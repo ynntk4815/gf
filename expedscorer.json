@@ -1,0 +1,99 @@
+{"expeds":[
+    {"id":"1", "level":"40", "ppl":"4", "time":
+        {"h":"0", "m":"50"},
+        "manpower":"0", "ammo":"145", "ration":"145", "part":"0", "quickRepair":"50", "quickDone":"20", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"2", "level":"45", "ppl":"5", "time":
+        {"h":"3", "m":"00"},
+        "manpower":"550", "ammo":"0", "ration":"0", "part":"350", "quickRepair":"0", "quickDone":"0", "contract":"50", "equipment":"0", "coin":"0"},
+    {"id":"3", "level":"45", "ppl":"5", "time":
+        {"h":"12", "m":"00"},
+        "manpower":"900", "ammo":"900", "ration":"900", "part":"250", "quickRepair":"100", "quickDone":"0", "contract":"0", "equipment":"100", "coin":"0"},
+    {"id":"4", "level":"50", "ppl":"5", "time":
+        {"h":"24", "m":"00"},
+        "manpower":"0", "ammo":"1200", "ration":"800", "part":"750", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"1"},
+    {"id":"5", "level":"1", "ppl":"2", "time":
+        {"h":"0", "m":"15"},
+        "manpower":"10", "ammo":"30", "ration":"15", "part":"0", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"6", "level":"3", "ppl":"2", "time":
+        {"h":"0", "m":"30"},
+        "manpower":"0", "ammo":"40", "ration":"60", "part":"0", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"7", "level":"5", "ppl":"3", "time":
+        {"h":"1", "m":"00"},
+        "manpower":"30", "ammo":"0", "ration":"30", "part":"10", "quickRepair":"60", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"8", "level":"6", "ppl":"5", "time":
+        {"h":"2", "m":"00"},
+        "manpower":"160", "ammo":"160", "ration":"0", "part":"0", "quickRepair":"0", "quickDone":"0", "contract":"20", "equipment":"0", "coin":"0"},
+    {"id":"9", "level":"5", "ppl":"3", "time":
+        {"h":"0", "m":"40"},
+        "manpower":"100", "ammo":"0", "ration":"0", "part":"30", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"10", "level":"8", "ppl":"4", "time":
+        {"h":"1", "m":"30"},
+        "manpower":"60", "ammo":"200", "ration":"80", "part":"0", "quickRepair":"30", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"11", "level":"10", "ppl":"5", "time":
+        {"h":"4", "m":"00"},
+        "manpower":"10", "ammo":"10", "ration":"10", "part":"230", "quickRepair":"50", "quickDone":"50", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"12", "level":"15", "ppl":"5", "time":
+        {"h":"6", "m":"00"},
+        "manpower":"0", "ammo":"250", "ration":"600", "part":"60", "quickRepair":"0", "quickDone":"0", "contract":"80", "equipment":"0", "coin":"0"},
+    {"id":"13", "level":"12", "ppl":"4", "time":
+        {"h":"0", "m":"20"},
+        "manpower":"50", "ammo":"0", "ration":"75", "part":"0", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"14", "level":"20", "ppl":"5", "time":
+        {"h":"0", "m":"45"},
+        "manpower":"0", "ammo":"120", "ration":"70", "part":"30", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"15", "level":"15", "ppl":"4", "time":
+        {"h":"1", "m":"30"},
+        "manpower":"0", "ammo":"300", "ration":"0", "part":"0", "quickRepair":"45", "quickDone":"40", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"16", "level":"25", "ppl":"5", "time":
+        {"h":"5", "m":"00"},
+        "manpower":"0", "ammo":"0", "ration":"300", "part":"300", "quickRepair":"0", "quickDone":"0", "contract":"75", "equipment":"80", "coin":"0"},
+    {"id":"17", "level":"30", "ppl":"4", "time":
+        {"h":"1", "m":"00"},
+        "manpower":"0", "ammo":"185", "ration":"185", "part":"0", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"60", "coin":"0"},
+    {"id":"18", "level":"35", "ppl":"5", "time":
+        {"h":"2", "m":"00"},
+        "manpower":"0", "ammo":"0", "ration":"0", "part":"210", "quickRepair":"0", "quickDone":"50", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"19", "level":"40", "ppl":"5", "time":
+        {"h":"6", "m":"00"},
+        "manpower":"800", "ammo":"550", "ration":"0", "part":"0", "quickRepair":"30", "quickDone":"0", "contract":"70", "equipment":"0", "coin":"0"},
+    {"id":"20", "level":"40", "ppl":"5", "time":
+        {"h":"8", "m":"00"},
+        "manpower":"400", "ammo":"400", "ration":"400", "part":"150", "quickRepair":"0", "quickDone":"100", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"21", "level":"30", "ppl":"4", "time":
+        {"h":"0", "m":"30"},
+        "manpower":"0", "ammo":"0", "ration":"100", "part":"45", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"22", "level":"35", "ppl":"5", "time":
+        {"h":"2", "m":"30"},
+        "manpower":"0", "ammo":"600", "ration":"300", "part":"0", "quickRepair":"80", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"23", "level":"40", "ppl":"5", "time":
+        {"h":"4", "m":"00"},
+        "manpower":"800", "ammo":"400", "ration":"400", "part":"0", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"70", "coin":"0"},
+    {"id":"24", "level":"40", "ppl":"5", "time":
+        {"h":"7", "m":"00"},
+        "manpower":"100", "ammo":"0", "ration":"0", "part":"700", "quickRepair":"0", "quickDone":"0", "contract":"40", "equipment":"0", "coin":"0"},
+    {"id":"25", "level":"35", "ppl":"5", "time":
+        {"h":"2", "m":"00"},
+        "manpower":"300", "ammo":"300", "ration":"0", "part":"100", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"26", "level":"40", "ppl":"5", "time":
+        {"h":"3", "m":"00"},
+        "manpower":"0", "ammo":"200", "ration":"550", "part":"100", "quickRepair":"60", "quickDone":"30", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"27", "level":"45", "ppl":"5", "time":
+        {"h":"5", "m":"00"},
+        "manpower":"0", "ammo":"0", "ration":"200", "part":"500", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"80", "coin":"0"},
+    {"id":"28", "level":"45", "ppl":"5", "time":
+        {"h":"12", "m":"00"},
+        "manpower":"800", "ammo":"800", "ration":"800", "part":"0", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"1"},
+    {"id":"29", "level":"45", "ppl":"5", "time":
+        {"h":"2", "m":"30"},
+        "manpower":"650", "ammo":"0", "ration":"650", "part":"0", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"0", "coin":"0"},
+    {"id":"30", "level":"45", "ppl":"5", "time":
+        {"h":"4", "m":"00"},
+        "manpower":"0", "ammo":"650", "ration":"0", "part":"300", "quickRepair":"1", "quickDone":"0", "contract":"1", "equipment":"0", "coin":"0"},
+    {"id":"31", "level":"45", "ppl":"5", "time":
+        {"h":"5", "m":"30"},
+        "manpower":"900", "ammo":"600", "ration":"600", "part":"0", "quickRepair":"0", "quickDone":"0", "contract":"0", "equipment":"1", "coin":"0"},
+    {"id":"32", "level":"45", "ppl":"5", "time":
+        {"h":"8", "m":"00"},
+        "manpower":"250", "ammo":"250", "ration":"250", "part":"600", "quickRepair":"0", "quickDone":"1", "contract":"0", "equipment":"1", "coin":"0"}
+]
+}

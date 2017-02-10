@@ -1,0 +1,174 @@
+<div class="tab_expedscorer">
+    <div class="page_title">
+        後勤計算機
+    </div>
+
+    <div class="expedNumBoxes page_panel">
+        <div class="expedNumBox expedNumBox_0">
+
+        </div>
+        <div class="expedNumBox expedNumBox_1">
+
+        </div>
+        <div class="expedNumBox expedNumBox_2">
+
+        </div>
+        <div class="expedNumBox expedNumBox_3">
+
+        </div>
+        <div class="expedNumBox expedNumBox_4">
+
+        </div>
+        <div class="expedNumBox expedNumBox_5">
+
+        </div>
+        <div class="expedNumBox expedNumBox_6">
+
+        </div>
+        <div class="expedNumBox expedNumBox_7">
+
+        </div>
+        <div class="expedNumBox fleetCounts">
+            <div class="fleetCount">
+                <div class="fleetRadio"><input type="radio" name="fleetCount" value="1" /></div>
+                <div class="fleetText">1 梯隊</div>
+                <div class="clear"></div>
+            </div>
+            <div class="fleetCount">
+                <div class="fleetRadio"><input type="radio" name="fleetCount" value="2" /></div>
+                <div class="fleetText">2 梯隊</div>
+                <div class="clear"></div>
+            </div>
+            <div class="fleetCount">
+                <div class="fleetRadio"><input type="radio" name="fleetCount" value="3" /></div>
+                <div class="fleetText">3 梯隊</div>
+                <div class="clear"></div>
+            </div>
+            <div class="fleetCount">
+                <div class="fleetRadio"><input type="radio" name="fleetCount" value="4" CHECKED /></div>
+                <div class="fleetText">4 梯隊</div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="expedControls page_panel">
+
+        <!-- Resource Priorities -->
+        <div class="control_box control_priorities">
+            <div class="control_title">資源權重</div>
+            <div class="clear"></div>
+            <div class="control">
+                <div class="control_label"><img src="assets/gf_manpower.png" /></div>
+                <div class="control_input"><input type="text" class="priorityManpower" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="control">
+                <div class="control_label"><img src="assets/gf_ammo.png" /></div>
+                <div class="control_input"><input type="text" class="priorityAmmo" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="control">
+                <div class="control_label"><img src="assets/gf_ration.png" /></div>
+                <div class="control_input"><input type="text" class="priorityRation" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="control">
+                <div class="control_label"><img src="assets/gf_part.png" /></div>
+                <div class="control_input"><input type="text" class="priorityPart" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+
+        <div class="control_box control_priorities">
+            <div class="control_title">契約權重</div>
+            <div class="clear"></div>
+            <div class="control">
+                <div class="control_label"><img src="assets/gf_quickRepair.png" /></div>
+                <div class="control_input"><input type="text" class="priorityQuickRepair" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="control">
+                <div class="control_label"><img src="assets/gf_quickDone.png" /></div>
+                <div class="control_input"><input type="text" class="priorityQuickDone" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="control">
+                <div class="control_label"><img src="assets/gf_contract.png" /></div>
+                <div class="control_input"><input type="text" class="priorityContract" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="control">
+                <div class="control_label"><img src="assets/gf_equipment.png" /></div>
+                <div class="control_input"><input type="text" class="priorityEquipment" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <!-- AFK Time -->
+        <div class="control_box control_afktime">
+            <div class="control_title">間隔時間</div>
+            <div class="clear"></div>
+            <div class="control">
+                <div class="control_label">Hrs</div>
+                <div class="control_input"><input type="text" class="afkH" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="control">
+                <div class="control_label">Mins</div>
+                <div class="control_input"><input type="text" class="afkM" value="0" /></div>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <!-- Calculate button -->
+        <div class="control_box control_calculate">
+            <div class="calculate_btn hover">計算</div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="page_padding">
+
+        <!-- Results Table -->
+        <table class="table table-hover results">
+            <thead>
+                <tr>
+                    <th>後勤組合</th>
+                    <th><img src="assets/gf_manpower.png" /> /<span class="unitTime"></span></th>
+                    <th><img src="assets/gf_ammo.png" /> /<span class="unitTime"></span></th>
+                    <th><img src="assets/gf_ration.png" /> /<span class="unitTime"></span></th>
+                    <th><img src="assets/gf_part.png" /> /<span class="unitTime"></span></th>
+                    <th><img src="assets/gf_quickRepair.png" /> /<span class="unitTime"></span></th>
+                    <th><img src="assets/gf_quickDone.png" /> /<span class="unitTime"></span></th>
+                    <th><img src="assets/gf_contract.png" /> /<span class="unitTime"></span></th>
+                    <th><img src="assets/gf_equipment.png" /> /<span class="unitTime"></span></th>
+                    <th>值</th>
+                    <th>資源總和</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="factory">
+
+        <!-- Expedition checkboxes for candidates -->
+        <div class="expedNum">
+            <div class="expedCheck"><input type="checkbox" CHECKED /></div>
+            <div class="expedText"></div>
+            <div class="expedTime"></div>
+            <div class="clear"></div>
+        </div>
+
+        <!-- Expedition result row -->
+
+    </div>
+</div>
