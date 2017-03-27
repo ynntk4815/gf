@@ -9,6 +9,7 @@ function p(){
                 $.each(data.expeds, function(key, val) {
                     var row = $('.tab_expedscorer .factory .expedNum').clone();
                     $(".expedCheck input", row).attr("value", val.id);
+                    $(".expedFixedCheck input", row).attr("value", val.id);
                     $(".expedText", row).text(idToCommonCalledId(val.id));
                     $(".expedTime", row).text(val.time.h + ":" + val.time.m);
 
@@ -26,7 +27,7 @@ function p(){
                     var
                         row = $('.tab_expedscorer .factory .expedNum').clone().addClass("expedWhole").removeClass("expedNum"),
                     val = true;
-                    $("input",".expedNumBox_"+(i)).each(function(id,elm){
+                    $("input",".expedCheck .expedNumBox_"+(i)).each(function(id,elm){
                         val&= $(elm).prop("checked");
                     });
                     $(row)
@@ -39,22 +40,26 @@ function p(){
                         .end()
                         .find(".expedTime")
                         .remove()
+                        .end()
+                        .find(".expedFixedCheck")
+                        .remove()
                         .end();
 
                     $(x).prepend(row);
-                }).on("click", '.expedNum input', function(){
+                }).on("click", '.expedNum .expedCheck input', function(){
                     var
                         worldNum     = parseInt(idToEp($(this).attr("value"))),
                     context      = ".tab_expedscorer .expedNumBox_"+worldNum,
                     parentCheck  = true;
                     self.exped_filters = [];
-                    $(".expedNum   input",context).each(function(i,x){ parentCheck &= $(x).prop("checked"); });
-                    $(".expedWhole input",context).prop("checked",parentCheck);
-                }).on("click", ".expedWhole input", function() {
+                    $(".expedNum .expedCheck   input",context).each(function(i,x){ parentCheck &= $(x).prop("checked"); 
+                    });
+                    $(".expedWhole .expedCheck input",context).prop("checked",parentCheck);
+                }).on("click", ".expedWhole .expedCheck input", function() {
                     var
                         worldNum = $(this).val(),
                     state    = $(this).prop("checked"),
-                    expeds   = $(".tab_expedscorer .expedNumBox_"+worldNum+" .expedNum input");
+                    expeds   = $(".tab_expedscorer .expedNumBox_"+worldNum+" .expedNum .expedCheck input");
                     expeds.each(function(i,x){
                         var
                             elmState = $(x).prop("checked"),
@@ -81,11 +86,18 @@ function p(){
 
                 var afkTime = afkHH * 60 + afkMM;
 
-                var selectedItemsQ = $('.tab_expedscorer .expedNumBox .expedNum input:checked');
+                var selectedItemsQ = $('.tab_expedscorer .expedNumBox .expedNum .expedCheck input:checked');
 
                 var selectedItems = [];
                 selectedItemsQ.each( function() {
                     selectedItems.push($(this).attr("value"));
+                });
+
+                var selectedFixedItemsQ = $('.tab_expedscorer .expedNumBox .expedNum .expedFixedCheck input:checked');
+
+                var selectedFixedItems = [];
+                selectedFixedItemsQ.each( function() {
+                    selectedFixedItems.push($(this).attr("value"));
                 });
 
                 var fleetCount = parseInt( $(".tab_expedscorer .fleetCounts input:checked").val(), 10);
@@ -93,7 +105,7 @@ function p(){
                 var fleetGreatSuccess = 60;
 
                 var results = calcWithExpeditionIdsFleetCountJS(fleetCount, priorityManpower, priorityAmmo, priorityRation, priorityPart, selectedItems, afkTime, fleetGreatSuccess,
-                        priorityQuickRepair, priorityQuickDone, priorityContract, priorityEquipment);
+                        priorityQuickRepair, priorityQuickDone, priorityContract, priorityEquipment, selectedFixedItems);
 
                 resultTable.empty();
                 for (var i = 0; i < results.length && i < 50; ++i) {
@@ -153,7 +165,7 @@ function getExpedMinutesTime(exped) {
 }
 
 function calcWithExpeditionIdsFleetCountJS(fleetCount, priorityManpower, priorityAmmo, priorityRation, priorityPart, selectedItems, afkTime, fleetGreatSuccess,
-        priorityQuickRepair, priorityQuickDone, priorityContract, priorityEquipment) {
+        priorityQuickRepair, priorityQuickDone, priorityContract, priorityEquipment, selectedFixedItems) {
     var expeds = [];
     var result = [];
 
@@ -194,7 +206,8 @@ function calcWithExpeditionIdsFleetCountJS(fleetCount, priorityManpower, priorit
         });
     }
 
-    idset = combine(ids, fleetCount);
+    ids = $(ids).not(selectedFixedItems).get();
+    idset = combine(ids, fleetCount - selectedFixedItems.length, selectedFixedItems);
     idset.forEach(function(val) {
         var eCombine = {};
         eCombine.eIds = "";
@@ -304,17 +317,24 @@ function incomeItem(expedItem, expedItemCount, fleetGreatSuccess) {
     return fleetGreatSuccess * 0.01 / expedItemCount + (1 - fleetGreatSuccess * 0.01) * expedItem * 0.01;
 }
 
-function combine(elements, combineLength) {
+function combine(elements, combineLength, selectedFixedItems) {
     var list = [];
+
+    if (combineLength <= 0) {
+        list.push(selectedFixedItems)
+        return list;
+    }
+
     for (var i = 0; i < elements.length - combineLength + 1; ++i) {
         if (combineLength == 1) {
             var t = [];
+            t = t.concat(selectedFixedItems);
             t.push(elements[i]);
             list.push(t);
         } else {
-            ll = combine(elements.slice(i + 1, elements.length), combineLength - 1);
+            ll = combine(elements.slice(i + 1, elements.length), combineLength - 1, selectedFixedItems);
             ll.forEach(function(val) {
-                val.splice(0, 0, elements[i]);
+                val.splice(selectedFixedItems.length, 0, elements[i]);
             });
             list = list.concat(ll);
         }

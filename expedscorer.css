@@ -12,7 +12,7 @@
 	
 }
 .tab_expedscorer .expedNumBox {
-	width:110px;
+	width:115px;
 	height:152px;
 	float:left;
 	margin:0px 3px 0px 0px;
@@ -37,6 +37,16 @@
 	height:13px;
 	margin:1px;
 }
+.tab_expedscorer .expedNumBox .expedFixedCheck {
+	width:15px;
+	height:15px;
+	float:left;
+}
+.tab_expedscorer .expedNumBox .expedFixedCheck input {
+	width:13px;
+	height:13px;
+	margin:1px;
+}
 .tab_expedscorer .expedNumBox .expedText {
 	width:25px;
 	height:15px;
@@ -50,7 +60,7 @@
 	margin:0px;
 }
 .tab_expedscorer .expedNumBox .expedTime {
-	width:40px;
+	width:30px;
 	height:15px;
 	float:left;
 	font-size:11px;
