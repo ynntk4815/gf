@@ -1,0 +1,343 @@
+{"equipment":[
+    {"id":"1", "name":"BM 3-12X40", "type":"optical_gunsight", "rarity":"2", "strengthenCoefficient":"0.10",
+        "effect":{
+            "criRate":{"min": "5", "max":"8"}
+        }},
+    {"id":"2", "name":"LRA 2-12x50", "type":"optical_gunsight", "rarity":"3", "strengthenCoefficient":"0.10",
+        "effect":{
+            "criRate":{"min": "9", "max":"12"}
+        }},
+    {"id":"3", "name":"PSO-1", "type":"optical_gunsight", "rarity":"4", "strengthenCoefficient":"0.10",
+        "effect":{
+            "criRate":{"min": "13", "max":"16"}
+        }},
+    {"id":"4", "name":"VFL 6-24X56", "type":"optical_gunsight", "rarity":"5", "strengthenCoefficient":"0.10",
+        "effect":{
+            "criRate":{"min": "17", "max":"24"}
+        }},
+    {"id":"5", "name":"EOT 506", "type":"holographic_sight", "rarity":"2", "strengthenCoefficient":"0.04",
+        "effect":{
+            "hit":{"min": "1", "max":"1"},
+            "dmg":{"min": "1", "max":"1"},
+            "fireOfRate":{"min": "-1", "max":"-1"}
+        }},
+    {"id":"6", "name":"EOT 512", "type":"holographic_sight", "rarity":"3", "strengthenCoefficient":"0.04",
+        "effect":{
+            "hit":{"min": "2", "max":"2"},
+            "dmg":{"min": "1", "max":"2"},
+            "fireOfRate":{"min": "-2", "max":"-2"}
+        }},
+    {"id":"7", "name":"EOT 516", "type":"holographic_sight", "rarity":"4", "strengthenCoefficient":"0.04",
+        "effect":{
+            "hit":{"min": "3", "max":"5"},
+            "dmg":{"min": "2", "max":"3"},
+            "fireOfRate":{"min": "-4", "max":"-3"}
+        }},
+    {"id":"8", "name":"EOT 518", "type":"holographic_sight", "rarity":"5", "strengthenCoefficient":"0.04",
+        "effect":{
+            "hit":{"min": "6", "max":"10"},
+            "dmg":{"min": "4", "max":"6"},
+            "fireOfRate":{"min": "-6", "max":"-4"}
+        }},
+    {"id":"9", "name":"AMP COMPM2", "type":"red_dot_sight", "rarity":"2", "strengthenCoefficient":"0.05",
+        "effect":{
+            "hit":{"min": "2", "max":"3"},
+            "fireOfRate":{"min": "-1", "max":"-1"}
+        }},
+    {"id":"10", "name":"AMP COMPM4", "type":"red_dot_sight", "rarity":"3", "strengthenCoefficient":"0.05",
+        "effect":{
+            "hit":{"min": "4", "max":"6"},
+            "fireOfRate":{"min": "-2", "max":"-1"}
+        }},
+    {"id":"11", "name":"COG M150", "type":"red_dot_sight", "rarity":"4", "strengthenCoefficient":"0.05",
+        "effect":{
+            "hit":{"min": "7", "max":"10"},
+            "fireOfRate":{"min": "-3", "max":"-1"}
+        }},
+    {"id":"12", "name":"ITI MARS", "type":"red_dot_sight", "rarity":"5", "strengthenCoefficient":"0.05",
+        "effect":{
+            "hit":{"min": "11", "max":"15"},
+            "fireOfRate":{"min": "-4", "max":"-1"}
+        }},
+    {"id":"13", "name":"PEQ-2", "type":"night_battle_equipment", "rarity":"2", "strengthenCoefficient":"0.00",
+        "effect":{
+            "nightSight":{"min": "51", "max":"55"}
+        }},
+    {"id":"14", "name":"PEQ-5", "type":"night_battle_equipment", "rarity":"3", "strengthenCoefficient":"0.00",
+        "effect":{
+            "nightSight":{"min": "61", "max":"70"}
+        }},
+    {"id":"15", "name":"PEQ-15", "type":"night_battle_equipment", "rarity":"4", "strengthenCoefficient":"0.00",
+        "effect":{
+            "nightSight":{"min": "76", "max":"85"}
+        }},
+    {"id":"16", "name":"PEQ-16A", "type":"night_battle_equipment", "rarity":"5", "strengthenCoefficient":"0.00",
+        "effect":{
+            "nightSight":{"min": "91", "max":"100"}
+        }},
+    {"id":"17", "name":"M61穿甲彈", "type":"armor_piercing_bullet", "rarity":"2", "strengthenCoefficient":"0.05",
+        "effect":{
+            "armor_piercing":{"min": "25", "max":"35"}
+        }},
+    {"id":"18", "name":"M993穿甲彈", "type":"armor_piercing_bullet", "rarity":"3", "strengthenCoefficient":"0.05",
+        "effect":{
+            "armor_piercing":{"min": "40", "max":"50"}
+        }},
+    {"id":"19", "name":"Mk169穿甲彈", "type":"armor_piercing_bullet", "rarity":"4", "strengthenCoefficient":"0.05",
+        "effect":{
+            "armor_piercing":{"min": "55", "max":"65"}
+        }},
+    {"id":"20", "name":"Mk211高爆穿甲彈", "type":"armor_piercing_bullet", "rarity":"5", "strengthenCoefficient":"0.05",
+        "effect":{
+            "armor_piercing":{"min": "70", "max":"80"}
+        }},
+    {"id":"29", "name":"FMJ高速彈", "type":"hight_speed_bullet", "rarity":"2", "strengthenCoefficient":"0.04",
+        "effect":{
+            "dmg":{"min": "1", "max":"1"}
+        }},
+    {"id":"30", "name":"JSP高速彈", "type":"hight_speed_bullet", "rarity":"3", "strengthenCoefficient":"0.04",
+        "effect":{
+            "dmg":{"min": "2", "max":"2"}
+        }},
+    {"id":"31", "name":"JHP高速彈", "type":"hight_speed_bullet", "rarity":"4", "strengthenCoefficient":"0.04",
+        "effect":{
+            "dmg":{"min": "3", "max":"4"}
+        }},
+    {"id":"32", "name":"APCR高速彈", "type":"hight_speed_bullet", "rarity":"5", "strengthenCoefficient":"0.04",
+        "effect":{
+            "dmg":{"min": "5", "max":"8"}
+        }},
+    {"id":"37", "name":"IOP T1外骨骼", "type":"exoskeleton", "rarity":"2", "strengthenCoefficient":"0.04",
+        "effect":{
+            "dodge":{"min": "6", "max":"8"},
+            "dmg":{"min": "-2", "max":"-1"}
+        }},
+    {"id":"38", "name":"IOP T2外骨骼", "type":"exoskeleton", "rarity":"3", "strengthenCoefficient":"0.04",
+        "effect":{
+            "dodge":{"min": "10", "max":"12"},
+            "dmg":{"min": "-4", "max":"-3"}
+        }},
+    {"id":"39", "name":"IOP T3外骨骼", "type":"exoskeleton", "rarity":"4", "strengthenCoefficient":"0.04",
+        "effect":{
+            "dodge":{"min": "14", "max":"16"},
+            "dmg":{"min": "-6", "max":"-5"}
+        }},
+    {"id":"40", "name":"IOP T4外骨骼", "type":"exoskeleton", "rarity":"5", "strengthenCoefficient":"0.04",
+        "effect":{
+            "dodge":{"min": "20", "max":"25"},
+            "dmg":{"min": "-8", "max":"-6"}
+        }},
+    {"id":"42", "name":"Type1防彈插板", "type":"bulletproof_board", "rarity":"3", "strengthenCoefficient":"0.04",
+        "effect":{
+            "armor":{"min": "3", "max":"3"},
+            "dodge":{"min": "-1", "max":"-1"}
+        }},
+    {"id":"43", "name":"Type2防彈插板", "type":"bulletproof_board", "rarity":"4", "strengthenCoefficient":"0.04",
+        "effect":{
+            "armor":{"min": "4", "max":"5"},
+            "dodge":{"min": "-1", "max":"-1"}
+        }},
+    {"id":"44", "name":"Type3防彈插板", "type":"bulletproof_board", "rarity":"5", "strengthenCoefficient":"0.04",
+        "effect":{
+            "armor":{"min": "6", "max":"8"},
+            "dodge":{"min": "-3", "max":"-2"}
+        }},
+    {"id":"49", "name":"16Lab紅外指示器", "type":"night_battle_equipment", "rarity":"5", "strengthenCoefficient":"0.0",
+        "effect":{
+            "nightSight":{"min": "100", "max":"100"}
+        }},
+    {"id":"50", "name":"16Lab次口徑穿甲彈", "type":"armor_piercing_bullet", "rarity":"5", "strengthenCoefficient":"0.05",
+        "effect":{
+            "armor_piercing":{"min": "80", "max":"80"}
+        }},
+    {"id":"55", "name":"IOP X1外骨骼", "type":"exoskeleton", "rarity":"2", "strengthenCoefficient":"0.07",
+        "effect":{
+            "dodge":{"min": "2", "max":"3"}
+        }},
+    {"id":"56", "name":"IOP X2外骨骼", "type":"exoskeleton", "rarity":"3", "strengthenCoefficient":"0.07",
+        "effect":{
+            "dodge":{"min": "4", "max":"5"}
+        }},
+    {"id":"57", "name":"IOP X3外骨骼", "type":"exoskeleton", "rarity":"4", "strengthenCoefficient":"0.07",
+        "effect":{
+            "dodge":{"min": "6", "max":"7"}
+        }},
+    {"id":"58", "name":"IOP X4外骨骼", "type":"exoskeleton", "rarity":"5", "strengthenCoefficient":"0.07",
+        "effect":{
+            "dodge":{"min": "8", "max":"12"}
+        }},
+    {"id":"59", "name":"國家競賽穿甲彈", "type":"armor_piercing_bullet", "rarity":"5", "can_char":["36"],
+        "effect":{
+            "armor_piercing":{"min": "75", "max":"85", "strengthenCoefficient":"0.05"},
+            "fireOfRate":{"min": "1", "max":"8", "strengthenCoefficient":"0.03"}
+        }},
+    {"id":"60", "name":".300BLK高速彈", "type":"hight_speed_bullet", "rarity":"5", "can_char":["57"], "strengthenCoefficient":"0.03",
+        "effect":{
+            "dmg":{"min": "8", "max":"12"},
+            "hit":{"min": "-5", "max":"-1"}
+        }},
+    {"id":"61", "name":"Titan火控晶片", "type":"chip", "rarity":"5", "can_char":["75"], "strengthenCoefficient":"0.05",
+        "effect":{
+            "belt":{"min": "3", "max":"4"},
+            "dmg":{"min": "-4", "max":"-2"},
+            "fireOfRate":{"min": "-8", "max":"-1"}
+        }},
+    {"id":"62", "name":"GSG UX外骨骼", "type":"exoskeleton", "rarity":"5", "can_char":["26"], "strengthenCoefficient":"0.03",
+        "effect":{
+            "dodge":{"min": "30", "max":"45"},
+            "dmg":{"min": "-10", "max":"-6"}
+        }},
+    {"id":"63", "name":"AC1消音器", "type":"silencer", "rarity":"2", "strengthenCoefficient":"0.03",
+        "effect":{
+            "criRate":{"min": "4", "max":"5"},
+            "dodge":{"min": "2", "max":"2"}
+        }},
+    {"id":"64", "name":"AC2消音器", "type":"silencer", "rarity":"3", "strengthenCoefficient":"0.03",
+        "effect":{
+            "criRate":{"min": "6", "max":"8"},
+            "dodge":{"min": "3", "max":"3"}
+        }},
+    {"id":"65", "name":"AC3消音器", "type":"silencer", "rarity":"4", "strengthenCoefficient":"0.03",
+        "effect":{
+            "criRate":{"min": "9", "max":"11"},
+            "dodge":{"min": "4", "max":"5"}
+        }},
+    {"id":"66", "name":"AC4消音器", "type":"silencer", "rarity":"5", "strengthenCoefficient":"0.03",
+        "effect":{
+            "criRate":{"min": "12", "max":"15"},
+            "dodge":{"min": "6", "max":"8"}
+        }},
+    {"id":"67", "name":"IOP大容量彈鏈箱", "type":"belt_box", "rarity":"4", "strengthenCoefficient":"0.07",
+        "effect":{
+            "belt":{"min": "1", "max":"1"},
+            "dodge":{"min": "-1", "max":"-1"}
+        }},
+    {"id":"68", "name":"IOP極限彈鏈箱", "type":"belt_box", "rarity":"5", "strengthenCoefficient":"0.07",
+        "effect":{
+            "belt":{"min": "2", "max":"3"},
+            "dodge":{"min": "-3", "max":"-2"}
+        }},
+    {"id":"69", "name":"ILM空尖彈", "type":"status_bullet", "rarity":"2", "strengthenCoefficient":"0.05",
+        "effect":{
+            "dmg":{"min": "1", "max":"1"},
+            "armor_piercing":{"min": "-1", "max":"-1"}
+        }},
+    {"id":"70", "name":"ILM空尖彈", "type":"status_bullet", "rarity":"3", "strengthenCoefficient":"0.05",
+        "effect":{
+            "dmg":{"min": "2", "max":"3"},
+            "armor_piercing":{"min": "-3", "max":"-2"}
+        }},
+    {"id":"71", "name":"ILM空尖彈", "type":"status_bullet", "rarity":"4", "strengthenCoefficient":"0.05",
+        "effect":{
+            "dmg":{"min": "4", "max":"6"},
+            "armor_piercing":{"min": "-6", "max":"-4"}
+        }},
+    {"id":"72", "name":"ILM空尖彈", "type":"status_bullet", "rarity":"5", "strengthenCoefficient":"0.05",
+        "effect":{
+            "dmg":{"min": "7", "max":"10"},
+            "armor_piercing":{"min": "-10", "max":"-7"}
+        }},
+    {"id":"73", "name":"#1獵鹿彈", "type":"shotgun_bullet", "rarity":"2", "strengthenCoefficient":"0.05",
+        "effect":{
+            "dmg":{"min": "1", "max":"1"},
+            "criDmg":{"min": "3", "max":"4"}
+        }},
+    {"id":"74", "name":"#0獵鹿彈", "type":"shotgun_bullet", "rarity":"3", "strengthenCoefficient":"0.05",
+        "effect":{
+            "dmg":{"min": "2", "max":"3"},
+            "criDmg":{"min": "5", "max":"6"}
+        }},
+    {"id":"75", "name":"#00獵鹿彈", "type":"shotgun_bullet", "rarity":"4", "strengthenCoefficient":"0.05",
+        "effect":{
+            "dmg":{"min": "4", "max":"6"},
+            "criDmg":{"min": "7", "max":"9"}
+        }},
+    {"id":"76", "name":"#000獵鹿彈", "type":"shotgun_bullet", "rarity":"5", "strengthenCoefficient":"0.05",
+        "effect":{
+            "dmg":{"min": "7", "max":"10"},
+            "criDmg":{"min": "10", "max":"15"}
+        }},
+    {"id":"77", "name":"BK獨頭彈", "type":"shotgun_bullet", "rarity":"2", "strengthenCoefficient":"0.07",
+        "effect":{
+            "targetCount":{"min": "-2", "max":"-2"},
+            "dmg_multiple":{"min": "3", "max":"3"},
+            "hit":{"min": "1", "max":"2"}
+        }},
+    {"id":"78", "name":"FST獨頭彈", "type":"shotgun_bullet", "rarity":"3", "strengthenCoefficient":"0.07",
+        "effect":{
+            "targetCount":{"min": "-2", "max":"-2"},
+            "dmg_multiple":{"min": "3", "max":"3"},
+            "hit":{"min": "3", "max":"4"}
+        }},
+    {"id":"79", "name":"WAD獨頭彈", "type":"shotgun_bullet", "rarity":"4", "strengthenCoefficient":"0.07",
+        "effect":{
+            "targetCount":{"min": "-2", "max":"-2"},
+            "dmg_multiple":{"min": "3", "max":"3"},
+            "hit":{"min": "5", "max":"7"}
+        }},
+    {"id":"80", "name":"SABOT獨頭彈", "type":"shotgun_bullet", "rarity":"5", "strengthenCoefficient":"0.07",
+        "effect":{
+            "targetCount":{"min": "-2", "max":"-2"},
+            "dmg_multiple":{"min": "3", "max":"3"},
+            "hit":{"min": "8", "max":"12"}
+        }},
+    {"id":"81", "name":"16Lab防彈插板", "type":"bulletproof_board", "rarity":"5", "strengthenCoefficient":"0.04",
+        "effect":{
+            "armor":{"min": "8", "max":"8"},
+            "dodge":{"min": "-2", "max":"-2"}
+        }},
+    {"id":"82", "name":"16Lab獵鹿彈", "type":"shotgun_bullet", "rarity":"5", "strengthenCoefficient":"0.05",
+        "effect":{
+            "dmg":{"min": "10", "max":"10"},
+            "criDmg":{"min": "15", "max":"15"}
+        }},
+    {"id":"83", "name":"KSTSP", "type":"optical_gunsight", "rarity":"5", "can_char":["58", "66"], "strengthenCoefficient":"0.00",
+        "effect":{
+            "criRate":{"min": "32", "max":"32"},
+            "criDmg":{"min": "40", "max":"40"}
+        }},
+    {"id":"84", "name":"KST1P8", "type":"optical_gunsight", "rarity":"5", "can_char":["58", "66"], "strengthenCoefficient":"0.00",
+        "effect":{
+            "criRate":{"min": "32", "max":"32"},
+            "criDmg":{"min": "25", "max":"25"}
+        }},
+    {"id":"85", "name":"KST1P7", "type":"optical_gunsight", "rarity":"5", "can_char":["58", "66"], "strengthenCoefficient":"0.00",
+        "effect":{
+            "criRate":{"min": "32", "max":"32"},
+            "criDmg":{"min": "10", "max":"10"}
+        }},
+    {"id":"86", "name":"Hayha記憶晶片", "type":"chip", "rarity":"5", "can_char":["39"], "strengthenCoefficient":"0.00",
+        "effect":{
+            "dmg":{"min": "12", "max":"18"},
+            "dodge":{"min": "2", "max":"4"},
+            "criDmg":{"min": "8", "max":"12"}
+        }}
+],
+"equipment_type":[
+    {"type":"optical_gunsight", "can_not_type":["hg"], "classification":"accessory"},
+    {"type":"holographic_sight", "can_not_type":["hg"], "classification":"accessory"},
+    {"type":"red_dot_sight", "can_not_type":["hg"], "classification":"accessory"},
+    {"type":"night_battle_equipment", "can_not_type":["rf","mg"], "classification":"accessory"},
+    {"type":"armor_piercing_bullet", "can_type":["rf","mg"], "classification":"magazine"},
+    {"type":"status_bullet", "can_type":["hg","smg"], "classification":"magazine"},
+    {"type":"shotgun_bullet", "can_type":["sg"], "classification":"magazine"},
+    {"type":"hight_speed_bullet", "can_type":["ar"], "classification":"magazine"},
+    {"type":"exoskeleton", "can_type":["hg","smg","ar"], "classification":"human_form"},
+    {"type":"bulletproof_board", "can_type":["sg"], "can_char":["54"], "classification":"human_form"},
+    {"type":"silencer", "can_not_type":["mg","sg"], "classification":"accessory"},
+    {"type":"belt_box", "can_type":["mg"], "classification":"human_form"},
+    {"type":"chip", "can_type":["all"], "classification":"human_form"}
+],
+"char_can_equipment_type":[
+    {"type":"hg", "classification_type":{"1":"accessory", "2":"magazine", "3":"human_form"}},
+    {"type":"smg", "classification_type":{"3":"accessory", "2":"magazine", "1":"human_form"}},
+    {"type":"ar", "classification_type":{"1":"accessory", "2":"magazine", "3":"human_form"}},
+    {"type":"rf", "classification_type":{"2":"accessory", "1":"magazine", "3":"human_form"}},
+    {"type":"mg", "classification_type":{"2":"accessory", "1":"magazine", "3":"human_form"}},
+    {"type":"sg", "classification_type":{"3":"accessory", "2":"magazine", "1":"human_form"}},
+    {"char":"56", "classification_type":{"1":"accessory", "3":"magazine", "2":"accessory"}},
+    {"char":"57", "classification_type":{"1":"accessory", "3":"magazine", "2":"accessory"}},
+    {"char":"54", "classification_type":{"3":"human_form", "1":"magazine", "2":"human_form"}}
+]
+
+}

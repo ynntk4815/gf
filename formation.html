@@ -1,0 +1,233 @@
+<div class="tab_formation">
+    <div class="panel">
+        <label><input type="checkbox" class="view_equipment">顯示裝備</label>
+        <table class="formation" border="1" cellpadding="0">
+        </table>
+    </div>
+
+    <div class="panel">
+        <div class="performance_container">
+        </div>
+        <div class="clear"></div>
+        <div class="enemy_control">
+            <div class="control_input">敵人迴避<input type="text" class="enemyDodge" value="10"/></div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+    <div><br></div>
+    <div><input id="code"></div>
+    <div><br></div>
+    <div><br></div>
+    <div><br></div>
+    <div><br></div>
+    <div><br></div>
+    <div><br></div>
+    <div><br></div>
+    <div><br></div>
+    <div><br></div>
+    <div><br></div>
+</div>
+
+
+<div id="picker" title="選擇類型">
+    <div class="button hover remove">移除</div>
+    <table cellspacing="4" border="1">
+    </table>
+    <div class="button hover close">關閉</div>
+</div>
+
+<div id="picker_by_type" title="選擇人形">
+    <div class="rarity_5">
+        ★★★★★
+        <table cellspacing="4" border="1">
+        </table>
+    </div>
+
+    <div class="rarity_4">
+        ★★★★
+        <table cellspacing="4" border="1">
+        </table>
+    </div>
+
+    <div class="rarity_3">
+        ★★★
+        <table cellspacing="4" border="1">
+        </table>
+    </div>
+
+    <div class="rarity_2">
+        ★★
+        <table cellspacing="4" border="1">
+        </table>
+    </div>
+    <div class="button hover close">關閉</div>
+</div>
+
+<div id="picker_equipment" title="選擇裝備">
+    <div class="button hover remove">移除</div>
+    <div class="rarity_5">
+        ★★★★★
+        <table cellspacing="4" border="1">
+        </table>
+    </div>
+
+    <div class="rarity_4">
+        ★★★★
+        <table cellspacing="4" border="1">
+        </table>
+    </div>
+
+    <div class="rarity_3">
+        ★★★
+        <table cellspacing="4" border="1">
+        </table>
+    </div>
+
+    <div class="rarity_2">
+        ★★
+        <table cellspacing="4" border="1">
+        </table>
+    </div>
+    <div class="button hover close">關閉</div>
+</div>
+
+<div class="factory">
+    <div class="grid_container">
+        <div class="add_button hover">加入人形</div>
+        <div class="char xhidden">
+            <div class="img"></div>
+            <div class="aura_container">
+                <table border="1" cellpadding="0">
+                    <tr><td class="aura_7 aura"></td><td class="aura_8 aura"></td><td class="aura_9 aura"></td></tr>
+                    <tr><td class="aura_4 aura"></td><td class="aura_5 aura"></td><td class="aura_6 aura"></td></tr>
+                    <tr><td class="aura_1 aura"></td><td class="aura_2 aura"></td><td class="aura_3 aura"></td></tr>
+                </table>
+            </div>
+            <div class="control_container">
+                <div class="item">
+                    <select class="level">
+                        <option value="100">100</option>
+                        <option value="99">99</option>
+                        <option value="98">98</option>
+                        <option value="97">97</option>
+                        <option value="96">96</option>
+                        <option value="95">95</option>
+                        <option value="94">94</option>
+                        <option value="93">93</option>
+                        <option value="92">92</option>
+                        <option value="91">91</option>
+                        <option value="90">90</option>
+                        <option value="80">80</option>
+                        <option value="70">70</option>
+                        <option value="60">60</option>
+                        <option value="50">50</option>
+                        <option value="40">40</option>
+                        <option value="30">30</option>
+                        <option value="20">20</option>
+                        <option value="10">10</option>
+                        <option value="1">1</option>
+                    </select>
+                </div>
+                <div class="item">
+                    <label><input type="checkbox" class="skill_control">技能</label>
+                </div>
+                <div class="item">
+                    <select class="skill_level">
+                        <option value="10">10</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="7">7</option>
+                        <option value="6">6</option>
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="equipment_container xhidden">
+            <div class="equipment equipment_1 button hover">new</div>
+            <div class="item">
+                <select class="equipment_strengthen_1">
+                    <option value="10">+10</option>
+                    <option value="9">+9</option>
+                    <option value="8">+8</option>
+                    <option value="7">+7</option>
+                    <option value="6">+6</option>
+                    <option value="5">+5</option>
+                    <option value="4">+4</option>
+                    <option value="3">+3</option>
+                    <option value="2">+2</option>
+                    <option value="1">+1</option>
+                    <option value="0">+0</option>
+                </select>
+            </div>
+            <div class="clear"></div>
+            <div class="equipment equipment_2 button hover">new</div>
+            <div class="item">
+                <select class="equipment_strengthen_2">
+                    <option value="10">+10</option>
+                    <option value="9">+9</option>
+                    <option value="8">+8</option>
+                    <option value="7">+7</option>
+                    <option value="6">+6</option>
+                    <option value="5">+5</option>
+                    <option value="4">+4</option>
+                    <option value="3">+3</option>
+                    <option value="2">+2</option>
+                    <option value="1">+1</option>
+                    <option value="0">+0</option>
+                </select>
+            </div>
+            <div class="clear"></div>
+            <div class="equipment equipment_3 button hover">new</div>
+            <div class="item">
+                <select class="equipment_strengthen_3">
+                    <option value="10">+10</option>
+                    <option value="9">+9</option>
+                    <option value="8">+8</option>
+                    <option value="7">+7</option>
+                    <option value="6">+6</option>
+                    <option value="5">+5</option>
+                    <option value="4">+4</option>
+                    <option value="3">+3</option>
+                    <option value="2">+2</option>
+                    <option value="1">+1</option>
+                    <option value="1">+1</option>
+                    <option value="0">+0</option>
+                </select>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+    <div class="char_performance">
+        <div class="title name">名稱</div>
+        <div class="value name">-</div>
+        <div class="clear"></div>
+        <div class="title hp">血量</div>
+        <div class="value hp">-</div>
+        <div class="title dmg">傷害</div>
+        <div class="value dmg">-</div>
+        <div class="clear"></div>
+        <div class="title hit">命中</div>
+        <div class="value hit">-</div>
+        <div class="clear"></div>
+        <div class="title dodge">迴避</div>
+        <div class="value dodge">-</div>
+        <div class="clear"></div>
+        <div class="title fireOfRate">射速</div>
+        <div class="value fireOfRate">-</div>
+        <div class="clear"></div>
+        <div class="title criRate">暴擊率</div>
+        <div class="value criRate">-</div>
+        <div class="title dps">DPS</div>
+        <div class="value dps">-</div>
+        <div class="title skillAttack">技能攻擊</div>
+        <div class="value skillAttack">-</div>
+        <div class="clear"></div>
+    </div>
+</div>
