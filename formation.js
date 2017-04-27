@@ -48,7 +48,12 @@ function init() {
         updateUI();
     });
 
-    $('.enemy_control .enemyDodge').change(function() {
+    $('.enemy_control input').change(function() {
+        updateCharObs();
+        updateUI();
+    });
+
+    $('.enemy_control .battleisNight').change(function() {
         updateCharObs();
         updateUI();
     });
@@ -634,6 +639,7 @@ function updateUI() {
             .find(".value.fireOfRate").html(charObj.c.fireOfRate).end()
             .find(".value.criRate").html(charObj.c.criRate).end()
             .find(".value.skillAttack").html(skillAttack).end()
+            .find(".value.armorPiercing").html(charObj.c.armorPiercing).end()
             .find(".value.dps").html(charObj.c.dps.toFixed(2)).end();
             index++;
         }
@@ -649,6 +655,7 @@ function updateUI() {
         .find(".value.fireOfRate").html("-").end()
         .find(".value.criRate").html("-").end()
         .find(".value.skillAttack").html("-").end()
+        .find(".value.armorPiercing").html("-").end()
         .find(".value.dps").html("-").end();
         index++;
     }
@@ -703,7 +710,7 @@ function getChar(id){
     return obj;
 }
 
-function updateCharObs() {
+function updateCharObsForBase() {
     for (var i in GRIDS) {
         if (mGridToChar[GRIDS[i]] != "") {
             var charObj = mGridToChar[GRIDS[i]];
@@ -728,6 +735,8 @@ function updateCharObs() {
             charObj.c.aura_fireOfRate = 0;
             charObj.c.aura_criRate = 0;
             charObj.c.skillAttack = 0;
+            charObj.c.armorPiercing = 10;
+            charObj.c.nightSight = 0;
 
             if (charObj.c.level < 80) charObj.equipment[3] = "";
             if (charObj.c.level < 50) charObj.equipment[2] = "";
@@ -760,14 +769,13 @@ function updateCharObs() {
             }
         }
     }
+}
 
-    var ally = [];
+function updateCharObsForAura() {
     for (var i in GRIDS) {
         var grid = GRIDS[i];
         if (mGridToChar[grid] != "") {
             var charObj = mGridToChar[grid];
-            ally.push(charObj);
-
             var aura = charObj.aura;
             var selfPos = gridToXY(grid);
 
@@ -782,7 +790,6 @@ function updateCharObs() {
                 var diffX = parseInt(val.x) - parseInt(auraSelfX);
                 var diffY = parseInt(val.y) - parseInt(auraSelfY);
 
-
                 var targetX = selfPos.x + diffX;
                 var targetY = selfPos.y + diffY;
                 var targetGrid = xyToGrid(targetX, targetY);
@@ -795,8 +802,6 @@ function updateCharObs() {
                     }
                 }
             });
-
-
         }
     }
 
@@ -811,6 +816,17 @@ function updateCharObs() {
             charObj.c.criRate = Math.floor(charObj.c.criRate * (1 + 0.01 * charObj.c.aura_criRate));
         }
     }
+}
+
+function updateCharObsForSkill() {
+    var battleisNight = $('.enemy_control .battleisNight').is(":checked");
+    var ally = [];
+    for (var i in GRIDS) {
+        if (mGridToChar[GRIDS[i]] != "") {
+            var charObj = mGridToChar[GRIDS[i]];
+            ally.push(charObj);
+        }
+    }
 
     for (var i in GRIDS) {
         if (mGridToChar[GRIDS[i]] != "") {
@@ -819,44 +835,69 @@ function updateCharObs() {
 
             if (controlUI.find(".skill_control").is(":checked")) {
                 var skill = charObj.skill;
-                var skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
-                if (skill.type == "buff") {
-                    if (skill.target == "ally") {
-                        updateForSkill(skillEffect, ally);
-                    } else if (skill.target == "self") {
-                        var t = [];
-                        t.push(charObj);
-                        updateForSkill(skillEffect, t);
+                var skillEffect = "";
+                if (battleisNight) {
+                    if ('effectNight' in skill) {
+                        var skillEffect = getSkillByLevel(skill.effectNight, charObj.c.skillLevel);
+                    } else if ('effect' in skill) {
+                        var skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
                     }
-                } else if (skill.type == "attack") {
-                    charObj.c.skillAttack = skillEffect.attack;
+                } else {
+                    if ('effect' in skill) {
+                        var skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
+                    }
                 }
 
+                if (skillEffect != "") {
+                    if (skill.type == "buff") {
+                        if (skill.target == "ally") {
+                            updateForSkill(skillEffect, ally);
+                        } else if (skill.target == "self") {
+                            var t = [];
+                            t.push(charObj);
+                            updateForSkill(skillEffect, t);
+                        }
+                    } else if (skill.type == "attack") {
+                        charObj.c.skillAttack = skillEffect.attack;
+                    }
+                }
             }
         }
     }
+}
 
+function updateCharObsForBattle() {
     var enemyDodge = $('.enemy_control .enemyDodge').val();
     if (enemyDodge == "") {
         enemyDodge = 0;
     }
 
+    var enemyArmor = $('.enemy_control .enemyArmor').val();
+    if (enemyArmor == "") {
+        enemyArmor = 0;
+    }
+
+    var battleisNight = $('.enemy_control .battleisNight').is(":checked");
+
     for (var i in GRIDS) {
         if (mGridToChar[GRIDS[i]] != "") {
             var charObj = mGridToChar[GRIDS[i]];
 
-            if (1 == 1) {
+            if (charObj.c.armorPiercing - enemyArmor >= 2) {
                 charObj.c.dmg += 2;
+            } else if (enemyArmor > charObj.c.armorPiercing) {
+                charObj.c.dmg -= enemyArmor * 1 - charObj.c.armorPiercing;
             }
-            //charObj.c.dmg = Math.floor(charObj.c.dmg * (1 + 0.01 * charObj.c.aura_dmg));
-            //charObj.c.hit = Math.floor(charObj.c.hit * (1 + 0.01 * charObj.c.aura_hit));
-            //charObj.c.dodge = Math.floor(charObj.c.dodge * (1 + 0.01 * charObj.c.aura_dodge));
-            //charObj.c.fireOfRate = Math.floor(charObj.c.fireOfRate * (1 + 0.01 * charObj.c.aura_fireOfRate));
+
+            charObj.c.dmg = Math.max(charObj.c.dmg, 1);
             charObj.c.fireOfRate = Math.min(charObj.c.fireOfRate, 120);
-            //charObj.c.criRate = Math.floor(charObj.c.criRate * (1 + 0.01 * charObj.c.aura_criRate));
             charObj.c.criRate = Math.min(charObj.c.criRate, 100);
 
             charObj.c.attackFrame = Math.ceil(50.0 / charObj.c.fireOfRate * 30.0);
+            if (battleisNight) {
+                charObj.c.hit *= 1.0 - (0.9 * 0.01 * Math.max(100 - charObj.c.nightSight * 1, 0));
+                charObj.c.hit = Math.floor(charObj.c.hit);
+            }
             var hitRate = charObj.c.hit / (charObj.c.hit + enemyDodge * 1.0);
             charObj.c.dps = charObj.c.dmg * 30.0 / charObj.c.attackFrame * (1 - charObj.c.criRate * 0.01 + 1.5 * charObj.c.criRate * 0.01) * hitRate;
             if ('attackTimes' in charObj.c) {
@@ -865,6 +906,13 @@ function updateCharObs() {
             charObj.c.skillAttack = charObj.c.skillAttack * charObj.c.dmg;
         }
     }
+}
+
+function updateCharObs() {
+    updateCharObsForBase();
+    updateCharObsForAura();
+    updateCharObsForSkill();
+    updateCharObsForBattle();
 }
 
 function getAuraEffectByLink(auraEffect, link) {

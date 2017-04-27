@@ -77,19 +77,19 @@
         }},
     {"id":"17", "name":"M61穿甲彈", "type":"armor_piercing_bullet", "rarity":"2", "strengthenCoefficient":"0.05",
         "effect":{
-            "armor_piercing":{"min": "25", "max":"35"}
+            "armorPiercing":{"min": "25", "max":"35"}
         }},
     {"id":"18", "name":"M993穿甲彈", "type":"armor_piercing_bullet", "rarity":"3", "strengthenCoefficient":"0.05",
         "effect":{
-            "armor_piercing":{"min": "40", "max":"50"}
+            "armorPiercing":{"min": "40", "max":"50"}
         }},
     {"id":"19", "name":"Mk169穿甲彈", "type":"armor_piercing_bullet", "rarity":"4", "strengthenCoefficient":"0.05",
         "effect":{
-            "armor_piercing":{"min": "55", "max":"65"}
+            "armorPiercing":{"min": "55", "max":"65"}
         }},
     {"id":"20", "name":"Mk211高爆穿甲彈", "type":"armor_piercing_bullet", "rarity":"5", "strengthenCoefficient":"0.05",
         "effect":{
-            "armor_piercing":{"min": "70", "max":"80"}
+            "armorPiercing":{"min": "70", "max":"80"}
         }},
     {"id":"29", "name":"FMJ高速彈", "type":"hight_speed_bullet", "rarity":"2", "strengthenCoefficient":"0.04",
         "effect":{
@@ -148,7 +148,7 @@
         }},
     {"id":"50", "name":"16Lab次口徑穿甲彈", "type":"armor_piercing_bullet", "rarity":"5", "strengthenCoefficient":"0.05",
         "effect":{
-            "armor_piercing":{"min": "80", "max":"80"}
+            "armorPiercing":{"min": "80", "max":"80"}
         }},
     {"id":"55", "name":"IOP X1外骨骼", "type":"exoskeleton", "rarity":"2", "strengthenCoefficient":"0.07",
         "effect":{
@@ -168,7 +168,7 @@
         }},
     {"id":"59", "name":"國家競賽穿甲彈", "type":"armor_piercing_bullet", "rarity":"5", "can_char":["36"],
         "effect":{
-            "armor_piercing":{"min": "75", "max":"85", "strengthenCoefficient":"0.05"},
+            "armorPiercing":{"min": "75", "max":"85", "strengthenCoefficient":"0.05"},
             "fireOfRate":{"min": "1", "max":"8", "strengthenCoefficient":"0.03"}
         }},
     {"id":"60", "name":".300BLK高速彈", "type":"hight_speed_bullet", "rarity":"5", "can_char":["57"], "strengthenCoefficient":"0.03",
@@ -220,22 +220,22 @@
     {"id":"69", "name":"ILM空尖彈", "type":"status_bullet", "rarity":"2", "strengthenCoefficient":"0.05",
         "effect":{
             "dmg":{"min": "1", "max":"1"},
-            "armor_piercing":{"min": "-1", "max":"-1"}
+            "armorPiercing":{"min": "-1", "max":"-1"}
         }},
     {"id":"70", "name":"ILM空尖彈", "type":"status_bullet", "rarity":"3", "strengthenCoefficient":"0.05",
         "effect":{
             "dmg":{"min": "2", "max":"3"},
-            "armor_piercing":{"min": "-3", "max":"-2"}
+            "armorPiercing":{"min": "-3", "max":"-2"}
         }},
     {"id":"71", "name":"ILM空尖彈", "type":"status_bullet", "rarity":"4", "strengthenCoefficient":"0.05",
         "effect":{
             "dmg":{"min": "4", "max":"6"},
-            "armor_piercing":{"min": "-6", "max":"-4"}
+            "armorPiercing":{"min": "-6", "max":"-4"}
         }},
     {"id":"72", "name":"ILM空尖彈", "type":"status_bullet", "rarity":"5", "strengthenCoefficient":"0.05",
         "effect":{
             "dmg":{"min": "7", "max":"10"},
-            "armor_piercing":{"min": "-10", "max":"-7"}
+            "armorPiercing":{"min": "-10", "max":"-7"}
         }},
     {"id":"73", "name":"#1獵鹿彈", "type":"shotgun_bullet", "rarity":"2", "strengthenCoefficient":"0.05",
         "effect":{
