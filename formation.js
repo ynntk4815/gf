@@ -53,7 +53,6 @@ function init() {
         updateUI();
     });
 
-
     $(".grid_container").draggable({revert: "invalid", helper: "clone"});
 
     $(".grid_container").droppable({
@@ -125,6 +124,28 @@ function init() {
             }
         });
     }
+
+    $('.aura_container').hover(function(){
+        $('#detail').dialog({position: {my: "left top", at: "right top", of: $(this)}});
+        $(".detail_container").html("");
+
+        var charObj = mGridToChar[getUiElementGridValue($(this))];
+        var aura = charObj.aura;
+        var text = mStringData[aura.target] + "<br>";
+        var auraText = [];
+        $.each(getAuraEffectByLink(aura.effect, charObj.c.link), function(key, val) {
+            auraText.push(mStringData[key] + val + "%");
+        });
+        text = text + auraText.join(", ");
+        $(".detail_container").html(text);
+        $('#detail').dialog("open");
+    }, function(){
+        $('#detail').dialog("close");
+    });
+}
+
+function getUiElementGridValue(e) {
+    return e.attr("grid_value");
 }
 
 function getGridUiObj(grid) {
@@ -137,6 +158,7 @@ function initDialog() {
     $('#picker_by_type').dialog({autoOpen: false, width: 'auto', modal : true});
     $('#picker_by_type').dialog({position: {my: "left top", at: "right top", of: ".formation"}});
     $('#picker_equipment').dialog({position: {my: "left top", at: "right top", of: ".formation"}});
+    $('#detail').dialog({autoOpen: false, width: 'auto'});
 
     var row = $('<tr></tr>');
     for (var i in TYPES) {
@@ -197,6 +219,7 @@ function initFormation() {
                     .find(".level").attr("grid_value", order).end()
                     .find(".skill_level").attr("grid_value", order).end()
                     .find(".skill_control").attr("grid_value", order).end()
+                    .find(".aura_container").attr("grid_value", order).end()
                     .find(".equipment").attr("grid_value", order).end()
                     .find(".equipment_1").attr("equipment_index", "1").end()
                     .find(".equipment_2").attr("equipment_index", "2").end()
@@ -847,7 +870,7 @@ function updateCharObs() {
 function getAuraEffectByLink(auraEffect, link) {
     var l = {};
     $.each(auraEffect, function(key, val) {
-        var e = (1 * val["5"] - 1 * val["1"]) / 4 * (link - 1) + 1 * val["1"];
+        var e = Math.floor((1 * val["5"] - 1 * val["1"]) / 4 * (link - 1) + 1 * val["1"]);
         l[key] = e;
     });
 

@@ -2,5 +2,19 @@
     "unlock":"解鎖",
     "magazine":"彈匣",
     "human_form":"人形裝備",
-    "accessory":"配件"
+    "accessory":"配件",
+    "hit":"命中",
+    "dmg":"傷害",
+    "fireOfRate":"射速",
+    "dodge":"迴避",
+    "armor":"護甲",
+    "criRate":"暴擊率",
+    "cooldownTime":"技能冷卻",
+    "all":"所有槍種",
+    "rf":"步槍",
+    "ar":"突擊步槍",
+    "mg":"機槍",
+    "sg":"霰彈槍",
+    "hg":"手槍",
+    "smg":"衝鋒槍"
 }}
