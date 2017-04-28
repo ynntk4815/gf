@@ -1,6 +1,7 @@
 
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 
 var mPickerType = "";
@@ -147,6 +148,49 @@ function init() {
     }, function(){
         $('#detail').dialog("close");
     });
+
+    $('.char .skill_control_container').hover(function(){
+        $('#detail').dialog({position: {my: "left top", at: "right top", of: $(this)}});
+        $(".detail_container").html("");
+
+        var charObj = mGridToChar[getUiElementGridValue($(this))];
+        var skill = charObj.skill;
+        var skillTarget = skill.target;
+        var skillType = skill.type;
+        var text = [];
+        var skillList = ['effect', 'effectNight'];
+        for (var i in skillList) {
+            var skillEffect = "";
+            if (skillList[i] == "effectNight" && 'effectNight' in skill) {
+                skillEffect = getSkillByLevel(skill.effectNight, charObj.c.skillLevel);
+                text.push("");
+                text.push(mStringData["night"]);
+            }
+            if (skillList[i] == "effect" && 'effect' in skill) {
+                skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
+                if ('effectNight' in skill) {
+                    text.push(mStringData["day"]);
+                }
+            }
+            if (skillEffect != "") {
+                $.each(skillEffect, function(key, val) {
+                    if (SKILL_TYPE_IS_PERCENT.indexOf(key) >= 0) {
+                        var row = "[" +mStringData[skillType] + "]";
+                        row += mStringData[skillTarget] + mStringData[key] + val + "%";
+                        text.push(row);
+                    } else if (key == "time") {
+                        text.push(mStringData["time"].format(val));
+                    } else if (key == "attack" || key == "attackDot" || key == "attackTimes") {
+                        text.push(mStringData[key].format(val));
+                    }
+                });
+            }
+        }
+        $(".detail_container").html(text.join("<br>"));
+        $('#detail').dialog("open");
+    }, function(){
+        $('#detail').dialog("close");
+    });
 }
 
 function getUiElementGridValue(e) {
@@ -225,6 +269,7 @@ function initFormation() {
                     .find(".skill_level").attr("grid_value", order).end()
                     .find(".skill_control").attr("grid_value", order).end()
                     .find(".aura_container").attr("grid_value", order).end()
+                    .find(".skill_control_container").attr("grid_value", order).end()
                     .find(".equipment").attr("grid_value", order).end()
                     .find(".equipment_1").attr("equipment_index", "1").end()
                     .find(".equipment_2").attr("equipment_index", "2").end()
@@ -693,7 +738,7 @@ function updateUI() {
 
 function charGetAttrByLevel(attr, lv) {
     var v = ((1.0 * attr["100"] - 1.0 * attr["1"]) / 99 * (lv - 1) + attr["1"] * 1.0);
-    return parseInt(v);
+    return parseInt(v.toFixed(0));
 }
 
 function getChar(id){
@@ -939,6 +984,11 @@ function getSkillByLevel(skillEffect, skillLevel) {
 
             } else {
                 var e = (1.0 * val["10"] - 1.0 * val["1"]) / 9.0 * (skillLevel - 1.0) + 1.0 * val["1"];
+                if (key == "time" || key == "attack" || key == "attackDot") {
+                    e = e.toFixed(1) * 1;
+                } else {
+                    e = e.toFixed(0) * 1;
+                }
                 l[key] = e;
             }
         }
@@ -1065,4 +1115,15 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
 //alert(JSON.stringify(charObj));
