@@ -136,7 +136,7 @@ function init() {
         $('#detail').dialog({position: {my: "left top", at: "right top", of: $(this)}});
         $(".detail_container").html("");
 
-        var charObj = mGridToChar[getUiElementGridValue($(this))];
+        var charObj = mGridToChar[getGridByUi($(this))];
         var aura = charObj.aura;
         var text = mStringData[aura.target] + "<br>";
         var auraText = [];
@@ -154,7 +154,7 @@ function init() {
         $('#detail').dialog({position: {my: "left top", at: "right top", of: $(this)}});
         $(".detail_container").html("");
 
-        var charObj = mGridToChar[getUiElementGridValue($(this))];
+        var charObj = mGridToChar[getGridByUi($(this))];
         var skill = charObj.skill;
         var skillTarget = skill.target;
         var skillType = skill.type;
@@ -196,6 +196,10 @@ function init() {
     }, function(){
         $('#detail').dialog("close");
     });
+}
+
+function getGridByUi(e) {
+    return getGridByUIValue(getUiElementGridValue(e));
 }
 
 function getUiElementGridValue(e) {
