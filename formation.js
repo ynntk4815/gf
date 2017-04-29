@@ -2,6 +2,7 @@
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime"];
+const SKILL_EFFECT_KEY_COPY = ["target", "type"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 
 var mPickerType = "";
@@ -174,14 +175,18 @@ function init() {
             }
             if (skillEffect != "") {
                 $.each(skillEffect, function(key, val) {
+                    var tSkillType = skillType;
+                    var tSkillTarget = skillTarget;
+                    if ('type' in val) tSkillType = val.type;
+                    if ('target' in val) tSkillTarget = val.target;
                     if (SKILL_TYPE_IS_PERCENT.indexOf(key) >= 0) {
-                        var row = "[" +mStringData[skillType] + "]";
-                        row += mStringData[skillTarget] + mStringData[key] + val + "%";
+                        var row = "[" +mStringData[tSkillType] + "]";
+                        row += mStringData[tSkillTarget] + mStringData[key] + val.val + "%";
                         text.push(row);
                     } else if (key == "time") {
-                        text.push(mStringData["time"].format(val));
+                        text.push(mStringData["time"].format(val.val));
                     } else if (key == "attack" || key == "attackDot" || key == "attackTimes") {
-                        text.push(mStringData[key].format(val));
+                        text.push(mStringData[key].format(val.val));
                     }
                 });
             }
@@ -880,6 +885,8 @@ function updateCharObsForSkill() {
 
             if (controlUI.find(".skill_control").is(":checked")) {
                 var skill = charObj.skill;
+                var skillTarget = skill.target;
+                var skillType = skill.type;
                 var skillEffect = "";
                 if (battleisNight) {
                     if ('effectNight' in skill) {
@@ -894,17 +901,25 @@ function updateCharObsForSkill() {
                 }
 
                 if (skillEffect != "") {
-                    if (skill.type == "buff") {
-                        if (skill.target == "ally") {
-                            updateForSkill(skillEffect, ally);
-                        } else if (skill.target == "self") {
-                            var t = [];
-                            t.push(charObj);
-                            updateForSkill(skillEffect, t);
+                    $.each(skillEffect, function(key, val) {
+                        var tSkillType = skillType;
+                        var tSkillTarget = skillTarget;
+                        var tSkill = {};
+                        tSkill[key] = val;
+                        if ('type' in val) tSkillType = val.type;
+                        if ('target' in val) tSkillTarget = val.target;
+                        if (tSkillType == "buff") {
+                            if (tSkillTarget == "ally") {
+                                updateForSkill(tSkill, ally);
+                            } else if (tSkillTarget == "self") {
+                                updateForSkill(tSkill, [charObj]);
+                            }
+                        } else if (tSkillType == "attack") {
+                            if (key == "attack") {
+                                charObj.c.skillAttack = tSkill.attack.val;
+                            }
                         }
-                    } else if (skill.type == "attack") {
-                        charObj.c.skillAttack = skillEffect.attack;
-                    }
+                    });
                 }
             }
         }
@@ -977,7 +992,8 @@ function getSkillByLevel(skillEffect, skillLevel) {
             if (val[skillLevel] == "") {
 
             } else {
-                l[key] = val[skillLevel] * 1.0;
+                l[key] = {};
+                l[key]["val"] = val[skillLevel] * 1.0;
             }
         } else {
             if (val["10"] == "" || val["1"] == "") {
@@ -989,11 +1005,18 @@ function getSkillByLevel(skillEffect, skillLevel) {
                 } else {
                     e = e.toFixed(0) * 1;
                 }
-                l[key] = e;
+                l[key] = {};
+                l[key]["val"] = e;
+            }
+        }
+
+        for (var i in SKILL_EFFECT_KEY_COPY) {
+            var effectKey = SKILL_EFFECT_KEY_COPY[i];
+            if (effectKey in val) {
+                l[key][effectKey] = val[effectKey];
             }
         }
     });
-
     return l;
 }
 
@@ -1003,9 +1026,9 @@ function updateForSkill(skillEffect, targetObjs) {
             for (var i in targetObjs) {
                 var t = targetObjs[i];
                 if (key == "attackTimes") {
-                    t.c[key] = val * 1.0;
+                    t.c[key] = val.val * 1.0;
                 } else {
-                    t.c[key] = parseInt(t.c[key] * (1 + 0.01 * val));
+                    t.c[key] = parseInt(t.c[key] * (1 + 0.01 * val.val));
                 }
             }
         }
