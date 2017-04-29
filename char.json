@@ -3142,7 +3142,7 @@
             "cooldownTime":{"1":"20", "10": "16"},
             "effect":{
                 "fixedDmg":{"1":"100", "10":"1000"},
-                " knockingBack":{"1":"2", "10":"3"},
+                "knockingBack":{"1":"2", "10":"3"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"mg", "effect":{
