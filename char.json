@@ -1736,7 +1736,6 @@
             "name":"連珠終結",
             "type":"passive",
             "target":"enemy",
-            "everyTimesOnNext":"3",
             "everyAttackTimesOnNext":"3",
             "firstCooldownTime":"",
             "cooldownTime":{"1":"20", "10": "16"},
