@@ -138,6 +138,10 @@
     border:1px outset #ace;
 }
 
+.calculate {
+    width:200px;
+}
+
 .button.equipment {
     width:100px;
     height:30px;

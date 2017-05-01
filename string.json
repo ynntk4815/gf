@@ -28,5 +28,7 @@
     "night":"夜戰",
     "attack":"{0}倍傷害",
     "attackDot":"每秒{0}倍持續傷害",
-    "attackTimes":"每次攻擊會對目標造成{0}次傷害"
+    "attackTimes":"每次攻擊會對目標造成{0}次傷害",
+    "calculateTitle":"計算輸出",
+    "second":"秒"
 }}
