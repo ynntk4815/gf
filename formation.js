@@ -1,7 +1,7 @@
 
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime"];
+const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg"];
 const SKILL_EFFECT_KEY_COPY = ["target", "type"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
@@ -181,7 +181,7 @@ function init() {
                     var tSkillTarget = skillTarget;
                     if ('type' in val) tSkillType = val.type;
                     if ('target' in val) tSkillTarget = val.target;
-                    if (SKILL_TYPE_IS_PERCENT.indexOf(key) >= 0) {
+                    if (isBuffAttrPercent(key)) {
                         var row = "[" +mStringData[tSkillType] + "]";
                         row += mStringData[tSkillTarget] + mStringData[key] + val.val + "%";
                         text.push(row);
@@ -724,6 +724,7 @@ function updatePerformance() {
             .find(".value.fireOfRate").html(charObj.c.fireOfRate).end()
             .find(".value.attackFrame").html(charObj.c.attackFrame).end()
             .find(".value.criRate").html(charObj.c.criRate).end()
+            .find(".value.criDmg").html(charObj.c.criDmg + "%").end()
             .find(".value.skillAttack").html(skillAttack).end()
             .find(".value.armorPiercing").html(charObj.c.armorPiercing).end()
             .find(".value.dps").html(charObj.c.dps.toFixed(2)).end();
@@ -741,6 +742,7 @@ function updatePerformance() {
         .find(".value.fireOfRate").html("-").end()
         .find(".value.attackFrame").html("-").end()
         .find(".value.criRate").html("-").end()
+        .find(".value.criDmg").html("-").end()
         .find(".value.skillAttack").html("-").end()
         .find(".value.armorPiercing").html("-").end()
         .find(".value.dps").html("-").end();
@@ -769,6 +771,7 @@ function updatePerformance() {
             .find(".value.dodge").html(charObj.c.dodge).end()
             .find(".value.fireOfRate").html(charObj.c.fireOfRate).end()
             .find(".value.criRate").html(charObj.c.criRate).end()
+            .find(".value.criDmg").html(charObj.c.criDmg).end()
             .find(".value.skillAttack").html(skillAttack).end()
             .find(".value.dps").html(charObj.c.dps.toFixed(2)).end();
             index++;
@@ -791,6 +794,7 @@ function getChar(id){
     var grepList = $.grep(mCharData, function(e){return e.id == id;});
     var obj = JSON.parse(JSON.stringify(grepList[0]));
     obj["criRate"] = 20;
+    obj["criDmg"] = 150;
     obj["equipment"] = [];
     obj["equipment"][1] = "";
     obj["equipment"][2] = "";
@@ -820,6 +824,7 @@ function updateCharObsForBase() {
             charObj.c.dodge = charGetAttrByLevel(charObj.dodge, charObj.c.level);
             charObj.c.fireOfRate = charGetAttrByLevel(charObj.fireOfRate, charObj.c.level);
             charObj.c.criRate = charObj.criRate;
+            charObj.c.criDmg = charObj.criDmg;
             if (charObj.type == "mg") {
                 charObj.c.belt = parseInt(charObj.belt);
             }
@@ -1003,6 +1008,8 @@ function updateCharObsForBattle() {
 
             charObj.c.dmg = Math.max(charObj.c.dmg, 1);
             charObj.c.fireOfRate = Math.min(charObj.c.fireOfRate, 120);
+            if (charObj.type == "rf") charObj.c.fireOfRate = Math.min(charObj.c.fireOfRate, 100);
+            if (charObj.type == "sg") charObj.c.fireOfRate = Math.min(charObj.c.fireOfRate, 60);
             charObj.c.criRate = Math.min(charObj.c.criRate, 100);
 
             charObj.c.attackFrame = getAttackFrame(charObj);
@@ -1011,7 +1018,7 @@ function updateCharObsForBattle() {
                 charObj.c.hit = Math.floor(charObj.c.hit);
             }
             var hitRate = charObj.c.hit / (charObj.c.hit + enemyDodge * 1.0);
-            charObj.c.dps = charObj.c.dmg * 30.0 / charObj.c.attackFrame * (1 - charObj.c.criRate * 0.01 + 1.5 * charObj.c.criRate * 0.01) * hitRate;
+            charObj.c.dps = charObj.c.dmg * 30.0 / charObj.c.attackFrame * (1 - charObj.c.criRate * 0.01 + charObj.c.criDmg / 100.0 * charObj.c.criRate * 0.01) * hitRate;
             if ('attackTimes' in charObj.c) {
                 charObj.c.dps = charObj.c.dps * charObj.c.attackTimes;
             }
@@ -1111,21 +1118,25 @@ function updateCharObsForCalculateBattle(charObj, ally) {
     }
 }
 
+function isBuffAttrPercent(key) {
+    return SKILL_TYPE_IS_PERCENT.indexOf(key) >= 0;
+}
+
 function updateForSkillCalculateBattle(skillEffect, targetObjs, time) {
     $.each(skillEffect, function(key, val) {
         if (key != "time") {
             for (var i in targetObjs) {
                 var t = targetObjs[i];
-                if (key == "attackTimes") {
+                if (isBuffAttrPercent(key)) {
                     var row = {};
                     row[key] = {};
-                    row[key]["val"] = val.val * 1.0;
+                    row[key]["val"] = 1 + 0.01 * val.val;
                     row[key]["time"] = time * FRAME_PER_SECOND;
                     t.cb.buff.push(row);
                 } else {
                     var row = {};
                     row[key] = {};
-                    row[key]["val"] = 1 + 0.01 * val.val;
+                    row[key]["val"] = val.val * 1.0;
                     row[key]["time"] = time * FRAME_PER_SECOND;
                     t.cb.buff.push(row);
                 }
@@ -1219,8 +1230,11 @@ function calculateBattle() {
                 var row = {};
                 for (var j in val) {
                     row = val[j];
-                    if (j == "attackTimes") {
+                    if (j == "attackTimes" || j == "criAttack") {
                         charObj.cb.attr[j] = row.val;
+                    } else if (j == "belt") {
+                        charObj.cb[j] += row.val;
+                        row.time = -1;
                     } else {
                         charObj.cb.attr[j] = charObj.cb.attr[j] * row.val;
                     }
@@ -1234,7 +1248,7 @@ function calculateBattle() {
             charObj.cb.attr.fireOfRate = Math.floor(charObj.cb.attr.fireOfRate);
             charObj.cb.attr.criRate = Math.floor(charObj.cb.attr.criRate);
 
-            if (charObj.cb.actionFrame == 0) {
+            if (charObj.cb.actionFrame <= 0) {
                 if (charObj.cb.actionType == "attack") {
                     if (charObj.c.armorPiercing - enemyArmor >= 2) {
                         charObj.cb.attr.dmg += 2;
@@ -1244,6 +1258,8 @@ function calculateBattle() {
 
                     charObj.cb.attr.dmg = Math.max(charObj.cb.attr.dmg, 1);
                     charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 120);
+                    if (charObj.type == "rf") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 100);
+                    if (charObj.type == "sg") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 60);
                     charObj.cb.attr.criRate = Math.min(charObj.cb.attr.criRate, 100);
 
                     if (battleisNight) {
@@ -1252,13 +1268,17 @@ function calculateBattle() {
                     }
                     var hitRate = charObj.cb.attr.hit / (charObj.cb.attr.hit + enemyDodge * 1.0);
                     charObj.cb.attr.dps = charObj.cb.attr.dmg * hitRate;
-                    charObj.cb.attr.criAttackDps = 1 - charObj.cb.attr.criRate * 0.01 + 1.5 * charObj.cb.attr.criRate * 0.01;
                     var isCanCri = true;
                     var resetAttackedTimes = false;
                     var attackMultiply = 1.0;
                     if ('attackTimes' in charObj.cb.attr) {
                         charObj.cb.attr.dps = charObj.cb.attr.dps * charObj.cb.attr.attackTimes;
                     }
+
+                    if ('criAttack' in charObj.cb.attr) {
+                        charObj.cb.attr.criRate = Math.max(charObj.cb.attr.criRate, 100);
+                    }
+                    charObj.cb.attr.criAttackDps = 1 - charObj.cb.attr.criRate * 0.01 + charObj.cb.attr.criDmg / 100.0 * charObj.cb.attr.criRate * 0.01;
 
                     if ('everyAttackTimesOnNext' in charObj.skill) {
                         var skillEveryAttackTimesOnNext = parseInt(charObj.skill.everyAttackTimesOnNext);
@@ -1279,7 +1299,7 @@ function calculateBattle() {
                     charObj.cb.actionFrame = getAttackFrame(charObj);
                     if (charObj.type == "mg") {
                         charObj.cb.belt--;
-                        if (charObj.cb.belt == 0) {
+                        if (charObj.cb.belt <= 0) {
                             charObj.cb.actionFrame = getMgChangeBeltFrame(charObj.cb.attr.fireOfRate);
                             charObj.cb.actionType = "changeBelt";
                         }

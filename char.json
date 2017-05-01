@@ -2344,7 +2344,7 @@
         "belt":"9",
         "skill":{
             "name":"狂躁血脈",
-            "type":"buff",
+            "type":"passive",
             "target":"self",
             "everyChangeBelt":"1",
             "firstCooldownTime":"",
