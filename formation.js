@@ -33,32 +33,32 @@ function init() {
     $('.char .level').change(function() {
         updateCharObs();
         updateEquipmentUIByGrid($(this).attr("grid_value"));
-        updateUI();
+        updatePerformance();
     });
 
     $('.equipment_container select').change(function() {
         updateCharObs();
-        updateUI();
+        updatePerformance();
     });
 
     $('.char .skill_level').change(function() {
         updateCharObs();
-        updateUI();
+        updatePerformance();
     });
 
     $('.char .skill_control').change(function() {
         updateCharObs();
-        updateUI();
+        updatePerformance();
     });
 
     $('.enemy_control input').change(function() {
         updateCharObs();
-        updateUI();
+        updatePerformance();
     });
 
     $('.enemy_control .battleisNight').change(function() {
         updateCharObs();
-        updateUI();
+        updatePerformance();
     });
 
     $(".grid_container").draggable({revert: "invalid", helper: "clone"});
@@ -84,7 +84,7 @@ function init() {
             draggable.swap(droppable);
             swapGridUI(draggable, droppable);
             updateCharObs();
-            updateUI();
+            updatePerformance();
         }
     });
 
@@ -279,7 +279,7 @@ function removeChar(grid) {
 
     var g = getGridUiObj(grid).attr("grid_value");
     mGridHasChar = $.grep(mGridHasChar, function(e) {return e != g;});
-    updateUI();
+    updatePerformance();
 }
 
 function removeEquipment(grid, equipmentIndex) {
@@ -290,7 +290,7 @@ function removeEquipment(grid, equipmentIndex) {
     updateEquipmentUIByGrid(grid);
 
     updateCharObs();
-    updateUI();
+    updatePerformance();
 }
 
 function initFormation() {
@@ -442,7 +442,7 @@ function addChar(grid, id) {
     } else {
         mGridHasChar.push(g);
     }
-    updateUI();
+    updatePerformance();
 }
 
 function updateEquipmentUIByGrid(grid) {
@@ -585,7 +585,7 @@ function addEquipment(grid, equipmentIndex, id) {
     updateEquipmentUIByGrid(grid);
 
     updateCharObs();
-    updateUI();
+    updatePerformance();
 }
 
 function getCharObjByGrid(grid) {
@@ -703,7 +703,7 @@ function getCharImgUIObj(id) {
     return img;
 }
 
-function updateUI() {
+function updatePerformance() {
     var index = 1;
     for (var i in mGridHasChar) {
         var grid = getGridByUIValue(mGridHasChar[i]);
@@ -722,6 +722,7 @@ function updateUI() {
             .find(".value.hit").html(charObj.c.hit).end()
             .find(".value.dodge").html(charObj.c.dodge).end()
             .find(".value.fireOfRate").html(charObj.c.fireOfRate).end()
+            .find(".value.attackFrame").html(charObj.c.attackFrame).end()
             .find(".value.criRate").html(charObj.c.criRate).end()
             .find(".value.skillAttack").html(skillAttack).end()
             .find(".value.armorPiercing").html(charObj.c.armorPiercing).end()
@@ -738,6 +739,7 @@ function updateUI() {
         .find(".value.hit").html("-").end()
         .find(".value.dodge").html("-").end()
         .find(".value.fireOfRate").html("-").end()
+        .find(".value.attackFrame").html("-").end()
         .find(".value.criRate").html("-").end()
         .find(".value.skillAttack").html("-").end()
         .find(".value.armorPiercing").html("-").end()
@@ -1003,7 +1005,7 @@ function updateCharObsForBattle() {
             charObj.c.fireOfRate = Math.min(charObj.c.fireOfRate, 120);
             charObj.c.criRate = Math.min(charObj.c.criRate, 100);
 
-            charObj.c.attackFrame = Math.ceil(50.0 * 30.0 / charObj.c.fireOfRate);
+            charObj.c.attackFrame = getAttackFrame(charObj);
             if (battleisNight) {
                 charObj.c.hit *= 1.0 - (0.9 * 0.01 * Math.max(100 - charObj.c.nightSight * 1, 0));
                 charObj.c.hit = Math.floor(charObj.c.hit);
@@ -1020,7 +1022,11 @@ function updateCharObsForBattle() {
 
 function getAttackFrame(charObj) {
     if (charObj.type == "mg") return 12;
-    return Math.ceil(50.0 * 30.0 / charObj.cb.attr.fireOfRate);
+    if ('cb' in charObj) {
+        return Math.ceil(50.0 * 30.0 / charObj.cb.attr.fireOfRate) - 1;
+    } else {
+        return Math.ceil(50.0 * 30.0 / charObj.c.fireOfRate) - 1;
+    }
 }
 
 function getMgChangeBeltFrame(fireOfRate) {
