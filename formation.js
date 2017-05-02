@@ -5,6 +5,8 @@ const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "cr
 const SKILL_EFFECT_KEY_COPY = ["target", "type"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
+const PREPARE_TO_USE_SKILL = "prepareToUseSkill";
+const USE_ATTACK_SKILL = "useAttackSkill";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -1194,38 +1196,41 @@ function calculateBattle() {
         dmgTable.y[i] = {};
         dmgTable.y[i]["name"] = ally[i].name;
         dmgTable.y[i]["data"] = [];
+        dmgTable.y[i]["data"][0] = 0;
     }
 
-    for (var nowFrame = 0; nowFrame <= endTime; nowFrame++) {
+    for (var nowFrame = 1; nowFrame <= endTime; nowFrame++) {
         dmgTable.x.push(parseInt((nowFrame / 30.0 * 100)) / 100.0);
         for (var i in ally) {
-            dmgTable.y[i]["data"][nowFrame] = 0;
-            if (nowFrame > 0) {
-                dmgTable.y[i]["data"][nowFrame] = dmgTable.y[i]["data"][nowFrame - 1];
-            }
+            dmgTable.y[i]["data"][nowFrame] = dmgTable.y[i]["data"][nowFrame - 1];
 
             var charObj = ally[i];
             if (charObj.c.isUseSkill) {
                 var skillType = charObj.skill.type;
-                    if (skillType != "passive") {
+                if (skillType != "passive") {
+                    charObj.cb.skillCD--;
                     if (charObj.cb.skillCD <= 0 && charObj.cb.actionType == "attack") {
-                        if (skillType == "buff") {
+                        if ('prepareTime' in charObj.skill) {
+                            charObj.cb.actionType = PREPARE_TO_USE_SKILL;
+                            charObj.cb.actionFrame = charObj.skill.prepareTime * 30;
+                        } else if (skillType == "buff") {
                             updateCharObsForCalculateBattle(charObj, ally);
+                        } else if (skillType == "attack") {
+                            charObj.cb.actionType = USE_ATTACK_SKILL;
+                            charObj.cb.actionFrame = 0;
                         }
                         charObj.cb.skillCD = getSkillCooldownTime(charObj.skill, charObj.c.skillLevel) * 30;
-                    } else {
-                        charObj.cb.skillCD--;
                     }
                 }
             }
 
+            charObj.cb.attr = copyObject(charObj.c);
             charObj.cb.buff = $.grep(charObj.cb.buff, function(e) {
                 for (var j in e) {
                     return e[j]["time"]-- > 0;
                 }
             });
 
-            charObj.cb.attr = copyObject(charObj.c);
             $.each(charObj.cb.buff, function(key, val) {
                 var row = {};
                 for (var j in val) {
@@ -1248,6 +1253,7 @@ function calculateBattle() {
             charObj.cb.attr.fireOfRate = Math.floor(charObj.cb.attr.fireOfRate);
             charObj.cb.attr.criRate = Math.floor(charObj.cb.attr.criRate);
 
+            charObj.cb.actionFrame--;
             if (charObj.cb.actionFrame <= 0) {
                 if (charObj.cb.actionType == "attack") {
                     if (charObj.c.armorPiercing - enemyArmor >= 2) {
@@ -1309,9 +1315,13 @@ function calculateBattle() {
                     charObj.cb.actionFrame = getAttackFrame(charObj);
                     charObj.cb.actionType = "attack";
                     charObj.cb.attackedTimes = 0;
+                } else if (charObj.cb.actionType == PREPARE_TO_USE_SKILL || charObj.cb.actionType == USE_ATTACK_SKILL) {
+                    var attackMultiply = getSkillAttrValByLevel(charObj, "attack");
+                    dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dmg_o * attackMultiply);
+
+                    charObj.cb.actionFrame = 12;
+                    charObj.cb.actionType = "attack";
                 }
-            } else {
-                charObj.cb.actionFrame--;
             }
         }
     }
