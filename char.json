@@ -2350,7 +2350,7 @@
             "firstCooldownTime":"",
             "cooldownTime":{"1":"20", "10": "16"},
             "effect":{
-                "dmg":{"1":"25", "10":"50"},
+                "dmg":{"1":"25", "10":"50","type":"buff"},
                 "time":{"1":"25", "10":"25"}}},
         "aura":{
             "target":"sg", "effect":{

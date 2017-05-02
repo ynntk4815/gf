@@ -1308,6 +1308,10 @@ function calculateBattle() {
                         if (charObj.cb.belt <= 0) {
                             charObj.cb.actionFrame = getMgChangeBeltFrame(charObj.cb.attr.fireOfRate);
                             charObj.cb.actionType = "changeBelt";
+
+                            if ('everyChangeBelt' in charObj.skill) {
+                                updateCharObsForCalculateBattle(charObj, ally);
+                            }
                         }
                     }
                 } else if (charObj.cb.actionType == "changeBelt") {
