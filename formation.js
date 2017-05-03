@@ -718,7 +718,8 @@ function updatePerformance() {
             }
 
             var cp = $(".char_performance_" + index);
-            cp.find(".value.name").html(charObj.name).end()
+            cp.find(".value").html("-").end()
+            .find(".value.name").html(charObj.name).end()
             .find(".value.hp").html(charObj.c.hp).end()
             .find(".value.dmg").html(charObj.c.dmg).end()
             .find(".value.hit").html(charObj.c.hit).end()
@@ -729,6 +730,7 @@ function updatePerformance() {
             .find(".value.criDmg").html(charObj.c.criDmg + "%").end()
             .find(".value.skillAttack").html(skillAttack).end()
             .find(".value.armorPiercing").html(charObj.c.armorPiercing).end()
+            .find(".value.belt").html(charObj.c.belt).end()
             .find(".value.dps").html(charObj.c.dps.toFixed(2)).end();
             index++;
         }
@@ -736,18 +738,7 @@ function updatePerformance() {
 
     while (index <= 5) {
         var cp = $(".char_performance_" + index);
-        cp.find(".value.name").html("-").end()
-        .find(".value.hp").html("-").end()
-        .find(".value.dmg").html("-").end()
-        .find(".value.hit").html("-").end()
-        .find(".value.dodge").html("-").end()
-        .find(".value.fireOfRate").html("-").end()
-        .find(".value.attackFrame").html("-").end()
-        .find(".value.criRate").html("-").end()
-        .find(".value.criDmg").html("-").end()
-        .find(".value.skillAttack").html("-").end()
-        .find(".value.armorPiercing").html("-").end()
-        .find(".value.dps").html("-").end();
+        cp.find(".value").html("-").end();
         index++;
     }
 
