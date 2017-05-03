@@ -1387,10 +1387,12 @@ function updateForSkill(skillEffect, targetObjs) {
         if (key != "time") {
             for (var i in targetObjs) {
                 var t = targetObjs[i];
-                if (key == "attackTimes") {
+                if (isBuffAttrPercent(key)) {
+                    t.c[key] = t.c[key] * (1 + 0.01 * val.val);
+                } else if (key == "attackTimes") {
                     t.c[key] = val.val * 1.0;
                 } else {
-                    t.c[key] = t.c[key] * (1 + 0.01 * val.val);
+                    t.c[key] += val.val * 1.0;
                 }
             }
         }
