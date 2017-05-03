@@ -85,8 +85,11 @@ function init() {
             });
             draggable.swap(droppable);
             swapGridUI(draggable, droppable);
-            updateCharObs();
-            updatePerformance();
+
+            setTimeout(function() {
+                updateCharObs();
+                updatePerformance();
+            }, 0);
         }
     });
 
