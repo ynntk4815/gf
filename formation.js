@@ -1155,7 +1155,6 @@ function getSkillCooldownTime(skill, skillLevel) {
 }
 
 function calculateBattle() {
-    var endTime = 20 * FRAME_PER_SECOND;
     var dmgTable = {};
     dmgTable.x = [];
     dmgTable.y = [];
@@ -1172,6 +1171,13 @@ function calculateBattle() {
     }
 
     var battleisNight = $('.enemy_control .battleisNight').is(":checked");
+
+    var endTime = $('.calculate_control .endTime').val();
+    if (endTime == "") {
+        endTime = 0;
+    } else {
+        endTime = endTime * FRAME_PER_SECOND;
+    }
 
     updateCharObsForBase();
     updateCharObsForAura();
@@ -1199,6 +1205,7 @@ function calculateBattle() {
         dmgTable.y[i]["data"][0] = 0;
     }
 
+    dmgTable.x.push(0);
     for (var nowFrame = 1; nowFrame <= endTime; nowFrame++) {
         dmgTable.x.push(parseInt((nowFrame / 30.0 * 100)) / 100.0);
         for (var i in ally) {

@@ -63,6 +63,23 @@
 .char .control_container .item {
 }
 
+.calculate_control .control_input {
+    width:70px;
+    height:20px;
+    line-height:18px;
+    float:left;
+    margin:10px 0px;
+}
+
+.calculate_control .control_input input {
+    width:50px;
+    height:20px;
+    line-height:18px;
+    font-size:12px;
+    padding:0px;
+    text-align:center;
+}
+
 .enemy_control .control_input {
     width:70px;
     height:20px;
@@ -140,6 +157,7 @@
 
 .calculate {
     width:200px;
+    float:left;
 }
 
 .button.equipment {
