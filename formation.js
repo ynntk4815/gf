@@ -231,6 +231,8 @@ function init() {
             series: data.y
         });
     });
+
+    //debugSkill();
 }
 
 function getGridByUi(e) {
@@ -1477,6 +1479,32 @@ function gridToXY(grid) {
     }
 
     return pos;
+}
+
+function debugSkill() {
+    for (var i in mCharData) {
+        var charObj = mCharData[i];
+        var skill = charObj.skill;
+        var skillType = skill.type;
+        var skillEffect = [];
+        if (true && 'effectNight' in skill) {
+            skillEffect = getSkillByLevel(skill.effectNight, 10);
+        }
+        if (false && 'effect' in skill) {
+            skillEffect = getSkillByLevel(skill.effect, 10);
+        }
+
+        $.each(skillEffect, function(key, val) {
+            var tSkillType = skillType;
+            if ('type' in val) tSkillType = val.type;
+            if (tSkillType == "buff" || tSkillType == "debuff") {
+                if (!('time' in skillEffect)) {
+                    alert("id: " + charObj.id + " skill no time val");
+                }
+            } else if (tSkillType == "attack") {
+            }
+        });
+    }
 }
 
 
