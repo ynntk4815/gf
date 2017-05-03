@@ -713,7 +713,7 @@ function updatePerformance() {
             var charObj = mGridToChar[grid];
 
             var skillAttack = "-";
-            if (charObj.c.skillAttack != 0) {
+            if (charObj.cb.skillAttack != 0) {
                 skillAttack = charObj.cb.skillAttack.toFixed(2);
             }
 
@@ -918,7 +918,7 @@ function updateCharObsForUseSkill() {
                 if (skillType == "buff" || skillType == "debuff") {
                     useSkillForCalculateBattle(charObj, ally, enemy);
                 } else if (skillType == "attack") {
-                    charObj.cb.skillAttack = tSkill.attack.val;
+                    charObj.cb.skillAttack = getSkillAttrValByLevel(charObj, "attack");
                 }
             }
         }
