@@ -1,7 +1,7 @@
 
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg"];
+const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed"];
 const SKILL_EFFECT_KEY_COPY = ["target", "type"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
@@ -782,6 +782,7 @@ function getChar(id){
     var obj = JSON.parse(JSON.stringify(grepList[0]));
     obj["criRate"] = 20;
     obj["criDmg"] = 150;
+    obj["movementSpeed"] = 150;
     obj["equipment"] = [];
     obj["equipment"][1] = "";
     obj["equipment"][2] = "";
@@ -812,6 +813,7 @@ function updateCharObsForBase() {
             charObj.c.fireOfRate = charGetAttrByLevel(charObj.fireOfRate, charObj.c.level);
             charObj.c.criRate = charObj.criRate;
             charObj.c.criDmg = charObj.criDmg;
+            charObj.c.movementSpeed = charObj.movementSpeed;
             if (charObj.type == "mg") {
                 charObj.c.belt = parseInt(charObj.belt);
             }
