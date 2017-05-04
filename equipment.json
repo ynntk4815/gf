@@ -39,22 +39,22 @@
             "dmg":{"min": "4", "max":"6"},
             "fireOfRate":{"min": "-6", "max":"-4"}
         }},
-    {"id":"9", "name":"AMP COMPM2", "type":"red_dot_sight", "rarity":"2", "strengthenCoefficient":"0.05",
+    {"id":"9", "name":"AMP COMPM2", "type":"red_dot_sight", "rarity":"2", "strengthenCoefficient":"0",
         "effect":{
             "hit":{"min": "2", "max":"3"},
             "fireOfRate":{"min": "-1", "max":"-1"}
         }},
-    {"id":"10", "name":"AMP COMPM4", "type":"red_dot_sight", "rarity":"3", "strengthenCoefficient":"0.05",
+    {"id":"10", "name":"AMP COMPM4", "type":"red_dot_sight", "rarity":"3", "strengthenCoefficient":"0.1",
         "effect":{
             "hit":{"min": "4", "max":"6"},
             "fireOfRate":{"min": "-2", "max":"-1"}
         }},
-    {"id":"11", "name":"COG M150", "type":"red_dot_sight", "rarity":"4", "strengthenCoefficient":"0.05",
+    {"id":"11", "name":"COG M150", "type":"red_dot_sight", "rarity":"4", "strengthenCoefficient":"0.1",
         "effect":{
             "hit":{"min": "7", "max":"10"},
             "fireOfRate":{"min": "-3", "max":"-1"}
         }},
-    {"id":"12", "name":"ITI MARS", "type":"red_dot_sight", "rarity":"5", "strengthenCoefficient":"0.05",
+    {"id":"12", "name":"ITI MARS", "type":"red_dot_sight", "rarity":"5", "strengthenCoefficient":"0.1",
         "effect":{
             "hit":{"min": "11", "max":"15"},
             "fireOfRate":{"min": "-4", "max":"-1"}
@@ -91,21 +91,21 @@
         "effect":{
             "armorPiercing":{"min": "70", "max":"80"}
         }},
-    {"id":"29", "name":"FMJ高速彈", "type":"hight_speed_bullet", "rarity":"2", "strengthenCoefficient":"0.04",
-        "effect":{
-            "dmg":{"min": "1", "max":"1"}
-        }},
-    {"id":"30", "name":"JSP高速彈", "type":"hight_speed_bullet", "rarity":"3", "strengthenCoefficient":"0.04",
+    {"id":"29", "name":"FMJ高速彈", "type":"hight_speed_bullet", "rarity":"2", "strengthenCoefficient":"0.0",
         "effect":{
             "dmg":{"min": "2", "max":"2"}
         }},
-    {"id":"31", "name":"JHP高速彈", "type":"hight_speed_bullet", "rarity":"4", "strengthenCoefficient":"0.04",
+    {"id":"30", "name":"JSP高速彈", "type":"hight_speed_bullet", "rarity":"3", "strengthenCoefficient":"0.10",
         "effect":{
             "dmg":{"min": "3", "max":"4"}
         }},
-    {"id":"32", "name":"APCR高速彈", "type":"hight_speed_bullet", "rarity":"5", "strengthenCoefficient":"0.04",
+    {"id":"31", "name":"JHP高速彈", "type":"hight_speed_bullet", "rarity":"4", "strengthenCoefficient":"0.08",
         "effect":{
-            "dmg":{"min": "5", "max":"8"}
+            "dmg":{"min": "5", "max":"7"}
+        }},
+    {"id":"32", "name":"APCR高速彈", "type":"hight_speed_bullet", "rarity":"5", "strengthenCoefficient":"0.07",
+        "effect":{
+            "dmg":{"min": "8", "max":"12"}
         }},
     {"id":"37", "name":"IOP T1外骨骼", "type":"exoskeleton", "rarity":"2", "strengthenCoefficient":"0.04",
         "effect":{
@@ -171,9 +171,9 @@
             "armorPiercing":{"min": "75", "max":"85", "strengthenCoefficient":"0.05"},
             "fireOfRate":{"min": "1", "max":"8", "strengthenCoefficient":"0.03"}
         }},
-    {"id":"60", "name":".300BLK高速彈", "type":"hight_speed_bullet", "rarity":"5", "can_char":["57"], "strengthenCoefficient":"0.03",
+    {"id":"60", "name":".300BLK高速彈", "type":"hight_speed_bullet", "rarity":"5", "can_char":["57"], "strengthenCoefficient":"0.06",
         "effect":{
-            "dmg":{"min": "8", "max":"12"},
+            "dmg":{"min": "12", "max":"16"},
             "hit":{"min": "-5", "max":"-1"}
         }},
     {"id":"61", "name":"Titan火控晶片", "type":"chip", "rarity":"5", "can_char":["75"], "strengthenCoefficient":"0.05",
@@ -291,27 +291,48 @@
             "dmg":{"min": "10", "max":"10"},
             "criDmg":{"min": "15", "max":"15"}
         }},
-    {"id":"83", "name":"KSTSP", "type":"optical_gunsight", "rarity":"5", "can_char":["58", "66"], "strengthenCoefficient":"0.00",
+    {"id":"83", "name":"KSTSP", "type":"optical_gunsight", "rarity":"5", "can_char":["58", "66"],
         "effect":{
-            "criRate":{"min": "32", "max":"32"},
-            "criDmg":{"min": "40", "max":"40"}
+            "criRate":{"min": "32", "max":"32", "strengthenCoefficient":"0.05"},
+            "criDmg":{"min": "40", "max":"40", "strengthenCoefficient":"0.01"}
         }},
-    {"id":"84", "name":"KST1P8", "type":"optical_gunsight", "rarity":"5", "can_char":["58", "66"], "strengthenCoefficient":"0.00",
+    {"id":"84", "name":"KST1P8", "type":"optical_gunsight", "rarity":"5", "can_char":["58", "66"],
         "effect":{
-            "criRate":{"min": "32", "max":"32"},
-            "criDmg":{"min": "25", "max":"25"}
+            "criRate":{"min": "32", "max":"32", "strengthenCoefficient":"0.05"},
+            "criDmg":{"min": "25", "max":"25", "strengthenCoefficient":"0.02"}
         }},
-    {"id":"85", "name":"KST1P7", "type":"optical_gunsight", "rarity":"5", "can_char":["58", "66"], "strengthenCoefficient":"0.00",
+    {"id":"85", "name":"KST1P7", "type":"optical_gunsight", "rarity":"5", "can_char":["58", "66"],
         "effect":{
-            "criRate":{"min": "32", "max":"32"},
-            "criDmg":{"min": "10", "max":"10"}
+            "criRate":{"min": "32", "max":"32", "strengthenCoefficient":"0.05"},
+            "criDmg":{"min": "10", "max":"10", "strengthenCoefficient":"0.05"}
         }},
-    {"id":"86", "name":"Hayha記憶晶片", "type":"chip", "rarity":"5", "can_char":["39"], "strengthenCoefficient":"0.00",
+    {"id":"86", "name":"Hayha記憶晶片", "type":"chip", "rarity":"5", "can_char":["39"],
         "effect":{
-            "dmg":{"min": "12", "max":"18"},
-            "dodge":{"min": "2", "max":"4"},
-            "criDmg":{"min": "8", "max":"12"}
+            "dmg":{"min": "18", "max":"25", "strengthenCoefficient":"0.02"},
+            "dodge":{"min": "2", "max":"4", "strengthenCoefficient":"0.03"},
+            "criDmg":{"min": "15", "max":"20", "strengthenCoefficient":"0.05"}
+        }},
+    {"id":"87", "name":"破舊披風", "type":"cloak", "rarity":"2", "strengthenCoefficient":"0.0",
+        "effect":{
+            "movementSpeed":{"min": "-3", "max":"-3"},
+            "criDmg":{"min": "3", "max":"4"}
+        }},
+    {"id":"88", "name":"偽裝披風", "type":"cloak", "rarity":"3", "strengthenCoefficient":"0.09",
+        "effect":{
+            "movementSpeed":{"min": "-3", "max":"-3"},
+            "criDmg":{"min": "5", "max":"7"}
+        }},
+    {"id":"89", "name":"城市迷彩披風", "type":"cloak", "rarity":"4", "strengthenCoefficient":"0.08",
+        "effect":{
+            "movementSpeed":{"min": "-3", "max":"-3"},
+            "criDmg":{"min": "8", "max":"10"}
+        }},
+    {"id":"90", "name":"熱光學迷彩披風", "type":"cloak", "rarity":"5", "strengthenCoefficient":"0.07",
+        "effect":{
+            "movementSpeed":{"min": "-3", "max":"-3"},
+            "criDmg":{"min": "11", "max":"15"}
         }}
+
 ],
 "equipment_type":[
     {"type":"optical_gunsight", "can_not_type":["hg"], "classification":"accessory"},
@@ -326,7 +347,8 @@
     {"type":"bulletproof_board", "can_type":["sg"], "can_char":["54"], "classification":"human_form"},
     {"type":"silencer", "can_not_type":["mg","sg"], "classification":"accessory"},
     {"type":"belt_box", "can_type":["mg"], "classification":"human_form"},
-    {"type":"chip", "can_type":["all"], "classification":"human_form"}
+    {"type":"chip", "can_type":["all"], "classification":"human_form"},
+    {"type":"cloak", "can_type":["rf"], "classification":"human_form"}
 ],
 "char_can_equipment_type":[
     {"type":"hg", "classification_type":{"1":"accessory", "2":"magazine", "3":"human_form"}},
