@@ -213,7 +213,18 @@ function init() {
                 text: mStringData["calculateTitle"]
             },
             tooltip: {
-                shared: true
+                shared: true,
+                formatter: function() {
+                    var s = '<b>'+ this.x +'</b>';
+                    var t = 0;
+                    $.each(this.points, function(i, point) {
+                        s += '<br><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': <b>' + point.y + '</b><br/>';
+                        t += point.y;
+                    });
+                    s += '<br>' + mStringData.total + ': <b>' + t + '</b>';
+
+                    return s;
+                }
             },
             xAxis: {
                 categories: data.x,
@@ -712,6 +723,7 @@ function getCharImgUIObj(id) {
 
 function updatePerformance() {
     var index = 1;
+    var dpsSum = 0;
     for (var i in mGridHasChar) {
         var grid = getGridByUIValue(mGridHasChar[i]);
         if (mGridToChar[grid] != "") {
@@ -737,8 +749,15 @@ function updatePerformance() {
             .find(".value.armorPiercing").html(charObj.c.armorPiercing).end()
             .find(".value.belt").html(charObj.cb.belt).end()
             .find(".value.dps").html(charObj.cb.attr.dps.toFixed(2)).end();
+
+            dpsSum += charObj.cb.attr.dps;
             index++;
         }
+    }
+
+    $(".value.dpsSum").html("-");
+    if (dpsSum > 0) {
+        $(".value.dpsSum").html(dpsSum.toFixed(2));
     }
 
     while (index <= 5) {
@@ -1129,6 +1148,7 @@ function getSkillCooldownTime(skill, skillLevel) {
 }
 
 function updateAttrBeforAction(charObj) {
+    if (!('cb' in charObj)) return;
     charObj.cb.attr = copyObject(charObj.c);
     charObj.cb.buff = $.grep(charObj.cb.buff, function(e) {
         for (var j in e) {

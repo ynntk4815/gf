@@ -31,5 +31,6 @@
     "attackTimes":"每次攻擊會對目標造成{0}次傷害",
     "calculateTitle":"計算輸出",
     "second":"秒",
-    "movementSpeed":"移動速度"
+    "movementSpeed":"移動速度",
+    "total":"總共"
 }}
