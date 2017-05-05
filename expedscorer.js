@@ -73,16 +73,16 @@ function p(){
             // Calculate
             var resultTable = $('.tab_expedscorer .results tbody');
             $('.tab_expedscorer .calculate_btn').click(function(){
-                var priorityManpower = parseInt($(".tab_expedscorer .priorityManpower").val(), 10);
-                var priorityAmmo = parseInt($(".tab_expedscorer .priorityAmmo").val(), 10);
-                var priorityRation = parseInt($(".tab_expedscorer .priorityRation").val(), 10);
-                var priorityPart = parseInt($(".tab_expedscorer .priorityPart").val(), 10);
-                var priorityQuickRepair = parseInt($(".tab_expedscorer .priorityQuickRepair").val(), 10);
-                var priorityQuickDone = parseInt($(".tab_expedscorer .priorityQuickDone").val(), 10);
-                var priorityContract = parseInt($(".tab_expedscorer .priorityContract").val(), 10);
-                var priorityEquipment = parseInt($(".tab_expedscorer .priorityEquipment").val(), 10);
-                var afkHH = parseInt($(".tab_expedscorer .afkH").val(), 10);
-                var afkMM = parseInt($(".tab_expedscorer .afkM").val(), 10);
+                var priorityManpower = $(".tab_expedscorer .priorityManpower").val() * 1;
+                var priorityAmmo = $(".tab_expedscorer .priorityAmmo").val() * 1;
+                var priorityRation = $(".tab_expedscorer .priorityRation").val() * 1;
+                var priorityPart = $(".tab_expedscorer .priorityPart").val() * 1;
+                var priorityQuickRepair = $(".tab_expedscorer .priorityQuickRepair").val() * 1;
+                var priorityQuickDone = $(".tab_expedscorer .priorityQuickDone").val() * 1;
+                var priorityContract = $(".tab_expedscorer .priorityContract").val() * 1;
+                var priorityEquipment = $(".tab_expedscorer .priorityEquipment").val() * 1;
+                var afkHH = $(".tab_expedscorer .afkH").val() * 1;
+                var afkMM = $(".tab_expedscorer .afkM").val() * 1;
 
                 var afkTime = afkHH * 60 + afkMM;
 
