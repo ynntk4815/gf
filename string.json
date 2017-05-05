@@ -32,5 +32,7 @@
     "calculateTitle":"計算輸出",
     "second":"秒",
     "movementSpeed":"移動速度",
-    "total":"總共"
+    "total":"總共",
+    "firstCooldownTime":"開場CD {0}秒",
+    "cooldownTime":"冷卻時間CD {0}秒"
 }}

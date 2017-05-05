@@ -180,7 +180,12 @@ function init() {
                     text.push(mStringData["day"]);
                 }
             }
+
             if (skillEffect != "") {
+                if (skillType != "passive") {
+                    text.push(mStringData.firstCooldownTime.format(skill.firstCooldownTime));
+                    text.push(mStringData.cooldownTime.format(getSkillCooldownTime(charObj.skill, charObj.c.skillLevel)));
+                }
                 $.each(skillEffect, function(key, val) {
                     var tSkillType = skillType;
                     var tSkillTarget = skillTarget;
