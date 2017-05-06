@@ -185,6 +185,9 @@ function init() {
                 if (skillType != "passive") {
                     text.push(mStringData.firstCooldownTime.format(skill.firstCooldownTime));
                     text.push(mStringData.cooldownTime.format(getSkillCooldownTime(charObj.skill, charObj.c.skillLevel)));
+                    if ('skillTimes' in charObj.skill) {
+                        text.push(mStringData.skillTimes.format(charObj.skill.skillTimes));
+                    }
                 }
                 $.each(skillEffect, function(key, val) {
                     var tSkillType = skillType;
@@ -1221,6 +1224,7 @@ function calculateBattle() {
             charObj.cb.actionFrame = getAttackFrame(charObj);
             charObj.cb.actionType = "attack";
             charObj.cb.skillCD = getSkillFirstCooldownTime(charObj) * 30;
+            charObj.cb.skillUsedTimes = 0;
             charObj.cb.attackedTimes = 0;
             charObj.cb.buff = [];
 
@@ -1267,6 +1271,7 @@ function calculateBattle() {
                         charObj.cb.actionFrame = 0;
                     }
                     charObj.cb.skillCD = getSkillCooldownTime(charObj.skill, charObj.c.skillLevel) * 30;
+                    charObj.cb.skillUsedTimes = 0;
                 }
             }
         }
@@ -1342,11 +1347,17 @@ function calculateBattle() {
                     charObj.cb.actionType = "attack";
                     charObj.cb.attackedTimes = 0;
                 } else if (charObj.cb.actionType == PREPARE_TO_USE_SKILL || charObj.cb.actionType == USE_ATTACK_SKILL) {
+                    charObj.cb.skillUsedTimes++;
                     var attackMultiply = getSkillAttrValByLevel(charObj, "attack");
                     dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dmg_o * attackMultiply);
 
-                    charObj.cb.actionFrame = 12;
-                    charObj.cb.actionType = "attack";
+                    if ('skillTimes' in charObj.skill && charObj.cb.skillUsedTimes < charObj.skill.skillTimes) {
+                        charObj.cb.actionType = PREPARE_TO_USE_SKILL;
+                        charObj.cb.actionFrame = charObj.skill.prepareTime * 30;
+                    } else {
+                        charObj.cb.actionFrame = 12;
+                        charObj.cb.actionType = "attack";
+                    }
                 }
             }
         }
