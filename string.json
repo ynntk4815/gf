@@ -35,5 +35,6 @@
     "total":"總共",
     "firstCooldownTime":"開場CD {0}秒",
     "cooldownTime":"冷卻時間CD {0}秒",
-    "skillTimes":"進行{0}次"
+    "skillTimes":"進行{0}次",
+    "prepareTime":"{0}秒的瞄準"
 }}

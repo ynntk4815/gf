@@ -158,55 +158,11 @@ function init() {
     });
 
     $('.char .skill_control_container').hover(function(){
+        var texts = getSkillDetail(getGridByUi($(this)));
+
         $('#detail').dialog({position: {my: "left top", at: "right top", of: $(this)}});
         $("#detail .detail_container").html("");
-
-        var charObj = mGridToChar[getGridByUi($(this))];
-        var skill = charObj.skill;
-        var skillTarget = skill.target;
-        var skillType = skill.type;
-        var text = [];
-        var skillList = ['effect', 'effectNight'];
-        for (var i in skillList) {
-            var skillEffect = "";
-            if (skillList[i] == "effectNight" && 'effectNight' in skill) {
-                skillEffect = getSkillByLevel(skill.effectNight, charObj.c.skillLevel);
-                text.push("");
-                text.push(mStringData["night"]);
-            }
-            if (skillList[i] == "effect" && 'effect' in skill) {
-                skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
-                if ('effectNight' in skill) {
-                    text.push(mStringData["day"]);
-                }
-            }
-
-            if (skillEffect != "") {
-                if (skillType != "passive") {
-                    text.push(mStringData.firstCooldownTime.format(skill.firstCooldownTime));
-                    text.push(mStringData.cooldownTime.format(getSkillCooldownTime(charObj.skill, charObj.c.skillLevel)));
-                    if ('skillTimes' in charObj.skill) {
-                        text.push(mStringData.skillTimes.format(charObj.skill.skillTimes));
-                    }
-                }
-                $.each(skillEffect, function(key, val) {
-                    var tSkillType = skillType;
-                    var tSkillTarget = skillTarget;
-                    if ('type' in val) tSkillType = val.type;
-                    if ('target' in val) tSkillTarget = val.target;
-                    if (isBuffAttrPercent(key)) {
-                        var row = "[" +mStringData[tSkillType] + "]";
-                        row += mStringData[tSkillTarget] + mStringData[key] + val.val + "%";
-                        text.push(row);
-                    } else if (key == "time") {
-                        text.push(mStringData["time"].format(val.val));
-                    } else if (key == "attack" || key == "attackDot" || key == "attackTimes") {
-                        text.push(mStringData[key].format(val.val));
-                    }
-                });
-            }
-        }
-        $("#detail .detail_container").html(text.join("<br>"));
+        $("#detail .detail_container").html(texts.join("<br>"));
         $('#detail').dialog("open");
     }, function(){
         $('#detail').dialog("close");
@@ -252,6 +208,60 @@ function init() {
     });
 
     //debugSkill();
+}
+
+function getSkillDetail(grid) {
+    var charObj = mGridToChar[grid];
+    var skill = charObj.skill;
+    var skillTarget = skill.target;
+    var skillType = skill.type;
+    var text = [];
+    var skillList = ['effect', 'effectNight'];
+    for (var i in skillList) {
+        var skillEffect = "";
+        if (skillList[i] == "effectNight" && 'effectNight' in skill) {
+            skillEffect = getSkillByLevel(skill.effectNight, charObj.c.skillLevel);
+            text.push("");
+            text.push(mStringData["night"]);
+        }
+        if (skillList[i] == "effect" && 'effect' in skill) {
+            skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
+            if ('effectNight' in skill) {
+                text.push(mStringData["day"]);
+            }
+        }
+
+        if (skillEffect != "") {
+            if (skillType != "passive") {
+                text.push(mStringData.firstCooldownTime.format(skill.firstCooldownTime));
+                text.push(mStringData.cooldownTime.format(getSkillCooldownTime(charObj.skill, charObj.c.skillLevel)));
+                if ('skillTimes' in charObj.skill) {
+                    text.push(mStringData.skillTimes.format(charObj.skill.skillTimes));
+                }
+            }
+            $.each(skillEffect, function(key, val) {
+                var tSkillType = skillType;
+                var tSkillTarget = skillTarget;
+                if ('type' in val) tSkillType = val.type;
+                if ('target' in val) tSkillTarget = val.target;
+                if (isBuffAttrPercent(key)) {
+                    var row = "[" +mStringData[tSkillType] + "]";
+                    row += mStringData[tSkillTarget] + mStringData[key] + val.val + "%";
+                    text.push(row);
+                } else if (key == "time") {
+                    text.push(mStringData["time"].format(val.val));
+                } else if (key == "attack" || key == "attackDot" || key == "attackTimes") {
+                    var s = "";
+                    if ('prepareTime' in charObj.skill) {
+                        s += mStringData.prepareTime.format(charObj.skill.prepareTime);
+                    }
+                    text.push(s + mStringData[key].format(val.val));
+                }
+            });
+        }
+    }
+
+    return text;
 }
 
 function getGridByUi(e) {
