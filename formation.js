@@ -207,6 +207,12 @@ function init() {
         });
     });
 
+    $('.picker_char_container .attr').change(function() {
+        var v = $(this).val();
+        if (v == "") v = null;
+        updatePickerByType(mPickerType, v);
+    });
+
     //debugSkill();
 }
 
@@ -397,15 +403,25 @@ function getGridByUIValue(v) {
 }
 
 function openDialogPickerByType(type) {
+    mPickerType = type;
     $('#picker_by_type').dialog("open");
     $('#picker').dialog("close");
+    $('.picker_char_container .attr').val("");
+    updatePickerByType(type, null);
+}
 
+function updatePickerByType(type, auraAttr) {
     for (var i = 5; i >= 2; i--) {
         var count = 0;
-
         var rows = [];
         var row = $('<tr></tr>');
-        var grepList = $.grep(mCharData, function(e) {return e.type == type && e.rarity == i;});
+        var grepList = $.grep(mCharData, function(e) {
+            var result = e.type == type && e.rarity == i;
+            if (auraAttr != null) {
+                result &= auraAttr in e.aura.effect;
+            }
+            return result;
+        });
         grepList.forEach(function(v) {
             var item = $('<div></div>').addClass("button hover rarity_"+i).html(v.name).attr("value", v.id).click(function() {
                 addChar(mPickerGrid, $(this).attr("value"));
