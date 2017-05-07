@@ -1,8 +1,9 @@
 
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed"];
+const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed", "rate"];
 const SKILL_EFFECT_KEY_COPY = ["target", "type"];
+const SKILL_EFFECT_KEY_NESTED = ["rate"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
 const PREPARE_TO_USE_SKILL = "prepareToUseSkill";
@@ -854,6 +855,7 @@ function updateCharObsForBase() {
             var equipmentUI = $("." + mGridToUI[GRIDS[i]] + " .equipment_container");
 
             charObj.c = {};
+            charObj.c.selfGrid = parseInt(GRIDS[i]);
             charObj.c.level = parseInt(controlUI.find(".level").val());
             charObj.c.isUseSkill = controlUI.find(".skill_control").is(":checked");
             charObj.c.skillLevel = parseInt(controlUI.find(".skill_level").val());
@@ -913,35 +915,45 @@ function updateCharObsForBase() {
     }
 }
 
+function getAuraTargetGrid(charObj) {
+    var aura = charObj.aura;
+    var selfPos = gridToXY(charObj.c.selfGrid);
+
+    var auraSelfX = "0";
+    var auraSelfY = "0";
+    if ('self' in aura) {
+        auraSelfX = aura["self"].x;
+        auraSelfY = aura["self"].y;
+    }
+
+    var grids = [];
+    $.each(aura.grid, function(key, val) {
+        var diffX = parseInt(val.x) - parseInt(auraSelfX);
+        var diffY = parseInt(val.y) - parseInt(auraSelfY);
+
+        var targetX = selfPos.x + diffX;
+        var targetY = selfPos.y + diffY;
+        var targetGrid = xyToGrid(targetX, targetY);
+        if (targetGrid != -1) {
+            grids.push(targetGrid);
+        }
+    });
+
+    return grids;
+}
+
 function updateCharObsForAura() {
     for (var i in GRIDS) {
         var grid = GRIDS[i];
         if (mGridToChar[grid] != "") {
             var charObj = mGridToChar[grid];
             var aura = charObj.aura;
-            var selfPos = gridToXY(grid);
-
-            var auraSelfX = "0";
-            var auraSelfY = "0";
-            if ('self' in aura) {
-                auraSelfX = aura["self"].x;
-                auraSelfY = aura["self"].y;
-            }
-
-            $.each(aura.grid, function(key, val) {
-                var diffX = parseInt(val.x) - parseInt(auraSelfX);
-                var diffY = parseInt(val.y) - parseInt(auraSelfY);
-
-                var targetX = selfPos.x + diffX;
-                var targetY = selfPos.y + diffY;
-                var targetGrid = xyToGrid(targetX, targetY);
-                if (targetGrid != -1) {
-                    var targetObj = mGridToChar[targetGrid];
-                    if (targetObj != "" && (targetObj.type == aura.target || aura.target == "all")) {
-                        $.each(getAuraEffectByLink(aura.effect, charObj.c.link), function(key, val) {
-                            targetObj.c["aura_" + key] += val;
-                        });
-                    }
+            $.each(getAuraTargetGrid(charObj), function(key, val) {
+                var targetObj = mGridToChar[val];
+                if (targetObj != "" && (targetObj.type == aura.target || aura.target == "all")) {
+                    $.each(getAuraEffectByLink(aura.effect, charObj.c.link), function(key, val) {
+                        targetObj.c["aura_" + key] += val;
+                    });
                 }
             });
         }
@@ -1078,7 +1090,7 @@ function getAlly() {
     return ally;
 }
 
-function getSkillAttrValByLevel(charObj, attr) {
+function getSkillAttrValByLevel(charObj, attr, nestedAttr) {
     var battleisNight = $('.enemy_control .battleisNight').is(":checked");
 
     var skill = charObj.skill;
@@ -1095,6 +1107,9 @@ function getSkillAttrValByLevel(charObj, attr) {
         }
     }
 
+    if (nestedAttr != null) {
+        return skillEffect[attr][nestedAttr];
+    }
     return skillEffect[attr].val;
 }
 
@@ -1131,6 +1146,10 @@ function useSkillForCalculateBattle(charObj, ally, enemy) {
                     updateForSkillCalculateBattle(tSkill, ally, skillEffect.time.val, "buff");
                 } else if (tSkillTarget == "self") {
                     updateForSkillCalculateBattle(tSkill, [charObj], skillEffect.time.val, "buff");
+                } else if (tSkillTarget == "self_aura_grid") {
+                    var targetGrid = getAuraTargetGrid(charObj);
+                    var grepList = $.grep(ally, function(e) {return targetGrid.indexOf(e.c.selfGrid) >= 0;});
+                    updateForSkillCalculateBattle(tSkill, grepList, skillEffect.time.val, "buff");
                 }
             } else if (tSkillType == "debuff") {
                 updateForSkillCalculateBattle(tSkill, [enemy], skillEffect.time.val, "debuff");
@@ -1348,8 +1367,16 @@ function calculateBattle() {
                         }
                     }
 
+                    var extraAttack = 0;
+                    if ('everyAttack' in charObj.skill) {
+                        if ('extraAttack' in charObj.skill.effect) {
+                            var rate = getSkillAttrValByLevel(charObj, "extraAttack", "rate");
+                            extraAttack = charObj.cb.attr.criDmg / 100.0 * rate * 0.01;
+                        }
+                    }
+
                     if (isCanCri) {
-                        dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dps * charObj.cb.attr.criAttackDps * attackMultiply);
+                        dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dps * (charObj.cb.attr.criAttackDps + extraAttack) * attackMultiply);
                     } else {
                         dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dps * attackMultiply);
                     }
@@ -1472,6 +1499,16 @@ function getSkillByLevel(skillEffect, skillLevel) {
             var effectKey = SKILL_EFFECT_KEY_COPY[i];
             if (effectKey in val) {
                 l[key][effectKey] = val[effectKey];
+            }
+        }
+
+        for (var i in SKILL_EFFECT_KEY_NESTED) {
+            var effectKey = SKILL_EFFECT_KEY_NESTED[i];
+            if (effectKey in val) {
+                var nested = {};
+                nested[effectKey] = val[effectKey];
+                nested = getSkillByLevel(nested, skillLevel);
+                l[key][effectKey] = nested[effectKey]["val"];
             }
         }
     });
