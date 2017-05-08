@@ -8,6 +8,8 @@ const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
 const PREPARE_TO_USE_SKILL = "prepareToUseSkill";
 const USE_ATTACK_SKILL = "useAttackSkill";
+const CONTROL_CONTAINER = "control_container";
+const EQUIPMENT_CONTAINER = "equipment_container";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -484,10 +486,9 @@ function addChar(grid, id) {
 
     mGridToChar[grid] = getChar(id);
     var auraUI = $("." + mGridToUI[grid] + " .aura_container");
-    var equipmentUI = $("." + mGridToUI[grid] + " .equipment_container");
     updateCharObs();
     updateAuraUI(auraUI, mGridToChar[grid]);
-    updateEquipmentUI(equipmentUI, mGridToChar[grid]);
+    updateEquipmentUI(mGridToChar[grid]);
 
     var g = getGridUiObj(grid).attr("grid_value");
     if (mGridHasChar.indexOf(g) >= 0) {
@@ -499,9 +500,8 @@ function addChar(grid, id) {
 }
 
 function updateEquipmentUIByGrid(grid) {
-    var equipmentUI = $("." + mGridToUI[grid] + " .equipment_container");
-    var charObj = mGridToChar[grid];
-    updateEquipmentUI(equipmentUI, charObj);
+    var g = getGridByUIValue(grid);
+    updateEquipmentUI(getCharObjByGrid(g));
 }
 
 function getEquipmentById(id) {
@@ -509,7 +509,7 @@ function getEquipmentById(id) {
     return grepList[0];
 }
 
-function updateEquipmentUI(equipmentUI, charObj) {
+function updateEquipmentUI(charObj) {
     var charType = charObj.type;
     var charLevel = charObj.c.level;
     var classificationList = getEquipmentClassificationOfChar(charObj);
@@ -521,11 +521,11 @@ function updateEquipmentUI(equipmentUI, charObj) {
             if (charObj.equipment[ii] != "") {
                 text = getEquipmentById(charObj.equipment[ii]).name;
             }
-            equipmentUI.find(".equipment_"+ii).html(text).click(function() {
+            charObj.ui.equipmentUI.find(".equipment_"+ii).html(text).click(function() {
                 openDialogPickerEquipment($(this).attr("equipment_index"), $(this).attr("grid_value"));
             });
         } else {
-            equipmentUI.find(".equipment_"+ii).html("Lv."+CHAR_LEVEL_EQUIPMENT[i]+mStringData.unlock).off('click');
+            charObj.ui.equipmentUI.find(".equipment_"+ii).html("Lv."+CHAR_LEVEL_EQUIPMENT[i]+mStringData.unlock).off('click');
         }
     }
 }
@@ -828,6 +828,13 @@ function charGetAttrByLevel(attr, lv) {
 }
 
 function copyObject(o) {
+    if ('thisType' in o && o.thisType == "char" && 'ui' in o) {
+        var t = o.ui;
+        o.ui = {};
+        var result = JSON.parse(JSON.stringify(o));
+        o.ui = t;
+        return result;
+    }
     return JSON.parse(JSON.stringify(o));
 }
 
@@ -841,24 +848,34 @@ function getChar(id){
     obj["equipment"][1] = "";
     obj["equipment"][2] = "";
     obj["equipment"][3] = "";
+    obj.thisType = "char";
     if (obj.type == "rf" || obj.type == "sg") obj["criRate"] = 40;
     if (obj.type == "smg" || obj.type == "mg") obj["criRate"] = 5;
     if (obj.id == "114") obj["criRate"] = 40;
     return obj;
 }
 
+function gridToUi(grid, elementName) {
+    if (elementName != null) {
+        return getGridUiObj(grid).find("."+elementName);
+    }
+    return getGridUiObj(grid);
+}
+
 function updateCharObsForBase() {
     for (var i in GRIDS) {
         if (mGridToChar[GRIDS[i]] != "") {
             var charObj = mGridToChar[GRIDS[i]];
-            var controlUI = $("." + mGridToUI[GRIDS[i]] + " .control_container");
-            var equipmentUI = $("." + mGridToUI[GRIDS[i]] + " .equipment_container");
+
+            charObj.ui = {};
+            charObj.ui.controlUI = gridToUi(GRIDS[i], CONTROL_CONTAINER);
+            charObj.ui.equipmentUI = gridToUi(GRIDS[i], EQUIPMENT_CONTAINER);
 
             charObj.c = {};
             charObj.c.selfGrid = parseInt(GRIDS[i]);
-            charObj.c.level = parseInt(controlUI.find(".level").val());
-            charObj.c.isUseSkill = controlUI.find(".skill_control").is(":checked");
-            charObj.c.skillLevel = parseInt(controlUI.find(".skill_level").val());
+            charObj.c.level = parseInt(charObj.ui.controlUI.find(".level").val());
+            charObj.c.isUseSkill = charObj.ui.controlUI.find(".skill_control").is(":checked");
+            charObj.c.skillLevel = parseInt(charObj.ui.controlUI.find(".skill_level").val());
             charObj.c.link = getLink(charObj.c.level);
             charObj.c.hp = charGetAttrByLevel(charObj.hp, charObj.c.level);
             charObj.c.dmg = charGetAttrByLevel(charObj.dmg, charObj.c.level);
@@ -889,7 +906,7 @@ function updateCharObsForBase() {
             for (var zi = 1; zi <= 3; zi++) {
                 if (charObj.equipment[zi] != "") {
                     var eObj = getEquipmentById(charObj.equipment[zi]);
-                    var strengthenLevel = parseInt(equipmentUI.find(".equipment_strengthen_"+zi).val());
+                    var strengthenLevel = parseInt(charObj.ui.equipmentUI.find(".equipment_strengthen_"+zi).val());
 
                     var eq_code = {};
                     eq_code.i = zi;
