@@ -190,6 +190,18 @@
     border:1px outset #ace;
 }
 
+.view_equipment_button {
+    display: inline-block;
+    width:110px;
+    height:30px;
+    border-radius:10px;
+    background:#cde;
+    border:1px outset #ace;
+    text-align:center;
+    line-height:28px;
+    margin:5px 0px;
+}
+
 .calculate {
     width:150px;
     float:left;
