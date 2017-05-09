@@ -1037,15 +1037,6 @@ function updateCharObsForBattle() {
         }
 
         charObj.cb.attr.dmg = Math.max(charObj.cb.attr.dmg, 1);
-        charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 120);
-        if (charObj.type == "rf") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 100);
-        if (charObj.type == "sg") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 60);
-        charObj.cb.attr.criRate = Math.min(charObj.cb.attr.criRate, 100);
-
-        if (battleisNight) {
-            charObj.cb.attr.hit *= 1.0 - (0.9 * 0.01 * Math.max(100 - charObj.c.nightSight * 1, 0));
-            charObj.cb.attr.hit = Math.floor(charObj.cb.attr.hit);
-        }
         var hitRate = charObj.cb.attr.hit / (charObj.cb.attr.hit + enemy.cb.attr.dodge);
         charObj.cb.attr.dps = charObj.cb.attr.dmg * hitRate;
         var isCanCri = true;
@@ -1219,6 +1210,7 @@ function getSkillCooldownTime(skill, skillLevel) {
 
 function updateAttrBeforAction(charObj) {
     if (!('cb' in charObj)) return;
+    var battleisNight = $('.enemy_control .battleisNight').is(":checked");
     charObj.cb.attr = copyObject(charObj.c);
     charObj.cb.buff = $.grep(charObj.cb.buff, function(e) {
         for (var j in e) {
@@ -1247,6 +1239,16 @@ function updateAttrBeforAction(charObj) {
     charObj.cb.attr.dodge = Math.floor(charObj.cb.attr.dodge);
     charObj.cb.attr.fireOfRate = Math.floor(charObj.cb.attr.fireOfRate);
     charObj.cb.attr.criRate = Math.floor(charObj.cb.attr.criRate);
+
+    if (charObj.type != "mg") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 120);
+    if (charObj.type == "rf") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 100);
+    if (charObj.type == "sg") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 60);
+    charObj.cb.attr.criRate = Math.min(charObj.cb.attr.criRate, 100);
+
+    if (battleisNight) {
+        charObj.cb.attr.hit *= 1.0 - (0.9 * 0.01 * Math.max(100 - charObj.c.nightSight * 1, 0));
+        charObj.cb.attr.hit = Math.floor(charObj.cb.attr.hit);
+    }
 }
 
 function calculateBattle() {
@@ -1352,15 +1354,6 @@ function calculateBattle() {
                     }
 
                     charObj.cb.attr.dmg = Math.max(charObj.cb.attr.dmg, 1);
-                    charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 120);
-                    if (charObj.type == "rf") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 100);
-                    if (charObj.type == "sg") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 60);
-                    charObj.cb.attr.criRate = Math.min(charObj.cb.attr.criRate, 100);
-
-                    if (battleisNight) {
-                        charObj.cb.attr.hit *= 1.0 - (0.9 * 0.01 * Math.max(100 - charObj.c.nightSight * 1, 0));
-                        charObj.cb.attr.hit = Math.floor(charObj.cb.attr.hit);
-                    }
                     var hitRate = charObj.cb.attr.hit / (charObj.cb.attr.hit + enemy.cb.attr.dodge);
                     charObj.cb.attr.dps = charObj.cb.attr.dmg * hitRate;
                     var isCanCri = true;
