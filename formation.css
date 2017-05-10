@@ -6,9 +6,6 @@
 .clear {
     clear:both !important;
 }
-.i18n {
-    visibility:hidden;
-}
 
 .xhidden {
     display: none;
@@ -32,9 +29,6 @@
 .grid_container .equipment_penel {
     width: 100%;
     height:100%;
-}
-
-.grid_container .equipment {
 }
 
 .char {
@@ -62,9 +56,6 @@
     z-index: 10;
     top: 0;
     right: 0;
-}
-
-.char .control_container .item {
 }
 
 .calculate_control .control_input {
@@ -137,16 +128,6 @@
     white-space: nowrap;
 }
 
-.performance_header .title {
-    height:20px;
-    width:80px;
-    margin:0px 0px 5px 0px;
-    text-align:center;
-    font-weight:bold;
-    color:#33a;
-    float:left;
-}
-
 .performance_header {
     width:175px;
     height:30px;
@@ -157,9 +138,21 @@
     background:#f0f5ff;
 }
 
-.performance_header .value {
-    height:20px;
+.performance_header .title {
     width:80px;
+    height:30px;
+    line-height:30px;
+    margin:0px 0px 5px 0px;
+    text-align:center;
+    font-weight:bold;
+    color:#33a;
+    float:left;
+}
+
+.performance_header .value {
+    width:80px;
+    height:30px;
+    line-height:30px;
     margin:0px 0px 5px 0px;
     text-align:center;
     font-weight:bold;
@@ -220,10 +213,6 @@
     float:left;
 }
 
-.item.equipment {
-    float:left;
-}
-
 .button.rarity_5 {
     background:#FFB400;
 }
@@ -243,8 +232,6 @@
 .factory {
     display: none;
 }
-
-
 
 .ui-state-hover {
     background:lightyellow;
