@@ -10,6 +10,8 @@ const PREPARE_TO_USE_SKILL = "prepareToUseSkill";
 const USE_ATTACK_SKILL = "useAttackSkill";
 const CONTROL_CONTAINER = "control_container";
 const EQUIPMENT_CONTAINER = "equipment_container";
+const PERFORMANCE = "performance";
+const ACTION = "action";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -1030,43 +1032,9 @@ function updateCharObsForBattle() {
     for (var i in ally) {
         var charObj = ally[i];
         updateAttrBeforAction(charObj);
-        if (charObj.c.armorPiercing - enemy.cb.attr.armor >= 2) {
-            charObj.cb.attr.dmg += 2;
-        } else if (enemy.cb.attr.armor > charObj.c.armorPiercing) {
-            charObj.cb.attr.dmg -= enemy.cb.attr.armor - charObj.c.armorPiercing;
-        }
-
-        charObj.cb.attr.dmg = Math.max(charObj.cb.attr.dmg, 1);
-        var hitRate = charObj.cb.attr.hit / (charObj.cb.attr.hit + enemy.cb.attr.dodge);
-        charObj.cb.attr.dps = charObj.cb.attr.dmg * hitRate;
-        var isCanCri = true;
-        var resetAttackedTimes = false;
-        var attackMultiply = 1.0;
-        if ('attackTimes' in charObj.cb.attr) {
-            charObj.cb.attr.dps = charObj.cb.attr.dps * charObj.cb.attr.attackTimes;
-        }
-
-        if ('criAttack' in charObj.cb.attr) {
-            charObj.cb.attr.criRate = Math.max(charObj.cb.attr.criRate, 100);
-        }
-        charObj.cb.attr.criAttackDps = 1 - charObj.cb.attr.criRate * 0.01 + charObj.cb.attr.criDmg / 100.0 * charObj.cb.attr.criRate * 0.01;
-
-//        if ('everyAttackTimesOnNext' in charObj.skill) {
-//            var skillEveryAttackTimesOnNext = parseInt(charObj.skill.everyAttackTimesOnNext);
-//            if (charObj.cb.attackedTimes == skillEveryAttackTimesOnNext) {
-//                attackMultiply = getSkillAttrValByLevel(charObj, "attack");
-//                isCanCri = false;
-//                resetAttackedTimes = true;
-//            }
-//        }
-
-        charObj.cb.attr.attackFrame = getAttackFrame(charObj);
-        if (isCanCri) {
-            charObj.cb.attr.dps = charObj.cb.attr.dps * charObj.cb.attr.criAttackDps * attackMultiply * 30.0 / charObj.cb.attr.attackFrame;
-        } else {
-            charObj.cb.attr.dps = charObj.cb.attr.dps * attackMultiply * 30.0 / charObj.cb.attr.attackFrame;
-        }
-        charObj.cb.skillAttack = charObj.cb.skillAttack * charObj.cb.attr.dmg_o;
+        calculateArmorPiercing(charObj, enemy);
+        calculateHitRate(charObj, enemy);
+        calculateActionDmg(charObj, PERFORMANCE);
     }
 }
 
@@ -1251,6 +1219,74 @@ function updateAttrBeforAction(charObj) {
     }
 }
 
+function calculateArmorPiercing(charObj, enemy) {
+    if (charObj.c.armorPiercing - enemy.cb.attr.armor >= 2) {
+        charObj.cb.attr.dmg += 2;
+    } else if (enemy.cb.attr.armor > charObj.c.armorPiercing) {
+        charObj.cb.attr.dmg -= enemy.cb.attr.armor - charObj.c.armorPiercing;
+    }
+
+    charObj.cb.attr.dmg = Math.max(charObj.cb.attr.dmg, 1);
+}
+
+function calculateHitRate(charObj, enemy) {
+    charObj.cb.attr.hitRate = charObj.cb.attr.hit / (charObj.cb.attr.hit + enemy.cb.attr.dodge);
+}
+
+function getCriAttackExpectedValue(criRate, criDmg) {
+    criRate = Math.min(criRate, 100);
+    criRate = Math.max(criRate, 0);
+    return 1 - criRate * 0.01 + criDmg / 100.0 * criRate * 0.01;
+}
+
+function calculateActionDmg(charObj, mode) {
+    var isCanCri = true;
+    var resetAttackedTimes = false;
+    var attackMultiply = 1.0;
+    var extraAttack = 0;
+
+    charObj.cb.attr.dmg_single = charObj.cb.attr.dmg * charObj.cb.attr.hitRate;
+    if ('attackTimes' in charObj.cb.attr) {
+        charObj.cb.attr.dmg_single *= charObj.cb.attr.attackTimes;
+    }
+
+    if ('criAttack' in charObj.cb.attr) {
+        charObj.cb.attr.criRate = Math.max(charObj.cb.attr.criRate, 100);
+    }
+
+    if ('everyAttackTimesOnNext' in charObj.skill && mode == ACTION) {
+        var skillEveryAttackTimesOnNext = parseInt(charObj.skill.everyAttackTimesOnNext);
+        if (charObj.cb.attackedTimes == skillEveryAttackTimesOnNext) {
+            attackMultiply = getSkillAttrValByLevel(charObj, "attack");
+            isCanCri = false;
+            resetAttackedTimes = true;
+        }
+    }
+
+    if ('everyAttack' in charObj.skill) {
+        if ('extraAttack' in charObj.skill.effect) {
+            var rate = getSkillAttrValByLevel(charObj, "extraAttack", "rate");
+            extraAttack = getCriAttackExpectedValue(100, charObj.cb.attr.criDmg) * rate * 0.01;
+        }
+    }
+
+    var criAttackE = getCriAttackExpectedValue(charObj.cb.attr.criRate, charObj.cb.attr.criDmg);
+    if (!isCanCri) {
+        criAttackE = 0;
+    }
+
+    if (mode == ACTION) {
+        charObj.cb.attackedTimes++;
+        if (resetAttackedTimes) charObj.cb.attackedTimes = 0;
+        charObj.cb.attr.dmg_frame = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply;
+    } else if (mode == PERFORMANCE) {
+        charObj.cb.attr.attackFrame = getAttackFrame(charObj);
+        var attackTimesPerSecond = 30.0 / charObj.cb.attr.attackFrame;
+        charObj.cb.attr.dps = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * attackTimesPerSecond;
+        charObj.cb.skillAttack = charObj.cb.skillAttack * charObj.cb.attr.dmg_o;
+    }
+}
+
 function calculateBattle() {
     var dmgTable = {};
     dmgTable.x = [];
@@ -1347,51 +1383,10 @@ function calculateBattle() {
             charObj.cb.actionFrame--;
             if (charObj.cb.actionFrame <= 0) {
                 if (charObj.cb.actionType == "attack") {
-                    if (charObj.c.armorPiercing - enemy.cb.attr.armor >= 2) {
-                        charObj.cb.attr.dmg += 2;
-                    } else if (enemy.cb.attr.armor > charObj.c.armorPiercing) {
-                        charObj.cb.attr.dmg -= enemy.cb.attr.armor - charObj.c.armorPiercing;
-                    }
-
-                    charObj.cb.attr.dmg = Math.max(charObj.cb.attr.dmg, 1);
-                    var hitRate = charObj.cb.attr.hit / (charObj.cb.attr.hit + enemy.cb.attr.dodge);
-                    charObj.cb.attr.dps = charObj.cb.attr.dmg * hitRate;
-                    var isCanCri = true;
-                    var resetAttackedTimes = false;
-                    var attackMultiply = 1.0;
-                    if ('attackTimes' in charObj.cb.attr) {
-                        charObj.cb.attr.dps = charObj.cb.attr.dps * charObj.cb.attr.attackTimes;
-                    }
-
-                    if ('criAttack' in charObj.cb.attr) {
-                        charObj.cb.attr.criRate = Math.max(charObj.cb.attr.criRate, 100);
-                    }
-                    charObj.cb.attr.criAttackDps = 1 - charObj.cb.attr.criRate * 0.01 + charObj.cb.attr.criDmg / 100.0 * charObj.cb.attr.criRate * 0.01;
-
-                    if ('everyAttackTimesOnNext' in charObj.skill) {
-                        var skillEveryAttackTimesOnNext = parseInt(charObj.skill.everyAttackTimesOnNext);
-                        if (charObj.cb.attackedTimes == skillEveryAttackTimesOnNext) {
-                            attackMultiply = getSkillAttrValByLevel(charObj, "attack");
-                            isCanCri = false;
-                            resetAttackedTimes = true;
-                        }
-                    }
-
-                    var extraAttack = 0;
-                    if ('everyAttack' in charObj.skill) {
-                        if ('extraAttack' in charObj.skill.effect) {
-                            var rate = getSkillAttrValByLevel(charObj, "extraAttack", "rate");
-                            extraAttack = charObj.cb.attr.criDmg / 100.0 * rate * 0.01;
-                        }
-                    }
-
-                    if (isCanCri) {
-                        dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dps * (charObj.cb.attr.criAttackDps + extraAttack) * attackMultiply);
-                    } else {
-                        dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dps * attackMultiply);
-                    }
-                    charObj.cb.attackedTimes++;
-                    if (resetAttackedTimes) charObj.cb.attackedTimes = 0;
+                    calculateArmorPiercing(charObj, enemy);
+                    calculateHitRate(charObj, enemy);
+                    calculateActionDmg(charObj, ACTION);
+                    dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dmg_frame);
                     charObj.cb.actionFrame = getAttackFrame(charObj);
                     if (charObj.type == "mg") {
                         charObj.cb.belt--;
