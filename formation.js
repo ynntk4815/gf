@@ -1243,7 +1243,8 @@ function calculateActionDmg(charObj, mode) {
     var isCanCri = true;
     var resetAttackedTimes = false;
     var attackMultiply = 1.0;
-    var extraAttack = 0;
+    var extraAttack = 0.0;
+    var criAttackE = 1.0;
 
     charObj.cb.attr.dmg_single = charObj.cb.attr.dmg * charObj.cb.attr.hitRate;
     if ('attackTimes' in charObj.cb.attr) {
@@ -1270,9 +1271,8 @@ function calculateActionDmg(charObj, mode) {
         }
     }
 
-    var criAttackE = getCriAttackExpectedValue(charObj.cb.attr.criRate, charObj.cb.attr.criDmg);
-    if (!isCanCri) {
-        criAttackE = 0;
+    if (isCanCri) {
+        criAttackE = getCriAttackExpectedValue(charObj.cb.attr.criRate, charObj.cb.attr.criDmg);
     }
 
     if (mode == ACTION) {
