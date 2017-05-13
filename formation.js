@@ -56,6 +56,16 @@ function init() {
     $('.char .skill_control').change(function() {
         updateCharObs();
         updatePerformance();
+
+        var allCheck  = true;
+        $(".skill_control").filter(function(i, x) {
+            return $(x).prop("disabled") == false;
+        }).filter(function(i, x) {
+            return mGridHasChar.indexOf($(x).attr("grid_value")) >= 0;
+        }).each(function(i, x) {
+            allCheck &= $(x).prop("checked");
+        });
+        $(".skill_all").prop("checked", allCheck);
     });
 
     $('.enemy_control input').change(function() {
@@ -216,6 +226,16 @@ function init() {
         var v = $(this).val();
         if (v == "") v = null;
         updatePickerByType(mPickerType, v);
+    });
+
+    $('.skill_all').change(function() {
+        var state = $(this).prop("checked");
+        $(".skill_control").filter(function(i, x) {
+            return $(x).prop("disabled") == false;
+        }).each(function(i, x) {
+            var elementState = $(x).prop("checked");
+            if (state ^ elementState) $(x).prop("checked", state).change();
+        });
     });
 
     //debugSkill();
@@ -476,8 +496,18 @@ function addChar(grid, id) {
     $('#picker_by_type').dialog("close");
     $('#picker').dialog("close");
 
+    mGridToChar[grid] = getChar(id);
+
     $("." + mGridToUI[grid] + " .add_button").hide();
     $("." + mGridToUI[grid] + " .char .img").html(getCharImgUIObj(id));
+    if (mGridToChar[grid].skill.type == "passive") {
+        $("." + mGridToUI[grid] + " .char .skill_control").prop("disabled", true);
+        $("." + mGridToUI[grid] + " .char .skill_control").prop("checked", true);
+    } else {
+        $("." + mGridToUI[grid] + " .char .skill_control").prop("disabled", false);
+        $("." + mGridToUI[grid] + " .char .skill_control").prop("checked", false);
+        $(".skill_all").prop("checked", false);
+    }
     if ($('.view_equipment').is(":checked")) {
         $("." + mGridToUI[grid] + " .char").hide();
         $("." + mGridToUI[grid] + " .equipment_container").show();
@@ -486,7 +516,6 @@ function addChar(grid, id) {
         $("." + mGridToUI[grid] + " .equipment_container").hide();
     }
 
-    mGridToChar[grid] = getChar(id);
     var auraUI = $("." + mGridToUI[grid] + " .aura_container");
     updateCharObs();
     updateAuraUI(auraUI, mGridToChar[grid]);
