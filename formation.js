@@ -163,7 +163,12 @@ function init() {
         var text = mStringData[aura.target] + "<br>";
         var auraText = [];
         $.each(getAuraEffectByLink(aura.effect, charObj.c.link), function(key, val) {
-            auraText.push(mStringData[key] + val + "%");
+            if (key == "cooldownTime") {
+                var tKey = key + "Aura";
+                auraText.push(mStringData[tKey] + val + "%");
+            } else {
+                auraText.push(mStringData[key] + val + "%");
+            }
         });
         text = text + auraText.join(", ");
         $("#detail .detail_container").html(text);
