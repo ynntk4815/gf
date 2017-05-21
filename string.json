@@ -38,5 +38,12 @@
     "skillTimes":"進行{0}次",
     "prepareTime":"{0}秒的瞄準",
     "self_aura_grid":"自身影響格上的隊友",
-    "cooldownTimeAura":"技能冷卻速度"
+    "cooldownTimeAura":"技能冷卻速度",
+    "everyAttackTimesOnNext":"每攻擊{0}次，下一次攻擊",
+    "everyChangeBelt":"每次換彈後",
+    "everyAttack":"每次攻擊時",
+    "extraAttack":"額外攻擊一次",
+    "rate":"{0}%概率",
+    "criAttack":"必定暴擊",
+    "addBelt":"該輪射擊的彈鏈延長{0}發"
 }}

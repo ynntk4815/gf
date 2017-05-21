@@ -280,18 +280,37 @@ function getSkillDetail(grid) {
                 var tSkillTarget = skillTarget;
                 if ('type' in val) tSkillType = val.type;
                 if ('target' in val) tSkillTarget = val.target;
+
+                var s = "";
+                if ('everyChangeBelt' in charObj.skill) {
+                    s += mStringData.everyChangeBelt;
+                }
+                if ('everyAttack' in charObj.skill) {
+                    s += mStringData.everyAttack;
+                }
                 if (isBuffAttrPercent(key)) {
-                    var row = "[" +mStringData[tSkillType] + "]";
-                    row += mStringData[tSkillTarget] + mStringData[key] + val.val + "%";
-                    text.push(row);
+                    s += "[" +mStringData[tSkillType] + "]";
+                    s += mStringData[tSkillTarget] + mStringData[key] + val.val + "%";
+                    text.push(s);
                 } else if (key == "time") {
                     text.push(mStringData["time"].format(val.val));
                 } else if (key == "attack" || key == "attackDot" || key == "attackTimes") {
-                    var s = "";
                     if ('prepareTime' in charObj.skill) {
                         s += mStringData.prepareTime.format(charObj.skill.prepareTime);
                     }
+                    if ('everyAttackTimesOnNext' in charObj.skill) {
+                        s += mStringData.everyAttackTimesOnNext.format(charObj.skill.everyAttackTimesOnNext);
+                    }
                     text.push(s + mStringData[key].format(val.val));
+                } else if (key == "extraAttack") {
+                    s += mStringData.rate.format(val.rate) + mStringData.extraAttack + mStringData.criAttack;
+                    text.push(s);
+                } else if (key == "criAttack") {
+                    s += mStringData.criAttack;
+                    text.push(s);
+                } else if (key == "belt") {
+                    s += mStringData.addBelt.format(val.val);
+                    text.push(s);
                 }
             });
         }
