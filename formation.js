@@ -1092,7 +1092,7 @@ function updateCharObsForBattle() {
 }
 
 function getAttackFrame(charObj) {
-    if (charObj.type == "mg") return 12;
+    if (charObj.type == "mg") return 11;
     if ('cb' in charObj) {
         return Math.ceil(50.0 * 30.0 / charObj.cb.attr.fireOfRate) - 1;
     } else {
@@ -1262,7 +1262,7 @@ function updateAttrBeforAction(charObj) {
     charObj.cb.attr.criRate = Math.floor(charObj.cb.attr.criRate);
 
     if (charObj.type != "mg") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 120);
-    if (charObj.type == "rf") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 100);
+    if (charObj.type == "rf") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 110);
     if (charObj.type == "sg") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 60);
     charObj.cb.attr.criRate = Math.min(charObj.cb.attr.criRate, 100);
 
