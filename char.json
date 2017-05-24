@@ -1881,7 +1881,7 @@
             "firstCooldownTime":"3",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
-                "dmg":{"1":"12", "10":"22"},
+                "fireOfRate":{"1":"12", "10":"22"},
                 "time":{"1":"5", "10":"8"}}},
         "aura":{
             "target":"all", "effect":{
