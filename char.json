@@ -427,7 +427,6 @@
             "target":"self",
             "firstCooldownTime":"6",
             "cooldownTime":{"1":"10", "10": "8"},
-            "radius":"",
             "effect":{
                 "dodge":{"1":"65", "10":"120"},
                 "time":{"1":"3", "10":"5"}}},
@@ -519,7 +518,6 @@
             "target":"self",
             "firstCooldownTime":"5",
             "cooldownTime":{"1":"20", "10": "16"},
-            "radius":"",
             "effect":{
                 "dodge":{"1":"25", "10":"45"},
                 "time":{"1":"9", "10":"15"}}},
@@ -589,7 +587,6 @@
             "target":"self",
             "firstCooldownTime":"8",
             "cooldownTime":{"1":"20", "10": "16"},
-            "radius":"",
             "effect":{
                 "immuneDamage":{"1":"1", "10":"1"},
                 "time":{"1":"1.5", "10":"3"}}},
@@ -730,7 +727,6 @@
             "target":"enemy_current",
             "firstCooldownTime":"10",
             "cooldownTime":{"1":"20", "10": "16"},
-            "radius":"",
             "prepareTime":"2",
             "effect":{
                 "attack":{"1":"2.2", "10":"5"},
@@ -752,7 +748,6 @@
             "target":"self",
             "firstCooldownTime":"5",
             "cooldownTime":{"1":"20", "10": "16"},
-            "radius":"",
             "effect":{
                 "fireOfRate":{"1":"22", "10":"40"},
                 "time":{"1":"9", "10":"15"}}},
@@ -774,7 +769,6 @@
             "target":"enemy_farthest",
             "firstCooldownTime":"15",
             "cooldownTime":{"1":"20", "10": "16"},
-            "radius":"",
             "prepareTime":"2",
             "effect":{
                 "attack":{"1":"2.5", "10":"5.5"},
