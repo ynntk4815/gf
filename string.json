@@ -45,5 +45,7 @@
     "extraAttack":"額外攻擊一次",
     "rate":"{0}%概率",
     "criAttack":"必定暴擊",
-    "addBelt":"該輪射擊的彈鏈延長{0}發"
+    "addBelt":"該輪射擊的彈鏈延長{0}發",
+    "singleLink":"單一小人傷害",
+    "multiLink":"擴編總傷害"
 }}

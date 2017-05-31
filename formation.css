@@ -213,6 +213,11 @@
     float:left;
 }
 
+.dmgLinkSwitch {
+    width:150px;
+    float:left;
+}
+
 .button.equipment {
     width:100px;
     height:30px;

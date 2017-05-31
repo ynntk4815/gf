@@ -12,6 +12,8 @@ const CONTROL_CONTAINER = "control_container";
 const EQUIPMENT_CONTAINER = "equipment_container";
 const PERFORMANCE = "performance";
 const ACTION = "action";
+const SINGLE_LINK = "single_link";
+const MULTI_LINK = "multi_link";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -23,6 +25,7 @@ var mFormation = [];
 var mGridToUI = [];
 var mGridToChar = [];
 var mGridHasChar = [];
+var mDmgLinkMode = SINGLE_LINK;
 
 function init() {
     initFormation();
@@ -74,6 +77,18 @@ function init() {
     });
 
     $('.enemy_control .battleisNight').change(function() {
+        updateCharObs();
+        updatePerformance();
+    });
+
+    $('.dmgLinkSwitch').click(function() {
+        if (mDmgLinkMode == SINGLE_LINK) {
+            mDmgLinkMode = MULTI_LINK;
+            $(this).html(mStringData.multiLink);
+        } else {
+            mDmgLinkMode = SINGLE_LINK;
+            $(this).html(mStringData.singleLink);
+        }
         updateCharObs();
         updatePerformance();
     });
@@ -1298,6 +1313,7 @@ function calculateActionDmg(charObj, mode) {
     var attackMultiply = 1.0;
     var extraAttack = 0.0;
     var criAttackE = 1.0;
+    var link = 1;
 
     charObj.cb.attr.dmg_single = charObj.cb.attr.dmg * charObj.cb.attr.hitRate;
     if ('attackTimes' in charObj.cb.attr) {
@@ -1328,15 +1344,23 @@ function calculateActionDmg(charObj, mode) {
         criAttackE = getCriAttackExpectedValue(charObj.cb.attr.criRate, charObj.cb.attr.criDmg);
     }
 
+    if (mDmgLinkMode == MULTI_LINK) {
+        link = charObj.c.link;
+    }
+
     if (mode == ACTION) {
         charObj.cb.attackedTimes++;
         if (resetAttackedTimes) charObj.cb.attackedTimes = 0;
-        charObj.cb.attr.dmg_frame = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply;
+        charObj.cb.attr.dmg_frame = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * link;
     } else if (mode == PERFORMANCE) {
         charObj.cb.attr.attackFrame = getAttackFrame(charObj);
         var attackTimesPerSecond = 30.0 / charObj.cb.attr.attackFrame;
-        charObj.cb.attr.dps = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * attackTimesPerSecond;
+        charObj.cb.attr.dps = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * attackTimesPerSecond * link;
         charObj.cb.skillAttack = charObj.cb.skillAttack * charObj.cb.attr.dmg_o;
+        if ('radius' in charObj.skill) {
+        } else {
+            charObj.cb.skillAttack *= link;
+        }
     }
 }
 
@@ -1460,7 +1484,15 @@ function calculateBattle() {
                 } else if (charObj.cb.actionType == PREPARE_TO_USE_SKILL || charObj.cb.actionType == USE_ATTACK_SKILL) {
                     charObj.cb.skillUsedTimes++;
                     var attackMultiply = getSkillAttrValByLevel(charObj, "attack");
-                    dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dmg_o * attackMultiply);
+                    var link = 1;
+                    if (mDmgLinkMode == MULTI_LINK) {
+                        link = charObj.c.link;
+                    }
+                    if ('radius' in charObj.skill) {
+                        link = 1;
+                    }
+
+                    dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dmg_o * attackMultiply * link);
 
                     if ('skillTimes' in charObj.skill && charObj.cb.skillUsedTimes < charObj.skill.skillTimes) {
                         charObj.cb.actionType = PREPARE_TO_USE_SKILL;
