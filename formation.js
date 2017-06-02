@@ -1389,6 +1389,13 @@ function calculateBattle() {
         endTime = endTime * FRAME_PER_SECOND;
     }
 
+    var walkTime = $('.calculate_control .walkTime input').val();
+    if (walkTime == "") {
+        walkTime = 0;
+    } else {
+        walkTime = walkTime * FRAME_PER_SECOND;
+    }
+
     updateCharObsForBase();
     updateCharObsForAura();
 
@@ -1400,7 +1407,7 @@ function calculateBattle() {
             charObj.cb.attr = copyObject(charObj.c);
             charObj.cb.actionFrame = getAttackFrame(charObj);
             charObj.cb.actionType = "attack";
-            charObj.cb.skillCD = getSkillFirstCooldownTime(charObj) * 30;
+            charObj.cb.skillCD = getSkillFirstCooldownTime(charObj) * 30 - walkTime;
             charObj.cb.skillUsedTimes = 0;
             charObj.cb.attackedTimes = 0;
             charObj.cb.buff = [];

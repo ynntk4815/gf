@@ -75,6 +75,10 @@
     text-align:center;
 }
 
+.calculate_control .control_input.walkTime {
+    width:170px;
+}
+
 .enemy_control .control_input {
     width:70px;
     height:20px;
