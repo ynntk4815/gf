@@ -980,7 +980,7 @@
             "name":"突擊專注N",
             "type":"buff",
             "target":"self",
-            "firstCooldownTime":"5",
+            "firstCooldownTime":"8",
             "cooldownTime":{"1":"10", "10": "8"},
             "effect":{
                 "fireOfRate":{"1":"15", "10":"28"},
