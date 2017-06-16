@@ -393,7 +393,7 @@ function removeEquipment(grid, equipmentIndex) {
 
     var charObj = mGridToChar[grid];
     charObj.equipment[equipmentIndex] = "";
-    updateEquipmentUIByGrid(grid);
+    updateEquipmentUI(charObj);
 
     updateCharObs();
     updatePerformance();
@@ -705,7 +705,7 @@ function openDialogPickerEquipment(index, grid) {
 function addEquipment(grid, equipmentIndex, id) {
     var charObj = mGridToChar[grid];
     charObj.equipment[equipmentIndex] = id;
-    updateEquipmentUIByGrid(grid);
+    updateEquipmentUI(charObj);
 
     updateCharObs();
     updatePerformance();
