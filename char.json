@@ -9,7 +9,7 @@
             "name":"火力號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"12", "10":"22"},
@@ -58,7 +58,7 @@
             "name":"閃光彈",
             "type":"debuff",
             "target":"enemy",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"5",
             "cooldownTime":{"1":"15", "10": "12"},
             "radius":"2.5",
             "effect":{
@@ -83,7 +83,7 @@
             "name":"火力壓制N",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"12", "10":"20"},
@@ -109,7 +109,7 @@
             "name":"掩護號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dodge":{"1":"32", "10":"55"},
@@ -133,7 +133,7 @@
             "name":"突擊號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "fireOfRate":{"1":"12", "10":"22"},
@@ -157,7 +157,7 @@
             "name":"精確壓制",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "hit":{"1":"24", "10":"36"},
@@ -205,7 +205,7 @@
             "name":"殲滅號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"6", "10":"10"},
@@ -230,7 +230,7 @@
             "name":"掩護號令N",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dodge":{"1":"28", "10":"35"},
@@ -279,7 +279,7 @@
             "name":"衝鋒號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"6", "10":"10"},
@@ -308,7 +308,7 @@
             "name":"突擊號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "fireOfRate":{"1":"11", "10":"20"},
@@ -332,7 +332,7 @@
             "name":"火力壓制",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"15", "10":"25"},
@@ -1847,7 +1847,7 @@
             "name":"掩護壓制",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dodge":{"1":"32", "10":"40"},
@@ -1872,7 +1872,7 @@
             "name":"突擊壓制",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "fireOfRate":{"1":"12", "10":"22"},
@@ -1982,7 +1982,7 @@
             "name":"火力號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"15", "10":"25"},
@@ -2007,7 +2007,7 @@
             "name":"突擊號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "fireOfRate":{"1":"15", "10":"25"},
@@ -2031,7 +2031,7 @@
             "name":"掩護壓制T",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dodge":{"1":"40", "10":"55"},
@@ -2055,7 +2055,7 @@
             "name":"火力號令N",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"10", "10":"20"},
@@ -2081,7 +2081,7 @@
             "name":"掩護號令T",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dodge":{"1":"35", "10":"60"},
@@ -2367,7 +2367,7 @@
             "name":"火力號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"11", "10":"20"},
@@ -2390,7 +2390,7 @@
             "name":"精確壓制",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "hit":{"1":"30", "10":"45"},
@@ -2599,7 +2599,7 @@
             "name":"掩護號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dodge":{"1":"32", "10":"55"},
@@ -2668,7 +2668,7 @@
             "name":"突擊壓制",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "fireOfRate":{"1":"18", "10":"30"},
@@ -2694,7 +2694,7 @@
             "name":"閃光彈",
             "type":"debuff",
             "target":"enemy",
-            "firstCooldownTime":"6",
+            "firstCooldownTime":"5",
             "cooldownTime":{"1":"20", "10": "16"},
             "radius":"2.5",
             "effect":{
@@ -2738,7 +2738,7 @@
             "name":"火力專注T",
             "type":"buff",
             "target":"self",
-            "firstCooldownTime":"4",
+            "firstCooldownTime":"2",
             "cooldownTime":{"1":"20", "10": "16"},
             "effect":{
                 "dmg":{"1":"30", "10":"50"},
@@ -2759,7 +2759,7 @@
             "name":"突擊專注T",
             "type":"buff",
             "target":"self",
-            "firstCooldownTime":"4",
+            "firstCooldownTime":"2",
             "cooldownTime":{"1":"20", "10": "16"},
             "effect":{
                 "fireOfRate":{"1":"30", "10":"50"},
@@ -2801,7 +2801,7 @@
             "name":"掩護壓制T",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dodge":{"1":"30", "10":"40"},
@@ -2937,7 +2937,7 @@
             "name":"火力號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"10", "10":"18"},
@@ -2961,7 +2961,7 @@
             "name":"隱秘號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"2",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "hit":{"1":"32", "10":"55"},
@@ -2986,7 +2986,7 @@
             "name":"精確號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"2",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "hit":{"1":"50", "10":"100"},
@@ -3008,7 +3008,7 @@
             "name":"穿刺號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"2",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "fireOfRate":{"1":"12", "10":"20"},
@@ -3474,7 +3474,7 @@
             "name":"閃光彈",
             "type":"debuff",
             "target":"enemy",
-            "firstCooldownTime":"6",
+            "firstCooldownTime":"5",
             "cooldownTime":{"1":"20", "10": "16"},
             "radius":"2.5",
             "effect":{
@@ -3497,7 +3497,7 @@
             "name":"觀測者直擊",
             "type":"attack",
             "target":"enemy",
-            "firstCooldownTime":"2",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "attack":{"1":"5", "10":"10"},
@@ -3565,7 +3565,7 @@
             "name":"強襲號令",
             "type":"buff",
             "target":"ally",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "dmg":{"1":"6", "10":"15"},
@@ -3589,7 +3589,7 @@
             "name":"突擊壓制",
             "type":"debuff",
             "target":"enemy_all",
-            "firstCooldownTime":"3",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"15", "10": "12"},
             "effect":{
                 "fireOfRate":{"1":"16", "10":"28"},
