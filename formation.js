@@ -284,8 +284,8 @@ function getSkillDetail(grid) {
 
         if (skillEffect != "") {
             if (skillType != "passive") {
-                text.push(mStringData.firstCooldownTime.format(skill.firstCooldownTime));
-                text.push(mStringData.cooldownTime.format(getSkillCooldownTime(charObj.skill, charObj.c.skillLevel)));
+                text.push(mStringData.firstCooldownTime.format(getSkillFirstCooldownTime(charObj)));
+                text.push(mStringData.cooldownTime.format(getSkillCooldownTime(charObj.skill, charObj.c.skillLevel, charObj.c.cooldownTimeReduction)));
                 if ('skillTimes' in charObj.skill) {
                     text.push(mStringData.skillTimes.format(charObj.skill.skillTimes));
                 }
@@ -965,6 +965,7 @@ function updateCharObsForBase() {
             charObj.c.aura_dodge = 0;
             charObj.c.aura_fireOfRate = 0;
             charObj.c.aura_criRate = 0;
+            charObj.c.aura_cooldownTime = 0;
             charObj.c.skillAttack = 0;
             charObj.c.armorPiercing = 10;
             charObj.c.nightSight = 0;
@@ -1055,6 +1056,7 @@ function updateCharObsForAura() {
             charObj.c.dodge = Math.floor(charObj.c.dodge * (1 + 0.01 * charObj.c.aura_dodge));
             charObj.c.fireOfRate = Math.floor(charObj.c.fireOfRate * (1 + 0.01 * charObj.c.aura_fireOfRate));
             charObj.c.criRate = Math.floor(charObj.c.criRate * (1 + 0.01 * charObj.c.aura_criRate));
+            charObj.c.cooldownTimeReduction = Math.min(30, charObj.c.aura_cooldownTime);
         }
     }
 }
@@ -1120,7 +1122,7 @@ function getMgChangeBeltFrame(fireOfRate) {
 }
 
 function getSkillFirstCooldownTime(charObj) {
-    return charObj.skill.firstCooldownTime;
+    return charObj.skill.firstCooldownTime * (1 - charObj.c.cooldownTimeReduction * 0.01);
 }
 
 function getAlly() {
@@ -1237,10 +1239,11 @@ function updateForSkillCalculateBattle(skillEffect, targetObjs, time, effectType
     });
 }
 
-function getSkillCooldownTime(skill, skillLevel) {
+function getSkillCooldownTime(skill, skillLevel, cooldownTimeReduction) {
     var cooldownTime = skill.cooldownTime;
     var e = (1.0 * cooldownTime["10"] - 1.0 * cooldownTime["1"]) / 9.0 * (skillLevel - 1.0) + 1.0 * cooldownTime["1"];
-    e = e.toFixed(1) * 1;
+    e = e * (1 - cooldownTimeReduction * 0.01);
+    e = e.toFixed(2) * 1
     return e;
 }
 
@@ -1454,7 +1457,7 @@ function calculateBattle() {
                         charObj.cb.actionType = USE_ATTACK_SKILL;
                         charObj.cb.actionFrame = 0;
                     }
-                    charObj.cb.skillCD = getSkillCooldownTime(charObj.skill, charObj.c.skillLevel) * 30;
+                    charObj.cb.skillCD = getSkillCooldownTime(charObj.skill, charObj.c.skillLevel, charObj.c.cooldownTimeReduction) * 30;
                     charObj.cb.skillUsedTimes = 0;
                 }
             }
