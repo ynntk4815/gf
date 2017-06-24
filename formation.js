@@ -922,6 +922,7 @@ function getChar(id){
     if (obj.type == "rf" || obj.type == "sg") obj["criRate"] = 40;
     if (obj.type == "smg" || obj.type == "mg") obj["criRate"] = 5;
     if (obj.id == "114") obj["criRate"] = 40;
+    if (obj.id == "172") obj["criRate"] = 30;
     return obj;
 }
 
