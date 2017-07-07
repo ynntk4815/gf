@@ -727,9 +727,9 @@
             "target":"enemy_current",
             "firstCooldownTime":"10",
             "cooldownTime":{"1":"20", "10": "16"},
-            "prepareTime":"2",
+            "prepareTime":"1.5",
             "effect":{
-                "attack":{"1":"2.2", "10":"5"},
+                "attack":{"1":"2.8", "10":"5.5"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"hg", "effect":{
@@ -767,11 +767,11 @@
             "name":"沉穩射擊",
             "type":"attack",
             "target":"enemy_farthest",
-            "firstCooldownTime":"15",
+            "firstCooldownTime":"10",
             "cooldownTime":{"1":"20", "10": "16"},
-            "prepareTime":"2",
+            "prepareTime":"1.5",
             "effect":{
-                "attack":{"1":"2.5", "10":"5.5"},
+                "attack":{"1":"3", "10":"6"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"hg", "effect":{
@@ -811,9 +811,9 @@
             "target":"enemy_specific",
             "firstCooldownTime":"10",
             "cooldownTime":{"1":"20", "10": "16"},
-            "prepareTime":"2",
+            "prepareTime":"1.5",
             "effect":{
-                "attack":{"1":"2.2", "10":"5"},
+                "attack":{"1":"2.8", "10":"5.5"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"hg", "effect":{
@@ -831,11 +831,11 @@
             "name":"沉穩射擊",
             "type":"attack",
             "target":"enemy_farthest",
-            "firstCooldownTime":"15",
+            "firstCooldownTime":"10",
             "cooldownTime":{"1":"20", "10": "16"},
-            "prepareTime":"2",
+            "prepareTime":"1.5",
             "effect":{
-                "attack":{"1":"2.5", "10":"5.5"},
+                "attack":{"1":"3", "10":"6"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"hg", "effect":{
@@ -854,9 +854,9 @@
             "target":"enemy_specific",
             "firstCooldownTime":"10",
             "cooldownTime":{"1":"20", "10": "16"},
-            "prepareTime":"2",
+            "prepareTime":"1.5",
             "effect":{
-                "attack":{"1":"2", "10":"4.5"},
+                "attack":{"1":"2.5", "10":"5"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"hg", "effect":{
@@ -938,9 +938,9 @@
             "target":"enemy_nearest",
             "firstCooldownTime":"10",
             "cooldownTime":{"1":"20", "10": "16"},
-            "prepareTime":"2",
+            "prepareTime":"1.5",
             "effect":{
-                "attack":{"1":"2.2", "10":"5"},
+                "attack":{"1":"2.8", "10":"5.5"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"hg", "effect":{
@@ -2461,11 +2461,11 @@
             "name":"沉穩射擊",
             "type":"attack",
             "target":"enemy_farthest",
-            "firstCooldownTime":"15",
+            "firstCooldownTime":"10",
             "cooldownTime":{"1":"20", "10": "16"},
-            "prepareTime":"2",
+            "prepareTime":"1.5",
             "effect":{
-                "attack":{"1":"2.5", "10":"5.5"},
+                "attack":{"1":"3", "10":"6"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"hg", "effect":{
@@ -2624,9 +2624,9 @@
             "target":"enemy_specific",
             "firstCooldownTime":"10",
             "cooldownTime":{"1":"20", "10": "16"},
-            "prepareTime":"2",
+            "prepareTime":"1.5",
             "effect":{
-                "attack":{"1":"2.2", "10":"5"},
+                "attack":{"1":"2.8", "10":"5.5"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"hg", "effect":{
