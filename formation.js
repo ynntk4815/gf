@@ -1512,7 +1512,11 @@ function calculateBattle() {
 
                     if ('skillTimes' in charObj.skill && charObj.cb.skillUsedTimes < charObj.skill.skillTimes) {
                         charObj.cb.actionType = PREPARE_TO_USE_SKILL;
-                        charObj.cb.actionFrame = charObj.skill.prepareTime * 30;
+                        if ('prepareTime' in charObj.skill) {
+                            charObj.cb.actionFrame = charObj.skill.prepareTime * 30;
+                        } else {
+                            charObj.cb.actionFrame = 1 * 30;
+                        }
                     } else {
                         charObj.cb.actionFrame = 12;
                         charObj.cb.actionType = "attack";

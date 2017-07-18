@@ -2201,11 +2201,12 @@
             "name":"爆破榴彈",
             "type":"attack",
             "target":"enemy",
-            "firstCooldownTime":"8",
+            "firstCooldownTime":"6",
             "cooldownTime":{"1":"20", "10": "16"},
-            "radius":"4",
+            "radius":"1.5",
+            "skillTimes":"3",
             "effect":{
-                "attack":{"1":"1", "10":"2.8"},
+                "attack":{"1":"2.5", "10":"5"},
                 "time":{"1":"", "10":""}}},
         "aura":{
             "target":"smg", "effect":{
