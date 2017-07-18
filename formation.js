@@ -2,7 +2,7 @@
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed", "rate"];
-const SKILL_EFFECT_KEY_COPY = ["target", "type"];
+const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime"];
 const SKILL_EFFECT_KEY_NESTED = ["rate"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
@@ -316,7 +316,12 @@ function getSkillDetail(grid) {
                     if ('everyAttackTimesOnNext' in charObj.skill) {
                         s += mStringData.everyAttackTimesOnNext.format(charObj.skill.everyAttackTimesOnNext);
                     }
-                    text.push(s + mStringData[key].format(val.val));
+
+                    if (key == "attackDot") {
+                        text.push(s + mStringData[key].format(val.everyTime, val.val));
+                    } else {
+                        text.push(s + mStringData[key].format(val.val));
+                    }
                 } else if (key == "extraAttack") {
                     s += mStringData.rate.format(val.rate) + mStringData.extraAttack + mStringData.criAttack;
                     text.push(s);
