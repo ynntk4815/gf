@@ -331,6 +331,13 @@
         "effect":{
             "movementSpeed":{"min": "-3", "max":"-3"},
             "criDmg":{"min": "11", "max":"15"}
+        }},
+    {"id":"91", "name":"特殊戰機動護甲", "type":"bulletproof_board", "rarity":"5", "strengthenCoefficient":"0.03", "can_char":["54"],
+        "effect":{
+            "armor":{"min": "15", "max":"15"},
+            "dodge":{"min": "8", "max":"8"},
+            "fireOfRate":{"min": "-10", "max":"-10"},
+            "hit":{"min": "-20", "max":"-20"}
         }}
 
 ],
