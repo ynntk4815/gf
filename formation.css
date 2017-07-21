@@ -58,6 +58,18 @@
     right: 0;
 }
 
+.char .friendship {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
+.char .friendship img {
+    max-width:30px;
+    max-height:30px;
+}
+
 .calculate_control .control_input {
     width:70px;
     height:20px;

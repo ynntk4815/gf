@@ -14,6 +14,13 @@ const PERFORMANCE = "performance";
 const ACTION = "action";
 const SINGLE_LINK = "single_link";
 const MULTI_LINK = "multi_link";
+const FRIENDSHIP = "friendship";
+const NONE_FRIENDLY = "none_friendly";
+const FRIENDLY = "friendly";
+const MARRIED = "married";
+const NONE_FRIENDLY_SRC = "assets/none_friendly.png";
+const FRIENDLY_SRC = "assets/friendly.png";
+const MARRIED_SRC = "assets/married.png";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -256,6 +263,23 @@ function init() {
             var elementState = $(x).prop("checked");
             if (state ^ elementState) $(x).prop("checked", state).change();
         });
+    });
+
+    $('.friendship').click(function() {
+        var friendship = $(this).attr("value");
+        $(this).html("");
+        if (friendship == NONE_FRIENDLY) {
+            $(this).attr("value", FRIENDLY);
+            $('<img>').attr("src", FRIENDLY_SRC).appendTo($(this));
+        } else if (friendship == FRIENDLY) {
+            $(this).attr("value", MARRIED);
+            $('<img>').attr("src", MARRIED_SRC).appendTo($(this));
+        } else if (friendship == MARRIED) {
+            $(this).attr("value", NONE_FRIENDLY);
+            $('<img>').attr("src", NONE_FRIENDLY_SRC).appendTo($(this));
+        }
+        updateCharObs();
+        updatePerformance();
     });
 
     //debugSkill();
@@ -946,12 +970,14 @@ function updateCharObsForBase() {
             charObj.ui = {};
             charObj.ui.controlUI = gridToUi(GRIDS[i], CONTROL_CONTAINER);
             charObj.ui.equipmentUI = gridToUi(GRIDS[i], EQUIPMENT_CONTAINER);
+            charObj.ui.friendship = gridToUi(GRIDS[i], FRIENDSHIP);
 
             charObj.c = {};
             charObj.c.selfGrid = parseInt(GRIDS[i]);
             charObj.c.level = parseInt(charObj.ui.controlUI.find(".level").val());
             charObj.c.isUseSkill = charObj.ui.controlUI.find(".skill_control").is(":checked");
             charObj.c.skillLevel = parseInt(charObj.ui.controlUI.find(".skill_level").val());
+            charObj.c.friendship = charObj.ui.friendship.attr("value");
             charObj.c.link = getLink(charObj.c.level);
             charObj.c.hp = charGetAttrByLevel(charObj.hp, charObj.c.level);
             charObj.c.dmg = charGetAttrByLevel(charObj.dmg, charObj.c.level);
@@ -965,6 +991,13 @@ function updateCharObsForBase() {
             if (charObj.type == "mg") {
                 charObj.c.belt = parseInt(charObj.belt);
             }
+
+            var friendshipEffect = 0;
+            if (charObj.c.friendship == FRIENDLY) friendshipEffect = 0.05;
+            if (charObj.c.friendship == MARRIED) friendshipEffect = 0.1;
+            charObj.c.dmg = Math.ceil(charObj.c.dmg * (1 + friendshipEffect));
+            charObj.c.hit = Math.ceil(charObj.c.hit * (1 + friendshipEffect));
+            charObj.c.dodge = Math.ceil(charObj.c.dodge * (1 + friendshipEffect));
 
             charObj.c.aura_dmg = 0;
             charObj.c.aura_hit = 0;
