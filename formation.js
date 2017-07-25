@@ -26,6 +26,7 @@ var mPickerType = "";
 var mPickerEquipmentIndex = "";
 var mEquipmentData = "";
 var mStringData = "";
+var mUpdate = [];
 var mCharData = [];
 var mGridOrder = [];
 var mFormation = [];
@@ -157,6 +158,7 @@ function init() {
         $('#picker_by_type').dialog("close");
         $('#picker_equipment').dialog("close");
         $('#detailCalculate').dialog("close");
+        $('#updateDialog').dialog("close");
     });
 
     var pre = getUrlParameter('pre');
@@ -282,6 +284,11 @@ function init() {
         updatePerformance();
     });
 
+    $('.update_log').html(mStringData["last_update"] + " " + mUpdate[0].date);
+    $('.update_log').click(function() {
+        $('#updateDialog').dialog("open");
+    });
+
     //debugSkill();
 }
 
@@ -383,6 +390,8 @@ function initDialog() {
     $('#picker_equipment').dialog({position: {my: "left top", at: "right top", of: ".formation"}});
     $('#detail').dialog({autoOpen: false, width: 'auto'});
     $('#detailCalculate').dialog({autoOpen: false, width: 'auto', modal : true});
+    $('#updateDialog').dialog({autoOpen: false, width: 'auto', modal : true});
+    $('#updateDialog').dialog({position: {my: "left bottom", at: "left top", of: ".update_log"}});
 
     var row = $('<tr></tr>');
     for (var i in TYPES) {
@@ -401,6 +410,14 @@ function initDialog() {
 
     $('#picker_equipment .remove').click(function() {
         removeEquipment(mPickerGrid, mPickerEquipmentIndex);
+    });
+
+    mUpdate.forEach(function(v) {
+        $('#updateDialog .text').append(v.date);
+        $('#updateDialog .text').append("<br>");
+        $('#updateDialog .text').append(v.log.join("<br>"));
+        $('#updateDialog .text').append("<br>");
+        $('#updateDialog .text').append("<br>");
     });
 }
 
@@ -558,6 +575,24 @@ function initData() {
     }).fail(function() {
         alert("load json data fail");
     });
+    $.getJSON("update.json", function(data) {
+        $.each(data.update, function(key, val) {
+            var msec = Date.parse(val.date);
+            val.date = new Date(msec);
+            mUpdate.push(val);
+        });
+    }).fail(function() {
+        alert("load json data fail");
+    });
+    mUpdate.sort(compare);
+}
+
+function compare(a,b) {
+    if (a.date < b.date)
+        return 1;
+    else
+        return -1;
+    return 0;
 }
 
 function addChar(grid, id) {

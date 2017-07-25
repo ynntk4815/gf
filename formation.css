@@ -262,6 +262,15 @@
     background:#BEDEC7;
 }
 
+.update_log {
+    width:400px;
+}
+
+#updateDialog .text {
+    height: 200px;
+    overflow-y: scroll;
+}
+
 .factory {
     display: none;
 }
