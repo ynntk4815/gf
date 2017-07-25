@@ -1761,16 +1761,20 @@ function gridToXY(grid) {
 }
 
 function debugSkill() {
+    var l = [];
     for (var i in mCharData) {
         var charObj = mCharData[i];
         var skill = charObj.skill;
         var skillType = skill.type;
         var skillEffect = [];
-        if (true && 'effectNight' in skill) {
+        if (false && 'effectNight' in skill) {
             skillEffect = getSkillByLevel(skill.effectNight, 10);
         }
-        if (false && 'effect' in skill) {
+        if (true && 'effect' in skill) {
             skillEffect = getSkillByLevel(skill.effect, 10);
+            if (skill.effect.time["1"] == 5 && skill.effect.time["10"] == 8) {
+                l.push(charObj.name);
+            }
         }
 
         $.each(skillEffect, function(key, val) {
@@ -1784,6 +1788,7 @@ function debugSkill() {
             }
         });
     }
+    alert(l);
 }
 
 
