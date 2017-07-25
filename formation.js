@@ -284,7 +284,7 @@ function init() {
         updatePerformance();
     });
 
-    $('.update_log').html(mStringData["last_update"] + " " + mUpdate[0].date);
+    $('.update_log').html(mStringData["last_update"] + " " + mUpdate[0].date.yyyymmdd());
     $('.update_log').click(function() {
         $('#updateDialog').dialog("open");
     });
@@ -413,7 +413,7 @@ function initDialog() {
     });
 
     mUpdate.forEach(function(v) {
-        $('#updateDialog .text').append(v.date);
+        $('#updateDialog .text').append(v.date.yyyymmdd());
         $('#updateDialog .text').append("<br>");
         $('#updateDialog .text').append(v.log.join("<br>"));
         $('#updateDialog .text').append("<br>");
@@ -1855,4 +1855,14 @@ if (!String.prototype.format) {
     });
   };
 }
+
+Date.prototype.yyyymmdd = function() {
+  var mm = this.getMonth() + 1; // getMonth() is zero-based
+  var dd = this.getDate();
+
+  return [this.getFullYear(),
+          (mm > 9 ? '' : '0') + mm,
+          (dd > 9 ? '' : '0') + dd
+         ].join('/');
+};
 //alert(JSON.stringify(charObj));
