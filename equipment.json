@@ -338,6 +338,16 @@
             "dodge":{"min": "8", "max":"8"},
             "fireOfRate":{"min": "-10", "max":"-10"},
             "hit":{"min": "-20", "max":"-20"}
+        }},
+    {"id":"92", "name":"UMP UX外骨骼", "type":"exoskeleton", "rarity":"5", "can_char":["101", "102", "103"],
+        "effect":{
+            "dodge":{"min": "20", "max":"25", "strengthenCoefficient":"0.04"},
+            "criDmg":{"min": "11", "max":"15", "strengthenCoefficient":"0.07"}
+        }},
+    {"id":"93", "name":"PKN03M夜視瞄具", "type":"night_battle_equipment", "rarity":"5", "can_char":["118"],
+        "effect":{
+            "dmg":{"min": "5", "max":"5", "strengthenCoefficient":"0.06"},
+            "nightSight":{"min": "100", "max":"100", "strengthenCoefficient":"0.00"}
         }}
 
 ],
