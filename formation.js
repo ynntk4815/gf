@@ -3,7 +3,7 @@ const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed", "rate"];
 const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime"];
-const SKILL_EFFECT_KEY_NESTED = ["rate"];
+const SKILL_EFFECT_KEY_NESTED = ["rate", "attackToArmor", "extraToTarget"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
 const PREPARE_TO_USE_SKILL = "prepareToUseSkill";
@@ -350,6 +350,15 @@ function getSkillDetail(grid) {
 
                     if (key == "attackDot") {
                         text.push(s + mStringData[key].format(val.everyTime, val.val));
+                    } else if (key == "attack") {
+                        s += mStringData[key].format(val.val);
+                        if ('attackToArmor' in val) {
+                            s += "/" + mStringData["attackToArmor"].format(val["attackToArmor"]);
+                        }
+                        if ('extraToTarget' in val) {
+                            s += "/" + mStringData["extraToTarget"] + mStringData[key].format(val["extraToTarget"]);
+                        }
+                        text.push(s);
                     } else {
                         text.push(s + mStringData[key].format(val.val));
                     }
@@ -1154,6 +1163,15 @@ function updateCharObsForUseSkill() {
                     useSkillForCalculateBattle(charObj, ally, enemy);
                 } else if (skillType == "attack") {
                     charObj.cb.skillAttack = getSkillAttrValByLevel(charObj, "attack");
+                    var attackMultiplyExtra = getSkillAttrValByLevel(charObj, "attack", "extraToTarget");
+                    if (isArmorUnit(enemy)) {
+                        var attackToArmor = getSkillAttrValByLevel(charObj, "attack", "attackToArmor");
+                        if (attackToArmor != null) charObj.cb.skillAttack = attackToArmor;
+                    }
+
+                    if (attackMultiplyExtra != null) {
+                        charObj.cb.skillAttack += attackMultiplyExtra;
+                    }
                 }
             }
         }
@@ -1228,9 +1246,18 @@ function getSkillAttrValByLevel(charObj, attr, nestedAttr) {
     }
 
     if (nestedAttr != null) {
-        return skillEffect[attr][nestedAttr];
+        if (nestedAttr in skillEffect[attr]) {
+            return skillEffect[attr][nestedAttr];
+        } else {
+            return null;
+        }
     }
-    return skillEffect[attr].val;
+
+    if (attr in skillEffect) {
+        return skillEffect[attr].val;
+    } else {
+        return null;
+    }
 }
 
 function useSkillForCalculateBattle(charObj, ally, enemy) {
@@ -1568,7 +1595,18 @@ function calculateBattle() {
                 } else if (charObj.cb.actionType == PREPARE_TO_USE_SKILL || charObj.cb.actionType == USE_ATTACK_SKILL) {
                     charObj.cb.skillUsedTimes++;
                     var attackMultiply = getSkillAttrValByLevel(charObj, "attack");
+                    var attackMultiplyExtra = getSkillAttrValByLevel(charObj, "attack", "extraToTarget");
                     var link = 1;
+
+                    if (isArmorUnit(enemy)) {
+                        var attackToArmor = getSkillAttrValByLevel(charObj, "attack", "attackToArmor");
+                        if (attackToArmor != null) attackMultiply = attackToArmor;
+                    }
+
+                    if (attackMultiplyExtra != null) {
+                        attackMultiply += attackMultiplyExtra;
+                    }
+
                     if (mDmgLinkMode == MULTI_LINK) {
                         link = charObj.c.link;
                     }
@@ -1594,6 +1632,12 @@ function calculateBattle() {
         }
     }
     return dmgTable;
+}
+
+function isArmorUnit(obj) {
+    if ('attr' in obj.cb && obj.cb.attr.armor > 0) return true;
+    if (obj.cb.armor > 0) return true;
+    return false
 }
 
 function updateCharObs() {
@@ -1663,7 +1707,7 @@ function getSkillByLevel(skillEffect, skillLevel) {
 
             } else {
                 var e = (1.0 * val["10"] - 1.0 * val["1"]) / 9.0 * (skillLevel - 1.0) + 1.0 * val["1"];
-                if (key == "time" || key == "attack" || key == "attackDot") {
+                if (key == "time" || key == "attack" || key == "attackDot" || key == "extraToTarget") {
                     e = e.toFixed(1) * 1;
                 } else {
                     e = e.toFixed(0) * 1;

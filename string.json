@@ -48,5 +48,7 @@
     "addBelt":"該輪射擊的彈鏈延長{0}發",
     "singleLink":"單一小人傷害",
     "multiLink":"擴編總傷害",
-    "last_update":"最後更新"
+    "last_update":"最後更新",
+    "attackToArmor":"若對裝甲{0}倍傷害",
+    "extraToTarget":"目標額外"
 }}
