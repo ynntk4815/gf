@@ -289,7 +289,7 @@ function init() {
         $('#updateDialog').dialog("open");
     });
 
-    //debugSkill();
+    //debugChar();
 }
 
 function getSkillDetail(grid) {
@@ -1804,33 +1804,44 @@ function gridToXY(grid) {
     return pos;
 }
 
-function debugSkill() {
+function debugChar() {
     var l = [];
     for (var i in mCharData) {
         var charObj = mCharData[i];
-        var skill = charObj.skill;
-        var skillType = skill.type;
-        var skillEffect = [];
-        if (false && 'effectNight' in skill) {
-            skillEffect = getSkillByLevel(skill.effectNight, 10);
-        }
-        if (true && 'effect' in skill) {
-            skillEffect = getSkillByLevel(skill.effect, 10);
-            if (skill.effect.time["1"] == 5 && skill.effect.time["10"] == 8) {
-                l.push(charObj.name);
+
+        if (false) {
+            var skill = charObj.skill;
+            var skillType = skill.type;
+            var skillEffect = [];
+            if (false && 'effectNight' in skill) {
+                skillEffect = getSkillByLevel(skill.effectNight, 10);
             }
+            if (true && 'effect' in skill) {
+                skillEffect = getSkillByLevel(skill.effect, 10);
+                if (skill.effect.time["1"] == 5 && skill.effect.time["10"] == 8) {
+                    l.push(charObj.name);
+                }
+            }
+
+            $.each(skillEffect, function(key, val) {
+                var tSkillType = skillType;
+                if ('type' in val) tSkillType = val.type;
+                if (tSkillType == "buff" || tSkillType == "debuff") {
+                    if (!('time' in skillEffect)) {
+                        alert("id: " + charObj.id + " skill no time val");
+                    }
+                } else if (tSkillType == "attack") {
+                }
+            });
         }
 
-        $.each(skillEffect, function(key, val) {
-            var tSkillType = skillType;
-            if ('type' in val) tSkillType = val.type;
-            if (tSkillType == "buff" || tSkillType == "debuff") {
-                if (!('time' in skillEffect)) {
-                    alert("id: " + charObj.id + " skill no time val");
+        if (true) {
+            $.each(charObj.aura.effect, function(key, val) {
+                if (val["1"] == "") {
+                    l.push(charObj.name);
                 }
-            } else if (tSkillType == "attack") {
-            }
-        });
+            });
+        }
     }
     alert(l);
 }
