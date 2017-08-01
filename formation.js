@@ -926,7 +926,8 @@ function updatePerformance() {
             .find(".value.skillAttack").html(skillAttack).end()
             .find(".value.armorPiercing").html(charObj.c.armorPiercing).end()
             .find(".value.belt").html(charObj.cb.belt).end()
-            .find(".value.dps").html(charObj.cb.attr.dps.toFixed(2)).end();
+            .find(".value.dps").html(charObj.cb.attr.dps.toFixed(2)).end()
+            .find(".value.armor").html(charObj.cb.attr.armor).end();
 
             dpsSum += charObj.cb.attr.dps;
             index++;
@@ -1036,6 +1037,12 @@ function updateCharObsForBase() {
                 charObj.c.belt = parseInt(charObj.belt);
             }
 
+            if (charObj.type == "sg") {
+                charObj.c.armor = charGetAttrByLevel(charObj.armor, charObj.c.level);
+            } else {
+                charObj.c.armor = 0;
+            }
+
             var friendshipEffect = 0;
             if (charObj.c.friendship == FRIENDLY) friendshipEffect = 0.05;
             if (charObj.c.friendship == MARRIED) friendshipEffect = 0.1;
@@ -1049,6 +1056,7 @@ function updateCharObsForBase() {
             charObj.c.aura_fireOfRate = 0;
             charObj.c.aura_criRate = 0;
             charObj.c.aura_cooldownTime = 0;
+            charObj.c.aura_armor = 0;
             charObj.c.skillAttack = 0;
             charObj.c.armorPiercing = 10;
             charObj.c.nightSight = 0;
@@ -1140,6 +1148,7 @@ function updateCharObsForAura() {
             charObj.c.fireOfRate = Math.floor(charObj.c.fireOfRate * (1 + 0.01 * charObj.c.aura_fireOfRate));
             charObj.c.criRate = Math.floor(charObj.c.criRate * (1 + 0.01 * charObj.c.aura_criRate));
             charObj.c.cooldownTimeReduction = Math.min(30, charObj.c.aura_cooldownTime);
+            charObj.c.armor = Math.floor(charObj.c.armor * (1 + 0.01 * charObj.c.aura_armor));
         }
     }
 }
@@ -1379,6 +1388,7 @@ function updateAttrBeforAction(charObj) {
     charObj.cb.attr.dodge = Math.floor(charObj.cb.attr.dodge);
     charObj.cb.attr.fireOfRate = Math.floor(charObj.cb.attr.fireOfRate);
     charObj.cb.attr.criRate = Math.floor(charObj.cb.attr.criRate);
+    charObj.cb.attr.armor = Math.floor(charObj.cb.attr.armor);
 
     if (charObj.type != "mg") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 120);
     if (charObj.type == "rf") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 110);
