@@ -3858,6 +3858,36 @@
                 "cooldownTime":{"1":"15", "5":"15"}},
             "grid":[
                 {"x":"0", "y":"1"},
-                {"x":"0", "y":"-1"}]}}
+                {"x":"0", "y":"-1"}]}},
+    {"id":"102", "name":"UMP40", "type":"smg", "rarity":"4",
+        "hp":{"1":"90", "100":"180"},
+        "dmg":{"1":"10", "100":"27"},
+        "dodge":{"1":"10", "100":"75"},
+        "hit":{"1":"2", "100":"14"},
+        "fireOfRate":{"1":"59", "100":"85"},
+        "skill":{
+            "name":"烙印超載",
+            "type":"activeWithPassive",
+            "target":"self",
+            "firstCooldownTime":"1",
+            "cooldownTime":{"1":"666", "10": "666"},
+            "detailText":"未釋放技能時<br> 每2秒回避上升{0}% 傷害下降{1}% 最多疊加5層。<br> 主動效果:清空當前所有被動效果，釋放後每2秒傷害上升{2}%，回避下降{3}% 最多疊加5層。",
+            "stack":true,
+            "effect":{
+                "dodge":{"1":"10", "10":"10", "type":"buff", "stackMax":"5", "stackUpWhenEveryTime":"2", "name":"102_p"},
+                "dmg":{"1":"-5", "10":"-5", "type":"buff", "stackMax":"5", "stackUpWhenEveryTime":"2", "name":"102_p"},
+                "time":{"1":"0", "10":"0"}},
+            "effect2":{
+                "dmg":{"1":"20", "10":"30", "type":"buff", "stackMax":"5", "stackUpWhenEveryTime":"2", "cleanBuff":"102_p"},
+                "dodge":{"1":"-20", "10":"-25", "type":"buff", "stackMax":"5", "stackUpWhenEveryTime":"2", "cleanBuff":"102_p"},
+                "time":{"1":"0", "10":"0"}}},
+        "aura":{
+            "target":"smg", "effect":{
+                "criRate":{"1":"500", "5":"500"}},
+            "grid":[
+                {"x":"0", "y":"1"},
+                {"x":"1", "y":"1"},
+                {"x":"0", "y":"-1"},
+                {"x":"1", "y":"-1"}]}}
 ]
 }
