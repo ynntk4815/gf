@@ -262,6 +262,14 @@
     background:#BEDEC7;
 }
 
+.button.battle {
+    background:#FF6A38;
+}
+
+.button.strategy {
+    background:#7794D8;
+}
+
 .update_log {
     width:200px;
 }
@@ -280,4 +288,51 @@
 }
 .ui-state-active {
     background:lightgray;
+}
+
+.fairy_container .item {
+    float:left;
+    margin:10px 0px;
+}
+
+.fairy_container .item.control {
+    margin:10px 10px;
+}
+
+.fairy_performance {
+    width:650px;
+    height:30px;
+    float:left;
+    margin:5px 3px 0px 0px;
+    border-radius:8px;
+    padding:3px 5px;
+    background:#f0f5ff;
+}
+
+.fairy_performance .title {
+    width:50px;
+    height:30px;
+    line-height:30px;
+    margin:0px 0px 5px 0px;
+    text-align:center;
+    font-weight:bold;
+    color:#33a;
+    float:left;
+}
+
+.fairy_performance .value {
+    width:50px;
+    height:30px;
+    line-height:30px;
+    margin:0px 0px 5px 0px;
+    text-align:center;
+    font-weight:bold;
+    float:left;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+
+.fairy_performance .title.head {
+    width:100px;
 }

@@ -1,0 +1,109 @@
+{"fairy":[
+    {"id":"1", "name":"勇士妖精", "type":"battle",
+        "skill":{
+            "name":"戰鬥效率",
+            "type":"buff",
+            "target":"ally",
+            "firstCooldownTime":0,
+            "detailText":{"val":"下場戰鬥中提升本梯隊全體傷害{0}%和射速{1}%，持續20秒（不可疊加）。"},
+            "effect":{
+                "dmg":{"1":12, "10":22},
+                "fireOfRate":{"1":5, "10":10},
+                "time":{"1":20, "10":20}}},
+        "partyAura":{
+            "dmg":160,
+            "hit":160,
+            "dodge":100,
+            "armor":100,
+            "criDmg":0,
+            "grow":100}},
+    {"id":"2", "name":"暴怒妖精", "type":"battle",
+        "skill":{
+            "name":"怒無限強",
+            "type":"buff",
+            "target":"ally",
+            "firstCooldownTime":0,
+            "detailText":{"val":"下場戰鬥中提升本梯隊全體命中{0}%和暴擊率{1}%，持續20秒（不可疊加）。"},
+            "effect":{
+                "hit":{"1":10, "10":50},
+                "criRate":{"1":10, "10":25},
+                "time":{"1":20, "10":20}}},
+        "partyAura":{
+            "dmg":100,
+            "hit":0,
+            "dodge":100,
+            "armor":100,
+            "criDmg":199,
+            "grow":100}}
+],"mastery":[
+    {"id":"1", "name":"殺傷型I", "target":"ally", "effect":{
+        "dmg":{"val":12}},
+        "detailText":{"val":"該場戰鬥中提升我方全體傷害12%"}},
+    {"id":"2", "name":"殺傷型II", "target":"ally", "effect":{
+        "dmg":{"val":15}},
+        "detailText":{"val":"該場戰鬥中提升我方全體傷害15%"}},
+    {"id":"3", "name":"精準型I", "target":"ally", "effect":{
+        "hit":{"val":20}},
+        "detailText":{"val":"該場戰鬥中提升我方全體命中20%"}},
+    {"id":"4", "name":"精準型II", "target":"ally", "effect":{
+        "hit":{"val":25}},
+        "detailText":{"val":"該場戰鬥中提升我方全體命中25%"}},
+    {"id":"5", "name":"迴避型I", "target":"ally", "effect":{
+        "dodge":{"val":15}},
+        "detailText":{"val":"該場戰鬥中提升我方全體閃避15%"}},
+    {"id":"6", "name":"迴避型II", "target":"ally", "effect":{
+        "dodge":{"val":20}},
+        "detailText":{"val":"該場戰鬥中提升我方全體閃避20%"}},
+    {"id":"7", "name":"護甲型I", "target":"ally", "effect":{
+        "armor":{"val":8}},
+        "detailText":{"val":"該場戰鬥中提升我方全體護甲8%"}},
+    {"id":"8", "name":"護甲型II", "target":"ally", "effect":{
+        "armor":{"val":10}},
+        "detailText":{"val":"該場戰鬥中提升我方全體護甲10%"}},
+    {"id":"9", "name":"必殺型I", "target":"ally", "effect":{
+        "criRate":{"val":40}},
+        "detailText":{"val":"該場戰鬥中提升我方全體暴擊率40%"}},
+    {"id":"10", "name":"必殺型II", "target":"ally", "effect":{
+        "criRate":{"val":50}},
+        "detailText":{"val":"該場戰鬥中提升我方全體暴擊率50%"}},
+    {"id":"11", "name":"衝鋒型", "target":"smg", "effect":{
+        "dmg":{"val":8},
+        "dodge":{"val":12}},
+        "detailText":{"val":"該場戰鬥中提升我方衝鋒槍8%傷害和12%迴避"}},
+    {"id":"12", "name":"突擊型", "target":"ar", "effect":{
+        "dmg":{"val":10},
+        "fireOfRate":{"val":8}},
+        "detailText":{"val":"該場戰鬥中提升我方突擊步槍10%傷害和8%射速"}},
+    {"id":"13", "name":"瞄準型", "target":"rf", "effect":{
+        "dmg":{"val":8},
+        "fireOfRate":{"val":10}},
+        "detailText":{"val":"該場戰鬥中提升我方步槍8%傷害和10%射速"}},
+    {"id":"14", "name":"堅韌型", "target":"sg", "effect":{
+        "armor":{"val":8},
+        "criRate":{"val":20}},
+        "detailText":{"val":"該場戰鬥中提升我方霰彈槍8%護甲和20%暴擊率"}},
+    {"id":"15", "name":"鎮壓型", "target":"mg", "effect":{
+        "dmg":{"val":10},
+        "hit":{"val":15}},
+        "detailText":{"val":"該場戰鬥中提升我方機槍10%傷害和15%命中"}},
+    {"id":"16", "name":"敏銳型", "target":"hg", "effect":{
+        "dodge":{"val":10},
+        "criRate":{"val":30}},
+        "detailText":{"val":"該場戰鬥中提升我方手槍10%迴避和30%暴擊率"}},
+    {"id":"17", "name":"激昂型", "target":"ally", "effect":{
+        "dmg":{"val":10, "stackMax":3, "initStack":1, "stackUpWhenEveryTime":8}},
+        "detailText":{"val":"該場戰鬥中提升我方全體傷害每8秒提升10%，最多疊加3層"}}
+],"initRatio":{
+    "dmg":0.07,
+    "hit":0.25,
+    "dodge":0.20,
+    "armor":0.05,
+    "criDmg":0.10
+},"growRatio":{
+    "dmg":0.076,
+    "hit":0.252,
+    "dodge":0.202,
+    "armor":0.05,
+    "criDmg":0.101
+},"rarityRatio":{"1":0.4, "2":0.5, "3":0.6, "4":0.8, "5":1}
+}

@@ -2,7 +2,7 @@
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed", "rate"];
-const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime", "stackMax", "stackUpWhenEveryTime", "cleanBuff", "name"];
+const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime", "stackMax", "stackUpWhenEveryTime", "cleanBuff", "name", "initStack"];
 const SKILL_EFFECT_KEY_NESTED = ["rate", "attackToArmor", "extraToTarget"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
@@ -21,10 +21,15 @@ const MARRIED = "married";
 const NONE_FRIENDLY_SRC = "assets/none_friendly.png";
 const FRIENDLY_SRC = "assets/friendly.png";
 const MARRIED_SRC = "assets/married.png";
+const FAIRY_TYPE = ["battle", "strategy"];
+const CHAR_SKILL = "char_skill";
+const FAIRY_SKILL = "fairy_skill";
+const FAIRY_MASTERY = "fairy_mastery";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
 var mEquipmentData = "";
+var mFairyData = "";
 var mStringData = "";
 var mUpdate = [];
 var mCharData = [];
@@ -35,10 +40,11 @@ var mGridToChar = [];
 var mGridHasChar = [];
 var mDmgLinkMode = SINGLE_LINK;
 var mIsDetailCalculate = false;
+var mFairy = null;
 
 function init() {
-    initFormation();
     initData();
+    initFormation();
     initDialog();
 
     $('.add_button').click(function() {
@@ -83,6 +89,18 @@ function init() {
             allCheck &= $(x).prop("checked");
         });
         $(".skill_all").prop("checked", allCheck);
+    });
+
+    $('.fairy_control_container select').change(function() {
+        updateFairy();
+        updateCharObs();
+        updatePerformance();
+    });
+
+    $('.fairy_control_container .skill_control').change(function() {
+        updateFairy();
+        updateCharObs();
+        updatePerformance();
     });
 
     $('.enemy_control input').change(function() {
@@ -165,6 +183,7 @@ function init() {
         $('#picker_equipment').dialog("close");
         $('#detailCalculate').dialog("close");
         $('#updateDialog').dialog("close");
+        $('#picker_fairy').dialog("close");
     });
 
     var pre = getUrlParameter('pre');
@@ -214,6 +233,30 @@ function init() {
         $("#detail .detail_container").html("");
         $("#detail .detail_container").html(texts.join("<br>"));
         $('#detail').dialog("open");
+    }, function(){
+        $('#detail').dialog("close");
+    });
+
+    $('.fairy_control_container .skill_control_label').hover(function(){
+        var texts = getFairySkillDetail(mFairy);
+
+        $('#detail').dialog({position: {my: "left top", at: "right top", of: $(this)}});
+        $("#detail .detail_container").html("");
+        $("#detail .detail_container").html(texts.join("<br>"));
+        $('#detail').dialog("open");
+    }, function(){
+        $('#detail').dialog("close");
+    });
+
+    $('.fairy_control_container .mastery').hover(function(){
+        if (mFairy.mastery != null) {
+            var texts = getFairyMasteryDetail(mFairy);
+
+            $('#detail').dialog({position: {my: "left top", at: "right top", of: $(this)}});
+            $("#detail .detail_container").html("");
+            $("#detail .detail_container").html(texts.join("<br>"));
+            $('#detail').dialog("open");
+        }
     }, function(){
         $('#detail').dialog("close");
     });
@@ -293,6 +336,14 @@ function init() {
     $('.update_log').html(mStringData["last_update"] + " " + mUpdate[0].date.yyyymmdd());
     $('.update_log').click(function() {
         $('#updateDialog').dialog("open");
+    });
+
+    $('.select_fairy').click(function() {
+        openPickerFairyDialog();
+    });
+
+    $(".fairy_container .fairy_control_container .fairy").click(function() {
+        openPickerFairyDialog();
     });
 
     //debugChar();
@@ -419,6 +470,8 @@ function initDialog() {
     $('#picker_by_type').dialog({autoOpen: false, width: 'auto', modal : true});
     $('#picker_by_type').dialog({position: {my: "left top", at: "right top", of: ".formation"}});
     $('#picker_equipment').dialog({position: {my: "left top", at: "right top", of: ".formation"}});
+    $('#picker_fairy').dialog({autoOpen: false, width: 'auto', modal : true});
+    $('#picker_fairy').dialog({position: {my: "left top", at: "right top", of: ".formation"}});
     $('#detail').dialog({autoOpen: false, width: 'auto'});
     $('#detailCalculate').dialog({autoOpen: false, width: 'auto', modal : true});
     $('#detailCalculate').on('dialogclose', function(event) {
@@ -449,6 +502,10 @@ function initDialog() {
         removeEquipment(mPickerGrid, mPickerEquipmentIndex);
     });
 
+    $('#picker_fairy .remove').click(function() {
+        removeFairy();
+    });
+
     mUpdate.forEach(function(v) {
         $('#updateDialog .text').append(v.date.yyyymmdd());
         $('#updateDialog .text').append("<br>");
@@ -456,6 +513,15 @@ function initDialog() {
         $('#updateDialog .text').append("<br>");
         $('#updateDialog .text').append("<br>");
     });
+}
+
+function openPickerFairyDialog() {
+    updatePickerFairy();
+    $('#picker_fairy').dialog("open");
+}
+
+function closePickerFairyDialog() {
+    $('#picker_fairy').dialog("close");
 }
 
 function removeChar(grid) {
@@ -517,6 +583,12 @@ function initFormation() {
         var item = $('.factory .char_performance').clone().addClass("char_performance_" + i);
         $('.performance_container').append(item);
     }
+
+    var masterySelect = $('.fairy_control_container .mastery');
+    $.each(mFairyData.mastery, function(key, val) {
+        masterySelect.append(
+                $("<option></option>").attr("value", val.id).text(val.name));
+    });
 }
 
 function swapGridUI(a, b) {
@@ -590,6 +662,95 @@ function updatePickerByType(type, auraAttr) {
     }
 }
 
+function updatePickerFairy() {
+    for (var i in FAIRY_TYPE) {
+        var grepList = $.grep(mFairyData.fairy, function(e) {
+            return e.type == FAIRY_TYPE[i];
+        });
+        var items = [];
+        grepList.forEach(function(v) {
+            var item = $('<div></div>').addClass("button hover "+FAIRY_TYPE[i]).html(v.name).attr("value", v.id).click(function() {
+                addFairy($(this).attr("value"));
+            });
+            items.push(item);
+        });
+
+        var count = 0;
+        var rows = [];
+        var row = $('<tr></tr>');
+        items.forEach(function(v) {
+            $('<td></td>').append(v).appendTo(row);
+
+            count++;
+            if (count % 5 == 0) {
+                rows.push(row);
+                row = $('<tr></tr>');
+                count = 0;
+            }
+        });
+        rows.push(row);
+
+        $("#picker_fairy ."+FAIRY_TYPE[i]+" table").html("");
+        $("#picker_fairy ."+FAIRY_TYPE[i]+" table").append(rows);
+    }
+}
+
+function addFairy(id) {
+    var grepList = $.grep(mFairyData.fairy, function(e){return e.id == id;});
+    mFairy = copyObject(grepList[0]);
+    mFairy.thisType = "fairy";
+
+    $(".fairy_container .select_fairy").hide();
+    $(".fairy_container .fairy_control_container").show();
+    $(".fairy_container .fairy_control_container .fairy").html(mFairy.name);
+    $(".fairy_container .fairy_control_container .fairy").addClass(mFairy.type);
+    closePickerFairyDialog();
+    updateFairy();
+    updateCharObs();
+    updatePerformance();
+}
+
+function getMastery(id) {
+    if (id == "0") return null;
+    var grepList = $.grep(mFairyData.mastery, function(e){return e.id == id;});
+    return copyObject(grepList[0]);
+}
+
+function updateFairy() {
+    var fairyControlContainer = $(".fairy_container .fairy_control_container");
+    mFairy.level = parseInt(fairyControlContainer.find(".level").val());
+    mFairy.rarity = fairyControlContainer.find(".rarity").val();
+    mFairy.isUseSkill = fairyControlContainer.find(".skill_control").is(":checked");
+    mFairy.skillLevel = parseInt(fairyControlContainer.find(".skill_level").val());
+    mFairy.mastery = getMastery(fairyControlContainer.find(".mastery").val());
+    mFairy.aura = {};
+
+    mFairy.aura.dmg =
+            (Math.ceil(mFairyData.initRatio.dmg * mFairy.partyAura.dmg) + Math.ceil(mFairyData.growRatio.dmg * mFairy.partyAura.dmg * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            mFairyData.rarityRatio[mFairy.rarity];
+    mFairy.aura.hit =
+            (Math.ceil(mFairyData.initRatio.hit * mFairy.partyAura.hit) + Math.ceil(mFairyData.growRatio.hit * mFairy.partyAura.hit * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            mFairyData.rarityRatio[mFairy.rarity];
+    mFairy.aura.dodge =
+            (Math.ceil(mFairyData.initRatio.dodge * mFairy.partyAura.dodge) + Math.ceil(mFairyData.growRatio.dodge * mFairy.partyAura.dodge * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            mFairyData.rarityRatio[mFairy.rarity];
+    mFairy.aura.armor =
+            (Math.ceil(mFairyData.initRatio.armor * mFairy.partyAura.armor) + Math.ceil(mFairyData.growRatio.armor * mFairy.partyAura.armor * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            mFairyData.rarityRatio[mFairy.rarity];
+    mFairy.aura.criDmg =
+            (Math.ceil(mFairyData.initRatio.criDmg * mFairy.partyAura.criDmg) + Math.ceil(mFairyData.growRatio.criDmg * mFairy.partyAura.criDmg * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            mFairyData.rarityRatio[mFairy.rarity];
+}
+
+function removeFairy() {
+    mFairy = null;
+    $(".fairy_container .select_fairy").show();
+    $(".fairy_container .fairy_control_container").hide();
+    closePickerFairyDialog();
+    updateCharObs();
+    updatePerformance();
+}
+
 function initData() {
     $.ajaxSetup({
         async: false
@@ -622,6 +783,12 @@ function initData() {
         alert("load json data fail");
     });
     mUpdate.sort(compare);
+
+    $.getJSON("fairy.json", function(data) {
+        mFairyData = data;
+    }).fail(function() {
+        alert("load json data fail");
+    });
 }
 
 function compare(a,b) {
@@ -979,6 +1146,16 @@ function updatePerformance() {
         index++;
     }
 
+    if (mFairy != null) {
+        $(".fairy_performance").find(".value.dmg").html(mFairy.aura.dmg.toFixed(1) + "%").end()
+            .find(".value.hit").html(mFairy.aura.hit.toFixed(1) + "%").end()
+            .find(".value.dodge").html(mFairy.aura.dodge.toFixed(1) + "%").end()
+            .find(".value.armor").html(mFairy.aura.armor.toFixed(1) + "%").end()
+            .find(".value.criDmg").html(mFairy.aura.criDmg.toFixed(1) + "%").end();
+    } else {
+        $(".fairy_performance").find(".value").html("-");
+    }
+
     var formation = [];
     for (var i in mGridHasChar) {
         var grid = getGridByUIValue(mGridHasChar[i]);
@@ -1020,7 +1197,7 @@ function getChar(id){
     var grepList = $.grep(mCharData, function(e){return e.id == id;});
     var obj = JSON.parse(JSON.stringify(grepList[0]));
     obj["criRate"] = 20;
-    obj["criDmg"] = 150;
+    obj["criDmg"] = 50;
     obj["movementSpeed"] = 150;
     obj["equipment"] = [];
     obj["equipment"][1] = "";
@@ -1154,6 +1331,22 @@ function getAuraTargetGrid(charObj) {
     });
 
     return grids;
+}
+
+function updateCharObsForFairyAura() {
+    if (mFairy != null) {
+        for (var i in GRIDS) {
+            if (mGridToChar[GRIDS[i]] != "") {
+                var charObj = mGridToChar[GRIDS[i]];
+
+                charObj.c.dmg = Math.floor(charObj.c.dmg * (1 + 0.01 * mFairy.aura.dmg));
+                charObj.c.hit = Math.floor(charObj.c.hit * (1 + 0.01 * mFairy.aura.hit));
+                charObj.c.dodge = Math.floor(charObj.c.dodge * (1 + 0.01 * mFairy.aura.dodge));
+                charObj.c.armor = Math.floor(charObj.c.armor * (1 + 0.01 * mFairy.aura.armor));
+                charObj.c.criDmg = Math.floor(charObj.c.criDmg * (1 + 0.01 * mFairy.aura.criDmg));
+            }
+        }
+    }
 }
 
 function updateCharObsForAura() {
@@ -1329,7 +1522,7 @@ function usePassiveSkillForCalculateBattle(charObj) {
         }
     }
 
-    useSkillForCalculateBattle2(charObj, null, null, skillEffect);
+    useSkillForCalculateBattle2(charObj, null, null, skillEffect, CHAR_SKILL);
 }
 
 function useSkillForCalculateBattle(charObj, ally, enemy) {
@@ -1355,14 +1548,44 @@ function useSkillForCalculateBattle(charObj, ally, enemy) {
         }
     }
 
-    useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect);
+    useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect, CHAR_SKILL);
 }
 
-function useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect) {
-    var skill = charObj.skill;
-    var skillTarget = skill.target;
-    var skillType = skill.type;
-    var skillName = skill.name;
+function useFairyMasteryForCalculateBattle(fairy, ally) {
+    if (fairy.mastery == null) return;
+    var skillEffect = getSkillByLevel(fairy.mastery.effect, null);
+
+    useSkillForCalculateBattle2(fairy, ally, null, skillEffect, FAIRY_MASTERY);
+}
+
+function useFairySkillForCalculateBattle(fairy, ally, enemy) {
+    var skillEffect = getSkillByLevel(fairy.skill.effect, mFairy.skillLevel);
+
+    useSkillForCalculateBattle2(fairy, ally, enemy, skillEffect, FAIRY_SKILL);
+}
+
+function useSkillForCalculateBattle2(obj, ally, enemy, skillEffect, skillUsedBy) {
+    charObj = obj;
+    var skill = null;
+    var skillTarget = null;
+    var skillType = null;
+    var skillName = null;
+    if (skillUsedBy == CHAR_SKILL) {
+        skill = charObj.skill;
+        skillTarget = skill.target;
+        skillType = skill.type;
+        skillName = skill.name;
+    } else if (skillUsedBy == FAIRY_MASTERY) {
+        skillTarget = obj.mastery.target;
+        skillType = "buff";
+        skillName = obj.mastery.name;
+    } else if (skillUsedBy == FAIRY_SKILL) {
+        skill = charObj.skill;
+        skillTarget = skill.target;
+        skillType = skill.type;
+        skillName = skill.name;
+    }
+
     if (skillEffect != null) {
         $.each(skillEffect, function(key, val) {
             var tSkillType = skillType;
@@ -1371,7 +1594,7 @@ function useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect) {
             tSkill[key] = copyObject(val);
             tSkill[key].name = skillName;
             tSkill[key].stack = 1;
-            if (!mIsDetailCalculate && 'stack' in skill && skill.stack) tSkill[key].stack = charObj.c.skillStack;
+            if (skillUsedBy == CHAR_SKILL && !mIsDetailCalculate && 'stack' in skill && skill.stack) tSkill[key].stack = charObj.c.skillStack;
             if ('type' in val) tSkillType = val.type;
             if ('target' in val) tSkillTarget = val.target;
             if ('name' in val) tSkill[key].name = val.name;
@@ -1383,6 +1606,9 @@ function useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect) {
                 } else if (tSkillTarget == "self_aura_grid") {
                     var targetGrid = getAuraTargetGrid(charObj);
                     var grepList = $.grep(ally, function(e) {return targetGrid.indexOf(e.c.selfGrid) >= 0;});
+                    updateForSkillCalculateBattle(tSkill, grepList, skillEffect.time.val, "buff");
+                } else if (TYPES.indexOf(tSkillTarget) >= 0) {
+                    var grepList = $.grep(ally, function(e) {return e.type == tSkillTarget;});
                     updateForSkillCalculateBattle(tSkill, grepList, skillEffect.time.val, "buff");
                 }
             } else if (tSkillType == "debuff") {
@@ -1427,6 +1653,7 @@ function updateForSkillCalculateBattle(skillEffect, targetObjs, time, effectType
                     row[key]["stackMax"] = val.stackMax;
                     row[key]["stackUpWhenEveryTime"] = val.stackUpWhenEveryTime * FRAME_PER_SECOND;
                     row[key]["stack"] = 0;
+                    if ('initStack' in val) row[key]["stack"] = val.initStack;
                 }
 
                 if ('cleanBuff' in val) {
@@ -1538,7 +1765,7 @@ function calculateHitRate(charObj, enemy) {
 function getCriAttackExpectedValue(criRate, criDmg) {
     criRate = Math.min(criRate, 100);
     criRate = Math.max(criRate, 0);
-    return 1 - criRate * 0.01 + criDmg / 100.0 * criRate * 0.01;
+    return 1 - criRate * 0.01 + (1 + criDmg / 100.0) * criRate * 0.01;
 }
 
 function calculateActionDmg(charObj, mode) {
@@ -1631,6 +1858,7 @@ function calculateBattle() {
     }
 
     updateCharObsForBase();
+    updateCharObsForFairyAura();
     updateCharObsForAura();
 
     for (var i in GRIDS) {
@@ -1660,6 +1888,13 @@ function calculateBattle() {
         var skillType = charObj.skill.type;
         if (skillType == "activeWithPassive") {
             usePassiveSkillForCalculateBattle(charObj);
+        }
+    }
+
+    if (mFairy != null) {
+        useFairyMasteryForCalculateBattle(mFairy, ally);
+        if (mFairy.isUseSkill) {
+            useFairySkillForCalculateBattle(mFairy, ally, null);
         }
     }
 
@@ -1788,6 +2023,7 @@ function updateCharObs() {
     }
 
     updateCharObsForBase();
+    updateCharObsForFairyAura();
     updateCharObsForAura();
 
     var ally = [];
@@ -1815,6 +2051,12 @@ function updateCharObs() {
     mEnemy = enemy;
 
     updateCharObsForUseSkill();
+    if (mFairy != null) {
+        useFairyMasteryForCalculateBattle(mFairy, ally);
+        if (mFairy.isUseSkill) {
+            useFairySkillForCalculateBattle(mFairy, ally, null);
+        }
+    }
     updateCharObsForBattle();
 }
 
@@ -1831,7 +2073,12 @@ function getAuraEffectByLink(auraEffect, link) {
 function getSkillByLevel(skillEffect, skillLevel) {
     var l = {};
     $.each(skillEffect, function(key, val) {
-        if (skillLevel in val) {
+        if (skillLevel == null) {
+            if ('val' in val) {
+                l[key] = {};
+                l[key]["val"] = val.val;
+            }
+        } else if (skillLevel in val) {
             if (val[skillLevel] == "") {
 
             } else {
@@ -1870,6 +2117,11 @@ function getSkillByLevel(skillEffect, skillLevel) {
             }
         }
     });
+
+    if (!('time' in l)) {
+        l.time = {};
+        l.time.val = 0;
+    }
     return l;
 }
 
@@ -1982,6 +2234,10 @@ function debugChar() {
     alert(l);
 }
 
+function debugString(str) {
+    $('.debug').html(str);
+    $('.debug').show();
+}
 
 jQuery.fn.swap = function(b){
     // method from: http://blog.pengoworks.com/index.cfm/2008/9/24/A-quick-and-dirty-swap-method-for-jQuery
