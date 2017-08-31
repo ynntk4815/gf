@@ -34,6 +34,40 @@
             "dodge":100,
             "armor":100,
             "criDmg":199,
+            "grow":100}},
+    {"id":"3", "name":"盾甲妖精", "type":"battle",
+        "skill":{
+            "name":"防暴強化",
+            "type":"buff",
+            "target":"sg",
+            "firstCooldownTime":0,
+            "detailText":{"val":"下場戰鬥中為本梯隊內的所有霰彈槍加強防暴能力，護甲提升{0}%，持續20秒。"},
+            "effect":{
+                "armor":{"1":15, "10":50},
+                "time":{"1":20, "10":20}}},
+        "partyAura":{
+            "dmg":145,
+            "hit":0,
+            "dodge":0,
+            "armor":242,
+            "criDmg":101,
+            "grow":100}},
+    {"id":"4", "name":"護盾妖精", "type":"battle",
+        "skill":{
+            "name":"能量護盾",
+            "type":"buff",
+            "target":"smg",
+            "firstCooldownTime":0,
+            "detailText":{"val":"下場戰鬥中為本梯隊內的所有衝鋒槍張開護盾，每個護盾最多吸收{0}點傷害。"},
+            "effect":{
+                "shield":{"1":40, "10":150},
+                "time":{"1":0, "10":0}}},
+        "partyAura":{
+            "dmg":130,
+            "hit":120,
+            "dodge":200,
+            "armor":0,
+            "criDmg":0,
             "grow":100}}
 ],"mastery":[
     {"id":"1", "name":"殺傷型I", "target":"ally", "effect":{

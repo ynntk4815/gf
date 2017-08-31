@@ -1245,6 +1245,7 @@ function updateCharObsForBase() {
             charObj.c.criRate = charObj.criRate;
             charObj.c.criDmg = charObj.criDmg;
             charObj.c.movementSpeed = charObj.movementSpeed;
+            charObj.c.shield = 0;
             if (charObj.type == "mg") {
                 charObj.c.belt = parseInt(charObj.belt);
             }
@@ -1717,9 +1718,10 @@ function updateAttrBeforAction(charObj) {
             row = val[j];
             if (j == "attackTimes" || j == "criAttack") {
                 charObj.cb.attr[j] = row.val;
-            } else if (j == "belt") {
+            } else if (j == "belt" || j == "shield") {
                 charObj.cb[j] += row.val;
                 row.time = -1;
+                row.infinitetime = false;
             } else {
                 var stack = row.stack;
                 for (var i = 0; i < stack; i++) {
