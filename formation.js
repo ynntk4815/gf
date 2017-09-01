@@ -25,6 +25,7 @@ const FAIRY_TYPE = ["battle", "strategy"];
 const CHAR_SKILL = "char_skill";
 const FAIRY_SKILL = "fairy_skill";
 const FAIRY_MASTERY = "fairy_mastery";
+const BUFF = "buff";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -703,6 +704,7 @@ function addFairy(id) {
     $(".fairy_container .select_fairy").hide();
     $(".fairy_container .fairy_control_container").show();
     $(".fairy_container .fairy_control_container .fairy").html(mFairy.name);
+    $(".fairy_container .fairy_control_container .fairy").removeClass(FAIRY_TYPE.join(" "));
     $(".fairy_container .fairy_control_container .fairy").addClass(mFairy.type);
     closePickerFairyDialog();
     updateFairy();
@@ -1246,6 +1248,7 @@ function updateCharObsForBase() {
             charObj.c.criDmg = charObj.criDmg;
             charObj.c.movementSpeed = charObj.movementSpeed;
             charObj.c.shield = 0;
+            charObj.c.reducedDamage = 0;
             if (charObj.type == "mg") {
                 charObj.c.belt = parseInt(charObj.belt);
             }
@@ -1716,7 +1719,7 @@ function updateAttrBeforAction(charObj) {
         var row = {};
         for (var j in val) {
             row = val[j];
-            if (j == "attackTimes" || j == "criAttack") {
+            if (j == "attackTimes" || j == "criAttack" || j == "reducedDamage") {
                 charObj.cb.attr[j] = row.val;
             } else if (j == "belt" || j == "shield") {
                 charObj.cb[j] += row.val;
@@ -1895,7 +1898,7 @@ function calculateBattle() {
 
     if (mFairy != null) {
         useFairyMasteryForCalculateBattle(mFairy, ally);
-        if (mFairy.isUseSkill) {
+        if (mFairy.isUseSkill && mFairy.skill.type == BUFF) {
             useFairySkillForCalculateBattle(mFairy, ally, null);
         }
     }
@@ -2055,7 +2058,7 @@ function updateCharObs() {
     updateCharObsForUseSkill();
     if (mFairy != null) {
         useFairyMasteryForCalculateBattle(mFairy, ally);
-        if (mFairy.isUseSkill) {
+        if (mFairy.isUseSkill && mFairy.skill.type == BUFF) {
             useFairySkillForCalculateBattle(mFairy, ally, null);
         }
     }
