@@ -117,7 +117,40 @@
             "dodge":70,
             "armor":141,
             "criDmg":175,
-            "grow":100}}
+            "grow":100}},
+    {"id":"8", "name":"炮擊妖精", "type":"battle",
+        "skill":{
+            "name":"炮擊指令",
+            "type":"attack",
+            "target":"enemy",
+            "radius":2.5,
+            "firstCooldownTime":10,
+            "detailText":{"val":"下場戰鬥中發射一枚迫擊炮彈 對2.5範圍內的敵人造成{0}的傷害。"},
+            "effect":{
+                "fixedDmg":{"1":200, "2":300, "3":400, "4":500, "5":600, "6":700, "7":800, "8":900, "9":1000, "10":1200}}},
+        "partyAura":{
+            "dmg":372,
+            "hit":0,
+            "dodge":140,
+            "armor":60,
+            "criDmg":0,
+            "grow":100}},
+    {"id":"9", "name":"空襲妖精", "type":"battle",
+        "skill":{
+            "name":"致命空襲",
+            "type":"attack",
+            "target":"enemy",
+            "firstCooldownTime":3,
+            "detailText":{"val":"下場戰鬥開場時呼叫空中打擊，對全體敵人造成{0}的傷害。"},
+            "effect":{
+                "fixedDmg":{"1":80, "2":120, "3":160, "4":200, "5":240, "6":280, "7":320, "8":360, "9":400, "10":500}}},
+        "partyAura":{
+            "dmg":159,
+            "hit":79,
+            "dodge":79,
+            "armor":79,
+            "criDmg":0,
+            "grow":150}}
 ],"mastery":[
     {"id":"1", "name":"殺傷型I", "target":"ally", "effect":{
         "dmg":{"val":12}},
