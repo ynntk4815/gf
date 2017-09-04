@@ -198,7 +198,39 @@
             "dodge":62,
             "armor":60,
             "criDmg":155,
-            "grow":150}}
+            "grow":150}},
+    {"id":"12", "name":"佈雷妖精", "type":"strategy",
+        "skill":{
+            "name":"地雷陣線",
+            "type":"attack",
+            "target":"enemy",
+            "firstCooldownTime":0,
+            "detailText":{"val":"相鄰無人的點上埋藏一枚存在兩回合的地雷，當敵人觸碰後會受到當前血量{0}%的傷害，該傷害對boss無效。"},
+            "effect":{
+                "AttackCurrentHp":{"1":20, "10":50}}},
+        "partyAura":{
+            "dmg":200,
+            "hit":100,
+            "dodge":242,
+            "armor":0,
+            "criDmg":0,
+            "grow":73}},
+    {"id":"13", "name":"火箭妖精", "type":"strategy",
+        "skill":{
+            "name":"陣地死神",
+            "type":"attack",
+            "target":"enemy",
+            "firstCooldownTime":0,
+            "detailText":{"val":"部署一個存在兩回合共三發的發射器，敵人在兩格內範圍移動時，會受到當前血量{0}%的傷害，該傷害對boss無效。"},
+            "effect":{
+                "AttackCurrentHp":{"1":10, "10":20}}},
+        "partyAura":{
+            "dmg":0,
+            "hit":100,
+            "dodge":0,
+            "armor":241,
+            "criDmg":200,
+            "grow":75}}
 ],"mastery":[
     {"id":"1", "name":"殺傷型I", "target":"ally", "effect":{
         "dmg":{"val":12}},
