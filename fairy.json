@@ -230,7 +230,27 @@
             "dodge":0,
             "armor":241,
             "criDmg":200,
-            "grow":75}}
+            "grow":75}},
+    {"id":"14", "name":"工事妖精", "type":"strategy",
+        "skill":{
+            "name":"緊急堡壘",
+            "type":"strategy",
+            "target":"node",
+            "firstCooldownTime":0,
+            "detailText":{"val":"在梯隊所在處建造一個不動的堡壘，三回合內我方在該點位戰鬥時，傷害、命中、回避、護甲和暴擊率提升{0}%。"},
+            "effect":{
+                "dmg":{"1":10, "10":30},
+                "hit":{"1":10, "10":30},
+                "dodge":{"1":10, "10":30},
+                "armor":{"1":10, "10":30},
+                "criRate":{"1":10, "10":30}}},
+        "partyAura":{
+            "dmg":120,
+            "hit":120,
+            "dodge":120,
+            "armor":120,
+            "criDmg":120,
+            "grow":65}}
 ],"mastery":[
     {"id":"1", "name":"殺傷型I", "target":"ally", "effect":{
         "dmg":{"val":12}},

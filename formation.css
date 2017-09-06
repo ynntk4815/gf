@@ -91,20 +91,27 @@
     width:170px;
 }
 
-.enemy_control .control_input {
+.battle_control .control_input {
     width:70px;
     height:20px;
     line-height:18px;
     float:left;
 }
 
-.enemy_control .control_input input {
+.battle_control .control_input input {
     width:50px;
     height:20px;
     line-height:18px;
     font-size:12px;
     padding:0px;
     text-align:center;
+}
+
+.battle_control .battleFortress_container {
+    width:150px;
+    height:20px;
+    line-height:18px;
+    float:left;
 }
 
 .aura {

@@ -26,6 +26,8 @@ const CHAR_SKILL = "char_skill";
 const FAIRY_SKILL = "fairy_skill";
 const FAIRY_MASTERY = "fairy_mastery";
 const BUFF = "buff";
+const FORTRESS = "fortress";
+const ALLY = "ally";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -104,14 +106,36 @@ function init() {
         updatePerformance();
     });
 
-    $('.enemy_control input').change(function() {
+    $('.battle_control input').change(function() {
         updateCharObs();
         updatePerformance();
     });
 
-    $('.enemy_control .battleisNight').change(function() {
+    $('.battle_control .battleisNight').change(function() {
         updateCharObs();
         updatePerformance();
+    });
+
+    $('.battle_control .battleFortress').change(function() {
+        updateCharObs();
+        updatePerformance();
+    });
+
+    $('.battle_control .fortress_level').change(function() {
+        updateCharObs();
+        updatePerformance();
+    });
+
+    $('.battle_control .battleFortress_container label').hover(function(){
+        var fortressLevel = $('.battle_control .fortress_level').val();
+        var texts = getFortressDetail(fortressLevel);
+
+        $('#detail').dialog({position: {my: "left top", at: "right top", of: $(this)}});
+        $("#detail .detail_container").html("");
+        $("#detail .detail_container").html(texts.join("<br>"));
+        $('#detail').dialog("open");
+    }, function(){
+        $('#detail').dialog("close");
     });
 
     $('.dmgLinkSwitch').click(function() {
@@ -696,10 +720,16 @@ function updatePickerFairy() {
     }
 }
 
-function addFairy(id) {
+function getFairy(id) {
     var grepList = $.grep(mFairyData.fairy, function(e){return e.id == id;});
-    mFairy = copyObject(grepList[0]);
-    mFairy.thisType = "fairy";
+    var fairy = copyObject(grepList[0]);
+    fairy.thisType = "fairy";
+
+    return fairy;
+}
+
+function addFairy(id) {
+    mFairy = getFairy(id);
 
     $(".fairy_container .select_fairy").hide();
     $(".fairy_container .fairy_control_container").show();
@@ -1422,7 +1452,7 @@ function updateCharObsForUseSkill() {
 }
 
 function updateCharObsForBattle() {
-    var battleisNight = $('.enemy_control .battleisNight').is(":checked");
+    var battleisNight = $('.battle_control .battleisNight').is(":checked");
 
     var enemy = mEnemy;
     updateAttrBeforAction(enemy);
@@ -1472,7 +1502,7 @@ function getAlly() {
 }
 
 function getSkillAttrValByLevel(charObj, attr, nestedAttr) {
-    var battleisNight = $('.enemy_control .battleisNight').is(":checked");
+    var battleisNight = $('.battle_control .battleisNight').is(":checked");
 
     var skill = charObj.skill;
     var skillEffect = "";
@@ -1504,7 +1534,7 @@ function getSkillAttrValByLevel(charObj, attr, nestedAttr) {
 }
 
 function usePassiveSkillForCalculateBattle(charObj) {
-    var battleisNight = $('.enemy_control .battleisNight').is(":checked");
+    var battleisNight = $('.battle_control .battleisNight').is(":checked");
 
     var skill = charObj.skill;
     var skillEffect = null;
@@ -1530,7 +1560,7 @@ function usePassiveSkillForCalculateBattle(charObj) {
 }
 
 function useSkillForCalculateBattle(charObj, ally, enemy) {
-    var battleisNight = $('.enemy_control .battleisNight').is(":checked");
+    var battleisNight = $('.battle_control .battleisNight').is(":checked");
 
     var skill = charObj.skill;
     var skillEffect = null;
@@ -1568,6 +1598,13 @@ function useFairySkillForCalculateBattle(fairy, ally, enemy) {
     useSkillForCalculateBattle2(fairy, ally, enemy, skillEffect, FAIRY_SKILL);
 }
 
+function useFortressForCalculateBattle(ally, fortressLevel) {
+    var fortressFairy = getFairy("14");
+    var skillEffect = getSkillByLevel(fortressFairy.skill.effect, fortressLevel);
+
+    useSkillForCalculateBattle2(fortressFairy, ally, null, skillEffect, FORTRESS);
+}
+
 function useSkillForCalculateBattle2(obj, ally, enemy, skillEffect, skillUsedBy) {
     charObj = obj;
     var skill = null;
@@ -1587,6 +1624,11 @@ function useSkillForCalculateBattle2(obj, ally, enemy, skillEffect, skillUsedBy)
         skill = charObj.skill;
         skillTarget = skill.target;
         skillType = skill.type;
+        skillName = skill.name;
+    } else if (skillUsedBy == FORTRESS) {
+        skill = charObj.skill;
+        skillType = BUFF;
+        skillTarget = ALLY;
         skillName = skill.name;
     }
 
@@ -1691,7 +1733,7 @@ function getSkillCooldownTime(skill, skillLevel, cooldownTimeReduction) {
 
 function updateAttrBeforAction(charObj) {
     if (!('cb' in charObj)) return;
-    var battleisNight = $('.enemy_control .battleisNight').is(":checked");
+    var battleisNight = $('.battle_control .battleisNight').is(":checked");
     charObj.cb.attr = copyObject(charObj.c);
     $.each(charObj.cb.buff, function(key, e) {
         for (var j in e) {
@@ -1836,17 +1878,19 @@ function calculateBattle() {
     dmgTable.y = [];
     var ally = [];
 
-    var enemyDodge = $('.enemy_control .enemyDodge').val();
+    var enemyDodge = $('.battle_control .enemyDodge').val();
     if (enemyDodge == "") {
         enemyDodge = 0;
     }
 
-    var enemyArmor = $('.enemy_control .enemyArmor').val();
+    var enemyArmor = $('.battle_control .enemyArmor').val();
     if (enemyArmor == "") {
         enemyArmor = 0;
     }
 
-    var battleisNight = $('.enemy_control .battleisNight').is(":checked");
+    var battleisNight = $('.battle_control .battleisNight').is(":checked");
+    var battleFortress = $('.battle_control .battleFortress').is(":checked");
+    var fortressLevel = $('.battle_control .fortress_level').val();
 
     var endTime = $('.calculate_control .endTime').val();
     if (endTime == "") {
@@ -1901,6 +1945,9 @@ function calculateBattle() {
         if (mFairy.isUseSkill && mFairy.skill.type == BUFF) {
             useFairySkillForCalculateBattle(mFairy, ally, null);
         }
+    }
+    if (battleFortress) {
+        useFortressForCalculateBattle(ally, fortressLevel);
     }
 
     var enemy = {};
@@ -2017,15 +2064,18 @@ function isArmorUnit(obj) {
 }
 
 function updateCharObs() {
-    var enemyDodge = $('.enemy_control .enemyDodge').val();
+    var enemyDodge = $('.battle_control .enemyDodge').val();
     if (enemyDodge == "") {
         enemyDodge = 0;
     }
 
-    var enemyArmor = $('.enemy_control .enemyArmor').val();
+    var enemyArmor = $('.battle_control .enemyArmor').val();
     if (enemyArmor == "") {
         enemyArmor = 0;
     }
+
+    var battleFortress = $('.battle_control .battleFortress').is(":checked");
+    var fortressLevel = $('.battle_control .fortress_level').val();
 
     updateCharObsForBase();
     updateCharObsForFairyAura();
@@ -2061,6 +2111,9 @@ function updateCharObs() {
         if (mFairy.isUseSkill && mFairy.skill.type == BUFF) {
             useFairySkillForCalculateBattle(mFairy, ally, null);
         }
+    }
+    if (battleFortress) {
+        useFortressForCalculateBattle(ally, fortressLevel);
     }
     updateCharObsForBattle();
 }
