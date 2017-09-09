@@ -511,7 +511,7 @@ function initDialog() {
     var row = $('<tr></tr>');
     for (var i in TYPES) {
         var v = TYPES[i];
-        var item = $('<div></div>').addClass("button hover").html(v).attr("value", v).click(function() {
+        var item = $('<div></div>').addClass("pick_button hover").html(v).attr("value", v).click(function() {
             openDialogPickerByType($(this).attr("value"));
         });
         $('<td></td>').append(item).appendTo(row);
@@ -667,7 +667,7 @@ function updatePickerByType(type, auraAttr) {
             return result;
         });
         grepList.forEach(function(v) {
-            var item = $('<div></div>').addClass("button hover rarity_"+i).html(v.name).attr("value", v.id).click(function() {
+            var item = $('<div></div>').addClass("pick_button hover rarity_"+i).html(v.name).attr("value", v.id).click(function() {
                 addChar(mPickerGrid, $(this).attr("value"));
             });
 
@@ -694,7 +694,7 @@ function updatePickerFairy() {
         });
         var items = [];
         grepList.forEach(function(v) {
-            var item = $('<div></div>').addClass("button hover "+FAIRY_TYPE[i]).html(v.name).attr("value", v.id).click(function() {
+            var item = $('<div></div>').addClass("pick_button hover "+FAIRY_TYPE[i]).html(v.name).attr("value", v.id).click(function() {
                 addFairy($(this).attr("value"));
             });
             items.push(item);
@@ -987,7 +987,7 @@ function openDialogPickerEquipment(index, grid) {
         var row = $('<tr></tr>');
         grepList = $.grep(equipmentList, function(e) {return e.rarity == i;});
         grepList.forEach(function(v) {
-            var item = $('<div></div>').addClass("button hover rarity_"+i).html(v.name).attr("value", v.id).click(function() {
+            var item = $('<div></div>').addClass("pick_button hover rarity_"+i).html(v.name).attr("value", v.id).click(function() {
                 addEquipment(mPickerGrid, mPickerEquipmentIndex, $(this).attr("value"));
                 $('#picker_equipment').dialog("close");
             });

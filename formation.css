@@ -207,6 +207,17 @@
     border:1px outset #ace;
 }
 
+.pick_button {
+    width:100px;
+    height:30px;
+    line-height:28px;
+    margin:0px 0px;
+    border-radius:10px;
+    text-align:center;
+    background:#cde;
+    border:1px outset #ace;
+}
+
 .view_equipment_button {
     display: inline-block;
     width:110px;
@@ -253,20 +264,28 @@
     float:left;
 }
 
-.button.rarity_5 {
+.pick_button.rarity_5 {
     background:#FFB400;
 }
 
-.button.rarity_4 {
+.pick_button.rarity_4 {
     background:#D2E05C;
 }
 
-.button.rarity_3 {
+.pick_button.rarity_3 {
     background:#6FDDCB;
 }
 
-.button.rarity_2 {
+.pick_button.rarity_2 {
     background:#BEDEC7;
+}
+
+.pick_button.battle {
+    background:#FF6A38;
+}
+
+.pick_button.strategy {
+    background:#7794D8;
 }
 
 .button.battle {
@@ -342,4 +361,17 @@
 
 .fairy_performance .title.head {
     width:100px;
+}
+
+.picker_table {
+    border-spacing: 0px;
+}
+
+.aura_table {
+    border: 1px solid black;
+    border-collapse:collapse;
+}
+
+.aura_table td {
+    border: 1px solid black;
 }
