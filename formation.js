@@ -1,8 +1,8 @@
 
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
-const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed", "rate"];
-const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime", "stackMax", "stackUpWhenEveryTime", "cleanBuff", "name", "initStack"];
+const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed", "rate", "reducedDamage"];
+const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime", "stackMax", "stackUpWhenEveryTime", "cleanBuff", "name", "initStack", "prepareTime"];
 const SKILL_EFFECT_KEY_NESTED = ["rate", "attackToArmor", "extraToTarget"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
@@ -382,9 +382,13 @@ function getSkillDetail(grid) {
         var text = [];
         text.push(mStringData.firstCooldownTime.format(getSkillFirstCooldownTime(charObj)));
         text.push(mStringData.cooldownTime.format(getSkillCooldownTime(charObj.skill, charObj.c.skillLevel, charObj.c.cooldownTimeReduction)));
-        var skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
-        var skillEffect2 = getSkillByLevel(skill.effect2, charObj.c.skillLevel);
-        text.push(skill.detailText.format(skillEffect.dodge.val, Math.abs(skillEffect.dmg.val), skillEffect2.dmg.val, Math.abs(skillEffect2.dodge.val)));
+        if (charObj.id == "183") {
+            text.push(getCharSkillDetail(charObj));
+        } else {
+            var skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
+            var skillEffect2 = getSkillByLevel(skill.effect2, charObj.c.skillLevel);
+            text.push(skill.detailText.format(skillEffect.dodge.val, Math.abs(skillEffect.dmg.val), skillEffect2.dmg.val, Math.abs(skillEffect2.dodge.val)));
+        }
         return text;
     } else {
         return getSkillDetailNormal(charObj);
@@ -1278,7 +1282,7 @@ function updateCharObsForBase() {
             charObj.c.criDmg = charObj.criDmg;
             charObj.c.movementSpeed = charObj.movementSpeed;
             charObj.c.shield = 0;
-            charObj.c.reducedDamage = 0;
+            charObj.c.reducedDamage = 1;
             if (charObj.type == "mg") {
                 charObj.c.belt = parseInt(charObj.belt);
             }
@@ -1429,20 +1433,23 @@ function updateCharObsForUseSkill() {
         var charObj = ally[i];
         var skillType = charObj.skill.type;
         if (charObj.c.isUseSkill) {
-            if (skillType != "passive") {
-                if (skillType == "buff" || skillType == "debuff" || skillType == "activeWithPassive") {
-                    useSkillForCalculateBattle(charObj, ally, enemy);
-                } else if (skillType == "attack") {
-                    charObj.cb.skillAttack = getSkillAttrValByLevel(charObj, "attack");
-                    var attackMultiplyExtra = getSkillAttrValByLevel(charObj, "attack", "extraToTarget");
-                    if (isArmorUnit(enemy)) {
-                        var attackToArmor = getSkillAttrValByLevel(charObj, "attack", "attackToArmor");
-                        if (attackToArmor != null) charObj.cb.skillAttack = attackToArmor;
-                    }
+            if (skillType == "passive") {
+            } else if (skillType == "buff" || skillType == "debuff" || skillType == "activeWithPassive") {
+                useSkillForCalculateBattle(charObj, ally, enemy);
+            } else if (skillType == "attack") {
+                charObj.cb.skillAttack = getSkillAttrValByLevel(charObj, "attack");
+                var attackMultiplyExtra = getSkillAttrValByLevel(charObj, "attack", "extraToTarget");
+                if (isArmorUnit(enemy)) {
+                    var attackToArmor = getSkillAttrValByLevel(charObj, "attack", "attackToArmor");
+                    if (attackToArmor != null) charObj.cb.skillAttack = attackToArmor;
+                }
 
-                    if (attackMultiplyExtra != null) {
-                        charObj.cb.skillAttack += attackMultiplyExtra;
-                    }
+                if (attackMultiplyExtra != null) {
+                    charObj.cb.skillAttack += attackMultiplyExtra;
+                }
+
+                if (charObj.id == "183") {
+                    useSkillForCalculateBattle(charObj, ally, enemy);
                 }
             }
         } else if (skillType == "activeWithPassive") {
@@ -1469,7 +1476,7 @@ function updateCharObsForBattle() {
         updateAttrBeforAction(charObj);
         calculateArmorPiercing(charObj, enemy);
         calculateHitRate(charObj, enemy);
-        calculateActionDmg(charObj, PERFORMANCE);
+        calculateActionDmg(charObj, enemy, PERFORMANCE);
     }
 }
 
@@ -1560,6 +1567,14 @@ function usePassiveSkillForCalculateBattle(charObj) {
 }
 
 function useSkillForCalculateBattle(charObj, ally, enemy) {
+    useSkillForCalculateBattle2(charObj, ally, enemy, getSkillEffects(charObj), CHAR_SKILL);
+}
+
+function useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect) {
+    useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect, CHAR_SKILL);
+}
+
+function getSkillEffects(charObj) {
     var battleisNight = $('.battle_control .battleisNight').is(":checked");
 
     var skill = charObj.skill;
@@ -1582,7 +1597,7 @@ function useSkillForCalculateBattle(charObj, ally, enemy) {
         }
     }
 
-    useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect, CHAR_SKILL);
+    return skillEffect;
 }
 
 function useFairyMasteryForCalculateBattle(fairy, ally) {
@@ -1761,7 +1776,7 @@ function updateAttrBeforAction(charObj) {
         var row = {};
         for (var j in val) {
             row = val[j];
-            if (j == "attackTimes" || j == "criAttack" || j == "reducedDamage") {
+            if (j == "attackTimes" || j == "criAttack") {
                 charObj.cb.attr[j] = row.val;
             } else if (j == "belt" || j == "shield") {
                 charObj.cb[j] += row.val;
@@ -1815,7 +1830,7 @@ function getCriAttackExpectedValue(criRate, criDmg) {
     return 1 - criRate * 0.01 + (1 + criDmg / 100.0) * criRate * 0.01;
 }
 
-function calculateActionDmg(charObj, mode) {
+function calculateActionDmg(charObj, enemy, mode) {
     var isCanCri = true;
     var resetAttackedTimes = false;
     var attackMultiply = 1.0;
@@ -1859,12 +1874,12 @@ function calculateActionDmg(charObj, mode) {
     if (mode == ACTION) {
         charObj.cb.attackedTimes++;
         if (resetAttackedTimes) charObj.cb.attackedTimes = 0;
-        charObj.cb.attr.dmg_frame = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * link;
+        charObj.cb.attr.dmg_frame = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * link * (2.0 - enemy.cb.attr.reducedDamage);
     } else if (mode == PERFORMANCE) {
         charObj.cb.attr.attackFrame = getAttackFrame(charObj);
         var attackTimesPerSecond = 30.0 / charObj.cb.attr.attackFrame;
-        charObj.cb.attr.dps = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * attackTimesPerSecond * link;
-        charObj.cb.skillAttack = charObj.cb.skillAttack * charObj.cb.attr.dmg_o;
+        charObj.cb.attr.dps = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * attackTimesPerSecond * link * (2.0 - enemy.cb.attr.reducedDamage);
+        charObj.cb.skillAttack = charObj.cb.skillAttack * charObj.cb.attr.dmg_o * (2.0 - enemy.cb.attr.reducedDamage);
         if ('radius' in charObj.skill) {
         } else {
             charObj.cb.skillAttack *= link;
@@ -1975,6 +1990,10 @@ function calculateBattle() {
                     if ('prepareTime' in charObj.skill) {
                         charObj.cb.actionType = PREPARE_TO_USE_SKILL;
                         charObj.cb.actionFrame = charObj.skill.prepareTime * 30;
+
+                        if (charObj.id == "183") {
+                            useSkillForCalculateBattle(charObj, ally, enemy);
+                        }
                     } else if (skillType == "buff" || skillType == "debuff" || skillType == "activeWithPassive") {
                         useSkillForCalculateBattle(charObj, ally, enemy);
                     } else if (skillType == "attack") {
@@ -1996,7 +2015,7 @@ function calculateBattle() {
                 if (charObj.cb.actionType == "attack") {
                     calculateArmorPiercing(charObj, enemy);
                     calculateHitRate(charObj, enemy);
-                    calculateActionDmg(charObj, ACTION);
+                    calculateActionDmg(charObj, enemy, ACTION);
                     dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dmg_frame);
                     charObj.cb.actionFrame = getAttackFrame(charObj);
                     if (charObj.type == "mg") {
@@ -2037,7 +2056,7 @@ function calculateBattle() {
                         link = 1;
                     }
 
-                    dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dmg_o * attackMultiply * link);
+                    dmgTable.y[i]["data"][nowFrame] += parseInt(charObj.cb.attr.dmg_o * attackMultiply * link * (2.0 - enemy.cb.attr.reducedDamage));
 
                     if ('skillTimes' in charObj.skill && charObj.cb.skillUsedTimes < charObj.skill.skillTimes) {
                         charObj.cb.actionType = PREPARE_TO_USE_SKILL;
