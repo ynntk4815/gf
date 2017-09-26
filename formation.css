@@ -264,6 +264,10 @@
     float:left;
 }
 
+.pick_button.rarity_extra {
+    background:#DFB6FF;
+}
+
 .pick_button.rarity_5 {
     background:#FFB400;
 }

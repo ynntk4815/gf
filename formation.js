@@ -2,7 +2,7 @@
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed", "rate", "reducedDamage"];
-const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime", "stackMax", "stackUpWhenEveryTime", "cleanBuff", "name", "initStack", "prepareTime"];
+const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime", "stackMax", "stackUpWhenEveryTime", "cleanBuff", "name", "initStack", "prepareTime", "attackSkillTimes", "radius"];
 const SKILL_EFFECT_KEY_NESTED = ["rate", "attackToArmor", "extraToTarget"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
@@ -28,6 +28,7 @@ const FAIRY_MASTERY = "fairy_mastery";
 const BUFF = "buff";
 const FORTRESS = "fortress";
 const ALLY = "ally";
+const CHAR_RARITY_LISTS = ["2", "3", "4", "5", "extra"];
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -382,12 +383,12 @@ function getSkillDetail(grid) {
         var text = [];
         text.push(mStringData.firstCooldownTime.format(getSkillFirstCooldownTime(charObj)));
         text.push(mStringData.cooldownTime.format(getSkillCooldownTime(charObj.skill, charObj.c.skillLevel, charObj.c.cooldownTimeReduction)));
-        if (charObj.id == "183") {
+        if (charObj.id != "102") {
             text.push(getCharSkillDetail(charObj));
         } else {
             var skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
             var skillEffect2 = getSkillByLevel(skill.effect2, charObj.c.skillLevel);
-            text.push(skill.detailText.format(skillEffect.dodge.val, Math.abs(skillEffect.dmg.val), skillEffect2.dmg.val, Math.abs(skillEffect2.dodge.val)));
+            text.push(skill.detailText.val.format(skillEffect.dodge.val, Math.abs(skillEffect.dmg.val), skillEffect2.dmg.val, Math.abs(skillEffect2.dodge.val)));
         }
         return text;
     } else {
@@ -659,19 +660,20 @@ function openDialogPickerByType(type) {
 }
 
 function updatePickerByType(type, auraAttr) {
-    for (var i = 5; i >= 2; i--) {
+    for (var i in CHAR_RARITY_LISTS) {
+        var nowVal = CHAR_RARITY_LISTS[i];
         var count = 0;
         var rows = [];
         var row = $('<tr></tr>');
         var grepList = $.grep(mCharData, function(e) {
-            var result = e.type == type && e.rarity == i;
+            var result = e.type == type && e.rarity == nowVal;
             if (auraAttr != null) {
                 result &= auraAttr in e.aura.effect;
             }
             return result;
         });
         grepList.forEach(function(v) {
-            var item = $('<div></div>').addClass("pick_button hover rarity_"+i).html(v.name).attr("value", v.id).click(function() {
+            var item = $('<div></div>').addClass("pick_button hover rarity_"+nowVal).html(v.name).attr("value", v.id).click(function() {
                 addChar(mPickerGrid, $(this).attr("value"));
             });
 
@@ -686,8 +688,8 @@ function updatePickerByType(type, auraAttr) {
         });
         rows.push(row);
 
-        $("#picker_by_type .rarity_"+i+" table").html("");
-        $("#picker_by_type .rarity_"+i+" table").append(rows);
+        $("#picker_by_type .rarity_"+nowVal+" table").html("");
+        $("#picker_by_type .rarity_"+nowVal+" table").append(rows);
     }
 }
 
