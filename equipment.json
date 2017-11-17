@@ -356,7 +356,7 @@
     {"type":"holographic_sight", "can_not_type":["hg"], "classification":"accessory"},
     {"type":"red_dot_sight", "can_not_type":["hg"], "classification":"accessory"},
     {"type":"night_battle_equipment", "can_not_type":["rf","mg"], "classification":"accessory"},
-    {"type":"armor_piercing_bullet", "can_type":["rf","mg"], "can_char":["138"], "classification":"magazine"},
+    {"type":"armor_piercing_bullet", "can_type":["rf","mg"], "can_char":["138", "183"], "classification":"magazine"},
     {"type":"status_bullet", "can_type":["hg","smg"], "classification":"magazine"},
     {"type":"shotgun_bullet", "can_type":["sg"], "classification":"magazine"},
     {"type":"hight_speed_bullet", "can_type":["ar"], "classification":"magazine"},
