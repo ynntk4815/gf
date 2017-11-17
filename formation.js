@@ -1744,7 +1744,7 @@ function getSkillCooldownTime(skill, skillLevel, cooldownTimeReduction) {
     var cooldownTime = skill.cooldownTime;
     var e = (1.0 * cooldownTime["10"] - 1.0 * cooldownTime["1"]) / 9.0 * (skillLevel - 1.0) + 1.0 * cooldownTime["1"];
     e = e * (1 - cooldownTimeReduction * 0.01);
-    e = e.toFixed(2) * 1
+    e = e.toFixed(1) * 1
     return e;
 }
 
