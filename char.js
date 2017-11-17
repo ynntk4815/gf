@@ -12,6 +12,7 @@ function getCharSkillDetail(charT) {
     if (charT.id == "188") text.push(getCharSkillDetailId188(skillEffect, detailText));
     if (charT.id == "1001") text.push(getCharSkillDetailId1001(skillEffect, detailText));
     if (charT.id == "1002") text.push(getCharSkillDetailId1002(skillEffect, detailText));
+    if (charT.id == "1004") text.push(getCharSkillDetailId1004(skillEffect, detailText));
     return text;
 }
 
@@ -29,5 +30,9 @@ function getCharSkillDetailId1001(skillEffect, detailText) {
 
 function getCharSkillDetailId1002(skillEffect, detailText) {
     return detailText.format(skillEffect.attack.val, skillEffect.attack2.val);
+}
+
+function getCharSkillDetailId1004(skillEffect, detailText) {
+    return detailText.format(skillEffect.attack.val, skillEffect.time.val);
 }
 //alert(JSON.stringify(charObj));
