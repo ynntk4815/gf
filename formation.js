@@ -214,19 +214,31 @@ function init() {
 
     var pre = getUrlParameter('pre');
     if (pre) {
-        var formation = JSON.parse(pre);
-        $.each(formation, function(key, val) {
-            var controlUI = getGridUiObj(""+val.g).find(".control_container");
-            var equipmentUI = getGridUiObj(""+val.g).find(".equipment_container");
-            controlUI.find(".level").val(val.lv);
-            controlUI.find(".skill_level").val(val.slv);
-            addChar(val.g, val.id);
-            for (var i in val.eq) {
-                var e = val.eq[i];
-                addEquipment(val.g, e.i, e.id);
-                equipmentUI.find(".equipment_strengthen_"+e.i).val(e.lv);
-            }
-        });
+        var preObject = JSON.parse(pre);
+        if (!jQuery.isEmptyObject(preObject["char"])) {
+            var formation = preObject["char"];
+            $.each(formation, function(key, val) {
+                var controlUI = getGridUiObj(""+val.g).find(".control_container");
+                var equipmentUI = getGridUiObj(""+val.g).find(".equipment_container");
+                controlUI.find(".level").val(val.lv);
+                controlUI.find(".skill_level").val(val.slv);
+                addChar(val.g, val.id);
+                for (var i in val.eq) {
+                    var e = val.eq[i];
+                    addEquipment(val.g, e.i, e.id);
+                    equipmentUI.find(".equipment_strengthen_"+e.i).val(e.lv);
+                }
+            });
+        }
+
+        if (!jQuery.isEmptyObject(preObject["fairy"])) {
+            var fairyControlContainer = $(".fairy_container .fairy_control_container");
+            fairyControlContainer.find(".level").val(preObject["fairy"].lv);
+            fairyControlContainer.find(".rarity").val(preObject["fairy"].r);
+            fairyControlContainer.find(".skill_level").val(preObject["fairy"].slv);
+            fairyControlContainer.find(".mastery").val(preObject["fairy"].m);
+            addFairy(preObject["fairy"].id);
+        }
     }
 
     $('.aura_container').hover(function(){
@@ -1194,7 +1206,9 @@ function updatePerformance() {
         $(".fairy_performance").find(".value").html("-");
     }
 
+    var preLoadCode = {};
     var formation = [];
+    var fairy = {};
     for (var i in mGridHasChar) {
         var grid = getGridByUIValue(mGridHasChar[i]);
         if (mGridToChar[grid] != "") {
@@ -1211,8 +1225,18 @@ function updatePerformance() {
         }
     }
 
+    if (mFairy != null) {
+        fairy.id = mFairy.id;
+        fairy.lv = mFairy.level;
+        fairy.r = mFairy.rarity;
+        fairy.slv = mFairy.skillLevel;
+        fairy.m = mFairy.mastery.id;
+    }
+    preLoadCode["char"] = formation;
+    preLoadCode["fairy"] = fairy;
+
     var url = [location.protocol, '//', location.host, location.pathname].join('');
-    $("#code").val(url + "?pre=" + JSON.stringify(formation));
+    $("#code").val(url + "?pre=" + JSON.stringify(preLoadCode));
 }
 
 function charGetAttrByLevel(attr, lv) {
