@@ -25,6 +25,9 @@ function getFairySkillDetail(fairy) {
     if (fairy.id == "16") text.push(getFairySkillDetailId016(fairy, detailText));
     if (fairy.id == "17") text.push(getFairySkillDetailId017(fairy, detailText));
     if (fairy.id == "18") text.push(getFairySkillDetailId018(fairy, detailText));
+    if (fairy.id == "1001") text.push(getFairySkillDetailId1001(fairy, detailText));
+    if (fairy.id == "1002") text.push(getFairySkillDetailId1002(fairy, detailText));
+    if (fairy.id == "1003") text.push(getFairySkillDetailId1003(fairy, detailText));
     return text;
 }
 
@@ -129,4 +132,19 @@ function getFairySkillDetailId017(fairy, detailText) {
 function getFairySkillDetailId018(fairy, detailText) {
     var skillEffect = getSkillByLevel(fairy.skill.effect, fairy.skillLevel);
     return detailText;
+}
+
+function getFairySkillDetailId1001(fairy, detailText) {
+    var skillEffect = getSkillByLevel(fairy.skill.effect, fairy.skillLevel);
+    return detailText.format(skillEffect.fixedDmg.val);
+}
+
+function getFairySkillDetailId1002(fairy, detailText) {
+    var skillEffect = getSkillByLevel(fairy.skill.effect, fairy.skillLevel);
+    return detailText.format(skillEffect.AttackCurrentHp.val);
+}
+
+function getFairySkillDetailId1003(fairy, detailText) {
+    var skillEffect = getSkillByLevel(fairy.skill.effect, fairy.skillLevel);
+    return detailText.format(skillEffect.hp.val, skillEffect.fixedDmg.val);
 }

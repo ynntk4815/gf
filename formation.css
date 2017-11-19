@@ -300,6 +300,14 @@
     background:#7794D8;
 }
 
+.pick_button.extra {
+    box-shadow:15px 0px 0px 0px #DFB6FF inset;
+}
+
+.button.extra {
+    box-shadow:15px 0px 0px 0px #DFB6FF inset;
+}
+
 .update_log {
     width:200px;
 }

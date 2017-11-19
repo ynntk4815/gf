@@ -335,7 +335,56 @@
             "dodge":58,
             "armor":56,
             "criDmg":58,
-            "grow":320}}
+            "grow":320}},
+    {"id":"1001", "name":"八重樱", "type":"battle",
+        "skill":{
+            "name":"绯狱幻世",
+            "type":"attack",
+            "target":"enemy",
+            "firstCooldownTime":0,
+            "detailText":{"val":"下场战斗中召唤绯狱丸，在敌方所处大范围内出现火柱，火柱在场上存在2秒，每0.5秒对接触到的敌人造成{0}伤害。"},
+            "effect":{
+                "fixedDmg":{"1":20, "2":30, "3":40, "4":50, "5":60, "6":70, "7":80, "8":90, "9":100, "10":120}}},
+        "partyAura":{
+            "dmg":220,
+            "hit":0,
+            "dodge":75,
+            "armor":65,
+            "criDmg":200,
+            "grow":60}},
+    {"id":"1002", "name":"耀夜姬", "type":"strategy",
+        "skill":{
+            "name":"八咫辉光",
+            "type":"attack",
+            "target":"enemy",
+            "firstCooldownTime":0,
+            "detailText":{"val":"在自身周围范围2的区域部署八咫镜并发射可折射的激光，随机对区域内的3队敌人造成当前血量{0}%的伤害，该伤害对boss无效。"},
+            "effect":{
+                "AttackCurrentHp":{"1":10, "10":20}}},
+        "partyAura":{
+            "dmg":0,
+            "hit":173,
+            "dodge":75,
+            "armor":180,
+            "criDmg":195,
+            "grow":60}},
+    {"id":"1003", "name":"柯萝伊", "type":"battle",
+        "skill":{
+            "name":"悲恸人形",
+            "type":"summon",
+            "target":null,
+            "firstCooldownTime":0,
+            "detailText":{"val":"下场战斗中召唤2个血量为{0}的分身，每个分身每两秒会对全体敌人造成{1}伤害。"},
+            "effect":{
+                "hp":{"1":150, "2":175, "3":200, "4":250, "5":300, "6":350, "7":400, "8":450, "9":500, "10":600},
+                "fixedDmg":{"1":15, "2":22, "3":30, "4":40, "5":50, "6":60, "7":70, "8":80, "9":90, "10":100}}},
+        "partyAura":{
+            "dmg":145,
+            "hit":135,
+            "dodge":199,
+            "armor":65,
+            "criDmg":0,
+            "grow":60}}
 ],"mastery":[
     {"id":"1", "name":"殺傷型I", "target":"ally", "effect":{
         "dmg":{"val":12}},

@@ -28,6 +28,7 @@ const FAIRY_MASTERY = "fairy_mastery";
 const BUFF = "buff";
 const FORTRESS = "fortress";
 const ALLY = "ally";
+const EXTRA = "extra";
 const CHAR_RARITY_LISTS = ["2", "3", "4", "5", "extra"];
 
 var mPickerType = "";
@@ -705,6 +706,10 @@ function updatePickerByType(type, auraAttr) {
     }
 }
 
+function isFairyExtra(id) {
+    return /^([0-9]{4,})$/.test(id);
+}
+
 function updatePickerFairy() {
     for (var i in FAIRY_TYPE) {
         var grepList = $.grep(mFairyData.fairy, function(e) {
@@ -712,7 +717,11 @@ function updatePickerFairy() {
         });
         var items = [];
         grepList.forEach(function(v) {
-            var item = $('<div></div>').addClass("pick_button hover "+FAIRY_TYPE[i]).html(v.name).attr("value", v.id).click(function() {
+            var buttonClass = "pick_button hover "+FAIRY_TYPE[i];
+            if (isFairyExtra(v.id)) {
+                buttonClass += " " + EXTRA;
+            }
+            var item = $('<div></div>').addClass(buttonClass).html(v.name).attr("value", v.id).click(function() {
                 addFairy($(this).attr("value"));
             });
             items.push(item);
@@ -752,8 +761,11 @@ function addFairy(id) {
     $(".fairy_container .select_fairy").hide();
     $(".fairy_container .fairy_control_container").show();
     $(".fairy_container .fairy_control_container .fairy").html(mFairy.name);
-    $(".fairy_container .fairy_control_container .fairy").removeClass(FAIRY_TYPE.join(" "));
+    $(".fairy_container .fairy_control_container .fairy").removeClass(FAIRY_TYPE.join(" ") + " " + EXTRA);
     $(".fairy_container .fairy_control_container .fairy").addClass(mFairy.type);
+    if (isFairyExtra(id)) {
+        $(".fairy_container .fairy_control_container .fairy").addClass(EXTRA);
+    }
     closePickerFairyDialog();
     updateFairy();
     updateCharObs();
