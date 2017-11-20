@@ -2204,7 +2204,24 @@ function getSkillByLevel(skillEffect, skillLevel) {
             if (val["10"] == "" || val["1"] == "") {
 
             } else {
-                var e = (1.0 * val["10"] - 1.0 * val["1"]) / 9.0 * (skillLevel - 1.0) + 1.0 * val["1"];
+                var u = skillLevel + 1;
+                while (true) {
+                    if (u in val) {
+                        break;
+                    } else {
+                        u += 1;
+                    }
+                }
+
+                var d = skillLevel - 1;
+                while (true) {
+                    if (d in val) {
+                        break;
+                    } else {
+                        d -= 1;
+                    }
+                }
+                var e = (1.0 * val[u] - 1.0 * val[d]) / (u - d) * (skillLevel - d) + 1.0 * val[d];
                 if (key == "time" || key == "attack" || key == "attackDot" || key == "extraToTarget") {
                     e = e.toFixed(1) * 1;
                 } else {
