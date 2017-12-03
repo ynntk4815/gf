@@ -30,6 +30,7 @@ const FORTRESS = "fortress";
 const ALLY = "ally";
 const EXTRA = "extra";
 const CHAR_RARITY_LISTS = ["2", "3", "4", "5", "extra"];
+const CRI_RATE = "criRate";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -1270,7 +1271,6 @@ function copyObject(o) {
 function getChar(id){
     var grepList = $.grep(mCharData, function(e){return e.id == id;});
     var obj = JSON.parse(JSON.stringify(grepList[0]));
-    obj["criRate"] = 20;
     obj["criDmg"] = 50;
     obj["movementSpeed"] = 150;
     obj["equipment"] = [];
@@ -1278,10 +1278,13 @@ function getChar(id){
     obj["equipment"][2] = "";
     obj["equipment"][3] = "";
     obj.thisType = "char";
-    if (obj.type == "rf" || obj.type == "sg") obj["criRate"] = 40;
-    if (obj.type == "smg" || obj.type == "mg") obj["criRate"] = 5;
-    if (obj.id == "114") obj["criRate"] = 40;
-    if (obj.id == "172") obj["criRate"] = 30;
+    if (CRI_RATE in obj) {
+        obj[CRI_RATE] = obj[CRI_RATE] * 1;
+    } else {
+        obj[CRI_RATE] = 20;
+        if (obj.type == "rf" || obj.type == "sg") obj[CRI_RATE] = 40;
+        if (obj.type == "smg" || obj.type == "mg") obj[CRI_RATE] = 5;
+    }
     return obj;
 }
 
