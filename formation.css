@@ -387,3 +387,8 @@
 .aura_table td {
     border: 1px solid black;
 }
+
+a img {
+    max-width:25px;
+    max-height:25px;
+}

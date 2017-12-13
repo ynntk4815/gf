@@ -373,7 +373,8 @@ function init() {
         updatePerformance();
     });
 
-    $('.update_log').html(mStringData["last_update"] + " " + mUpdate[0].date.yyyymmdd());
+    $('.update_log').html(mStringData["contact"] + " & " + mStringData["updateLog"]);
+    $('.last_update_time').html(mStringData["last_update"] + " " + mUpdate[0].date.yyyymmdd());
     $('.update_log').click(function() {
         $('#updateDialog').dialog("open");
     });

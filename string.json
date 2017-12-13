@@ -50,5 +50,7 @@
     "multiLink":"擴編總傷害",
     "last_update":"最後更新",
     "attackToArmor":"若對裝甲{0}倍傷害",
-    "extraToTarget":"目標額外"
+    "extraToTarget":"目標額外",
+    "contact":"聯絡方式",
+    "updateLog":"更新紀錄"
 }}
