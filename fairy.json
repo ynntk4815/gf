@@ -336,7 +336,7 @@
             "armor":56,
             "criDmg":58,
             "grow":320}},
-    {"id":"1001", "name":"八重樱", "type":"battle",
+    {"id":"1001", "name":"八重樱", "type":"battle", "version":"cn",
         "skill":{
             "name":"绯狱幻世",
             "type":"attack",
@@ -352,7 +352,7 @@
             "armor":65,
             "criDmg":200,
             "grow":60}},
-    {"id":"1002", "name":"耀夜姬", "type":"strategy",
+    {"id":"1002", "name":"耀夜姬", "type":"strategy", "version":"cn",
         "skill":{
             "name":"八咫辉光",
             "type":"attack",
@@ -368,7 +368,7 @@
             "armor":180,
             "criDmg":195,
             "grow":60}},
-    {"id":"1003", "name":"柯萝伊", "type":"battle",
+    {"id":"1003", "name":"柯萝伊", "type":"battle", "version":"cn",
         "skill":{
             "name":"悲恸人形",
             "type":"summon",

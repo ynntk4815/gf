@@ -31,6 +31,7 @@ const ALLY = "ally";
 const EXTRA = "extra";
 const CHAR_RARITY_LISTS = ["2", "3", "4", "5", "extra"];
 const CRI_RATE = "criRate";
+const VERSION = "version";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -47,6 +48,7 @@ var mGridHasChar = [];
 var mDmgLinkMode = SINGLE_LINK;
 var mIsDetailCalculate = false;
 var mFairy = null;
+var mVersion = "tw";
 
 function init() {
     initData();
@@ -685,6 +687,9 @@ function updatePickerByType(type, auraAttr) {
             if (auraAttr != null) {
                 result &= auraAttr in e.aura.effect;
             }
+            if (VERSION in e) {
+                result &= e[VERSION] == mVersion;
+            }
             return result;
         });
         grepList.forEach(function(v) {
@@ -715,7 +720,11 @@ function isFairyExtra(id) {
 function updatePickerFairy() {
     for (var i in FAIRY_TYPE) {
         var grepList = $.grep(mFairyData.fairy, function(e) {
-            return e.type == FAIRY_TYPE[i];
+            var result = e.type == FAIRY_TYPE[i];
+            if (VERSION in e) {
+                result &= e[VERSION] == mVersion;
+            }
+            return result;
         });
         var items = [];
         grepList.forEach(function(v) {
