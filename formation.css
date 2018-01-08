@@ -247,6 +247,11 @@
     float:left;
 }
 
+.simulation {
+    width:150px;
+    float:left;
+}
+
 .dmgLinkSwitch {
     width:150px;
     float:left;

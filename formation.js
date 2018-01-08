@@ -2,7 +2,7 @@
 const TYPES = ["hg", "smg", "ar", "rf", "mg", "sg"];
 const GRIDS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const SKILL_TYPE_IS_PERCENT = ["hit", "dodge", "armor", "fireOfRate", "dmg", "criRate", "cooldownTime", "criDmg", "movementSpeed", "rate", "reducedDamage"];
-const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime", "stackMax", "stackUpWhenEveryTime", "cleanBuff", "name", "initStack", "prepareTime", "attackSkillTimes", "radius"];
+const SKILL_EFFECT_KEY_COPY = ["target", "type", "everyTime", "stackMax", "stackUpWhenEveryTime", "cleanBuff", "name", "initStack", "prepareTime", "attackSkillTimes", "radius", "multiplyByTypeCount", "howOccur"];
 const SKILL_EFFECT_KEY_NESTED = ["rate", "attackToArmor", "extraToTarget"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
@@ -25,6 +25,7 @@ const FAIRY_TYPE = ["battle", "strategy"];
 const CHAR_SKILL = "char_skill";
 const FAIRY_SKILL = "fairy_skill";
 const FAIRY_MASTERY = "fairy_mastery";
+const CHAR_SKILL_PASSIVE = "char_skill_passive";
 const BUFF = "buff";
 const FORTRESS = "fortress";
 const ALLY = "ally";
@@ -32,6 +33,7 @@ const EXTRA = "extra";
 const CHAR_RARITY_LISTS = ["2", "3", "4", "5", "extra"];
 const CRI_RATE = "criRate";
 const VERSION = "version";
+const EVERY_ATTACK_CHANCE = "everyAttackChance";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -49,6 +51,9 @@ var mDmgLinkMode = SINGLE_LINK;
 var mIsDetailCalculate = false;
 var mFairy = null;
 var mVersion = "tw";
+var mRandom = new Random();
+var mData;
+var mIsCancel = true;
 
 function init() {
     initData();
@@ -305,41 +310,24 @@ function init() {
 
     $('.calculate').click(function() {
         $('#detailCalculate').dialog("open");
-        var data = calculateBattle();
+        $('#detailCalculate .control_input').hide();
+        $('#detailCalculate .startSimulation').hide();
+        $('#detailCalculate #text').hide();
+        updateCalculateChart(calculateBattle());
+    });
 
-        Highcharts.chart('detailCalculateContainer', {
-            title: {
-                text: mStringData["calculateTitle"]
-            },
-            tooltip: {
-                shared: true,
-                formatter: function() {
-                    var s = '<b>'+ this.x +'</b>';
-                    var t = 0;
-                    $.each(this.points, function(i, point) {
-                        s += '<br><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': <b>' + point.y + '</b><br/>';
-                        t += point.y;
-                    });
-                    s += '<br>' + mStringData.total + ': <b>' + t + '</b>';
+    $('.simulation').click(function() {
+        $('#detailCalculate').dialog("open");
+        $('#detailCalculate .control_input').show();
+        $('#detailCalculate .startSimulation').show();
+        $('#detailCalculate #text').show();
+        updateCalculateChart([]);
+    });
 
-                    return s;
-                }
-            },
-            xAxis: {
-                categories: data.x,
-                title: {
-                    text: mStringData["second"]}
-            },
-            yAxis: {
-                title: {
-                    align: 'high',
-                    offset: 0,
-                    text: mStringData["dmg"],
-                    rotation: 0,
-                    y: -10}},
-            exporting: {enabled: false},
-            series: data.y
-        });
+    $('.startSimulation').click(function() {
+        if (mIsCancel) {
+            startBattleSimulation();
+        }
     });
 
     $('.picker_char_container .attr').change(function() {
@@ -390,6 +378,99 @@ function init() {
     });
 
     //debugChar();
+}
+
+function startBattleSimulation() {
+    var n = parseInt($('#detailCalculate #times').val());
+    mData = [];
+    mIsCancel = false;
+    var progress = $('#detailCalculate #text');
+
+    var endTime = $('.calculate_control .endTime').val();
+    if (endTime == "") {
+        endTime = 0;
+    } else {
+        endTime = endTime * FRAME_PER_SECOND;
+    }
+
+    var walkTime = $('.calculate_control .walkTime input').val();
+    if (walkTime == "") {
+        walkTime = 0;
+    } else {
+        walkTime = walkTime * FRAME_PER_SECOND;
+    }
+
+    var ally = copyList(getAlly());
+    allyInit(ally);
+    var enemy = copyObject(ally[0]);
+    enemyInit(enemy);
+
+    var f = function() {
+        if (mIsCancel) return;
+        mData.push(battleSimulation(endTime, walkTime, copyList(ally), copyObject(enemy)));
+        progress.html(mData.length);
+
+        if (mData.length >= n) {
+            var odata = mData;
+            var data = mData[0];
+            for (var i = 1; i < n; i++) {
+                for (var c in odata[i].y) {
+                    for (var f in odata[i].y[c]["data"]) {
+                        data.y[c]["data"][f] += odata[i].y[c]["data"][f];
+                    }
+                }
+            }
+
+            for (var c in data.y) {
+                for (var f in data.y[c]["data"]) {
+                    data.y[c]["data"][f] /= n;
+                }
+            }
+
+            updateCalculateChart(data);
+            mIsCancel = true;
+        }
+    }
+
+    for (var i = 0; i < n; i++) {
+        setTimeout(f, 0);
+    }
+}
+
+function updateCalculateChart(data) {
+    Highcharts.chart('detailCalculateContainer', {
+        title: {
+            text: mStringData["calculateTitle"]
+        },
+        tooltip: {
+            shared: true,
+            formatter: function() {
+                var s = '<b>'+ this.x +'</b>';
+                var t = 0;
+                $.each(this.points, function(i, point) {
+                    s += '<br><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': <b>' + point.y + '</b><br/>';
+                    t += point.y;
+                });
+                s += '<br>' + mStringData.total + ': <b>' + t + '</b>';
+
+                return s;
+            }
+        },
+        xAxis: {
+            categories: data.x,
+            title: {
+                text: mStringData["second"]}
+        },
+        yAxis: {
+            title: {
+                align: 'high',
+                offset: 0,
+                text: mStringData["dmg"],
+                rotation: 0,
+                y: -10}},
+        exporting: {enabled: false},
+        series: data.y
+    });
 }
 
 function getSkillDetail(grid) {
@@ -523,6 +604,7 @@ function initDialog() {
     $('#detailCalculate').dialog({autoOpen: false, width: 'auto', modal : true});
     $('#detailCalculate').on('dialogclose', function(event) {
         mIsDetailCalculate = false;
+        mIsCancel = true;
     });
     $('#detailCalculate').on('dialogopen', function(event) {
         mIsDetailCalculate = true;
@@ -888,8 +970,13 @@ function addChar(grid, id) {
         $("." + mGridToUI[grid] + " .char .skill_control").prop("checked", false);
         $(".skill_all").prop("checked", false);
 
-        if ('stack' in mGridToChar[grid].skill && mGridToChar[grid].skill.stack) {
+        if ('stack' in mGridToChar[grid].skill && mGridToChar[grid].skill.stack > 0) {
             $("." + mGridToUI[grid] + " .char .skill_stack").show();
+            $("." + mGridToUI[grid] + " .char .skill_stack").empty();
+            for (var i = mGridToChar[grid].skill.stack; i >= 0; i--) {
+                $("." + mGridToUI[grid] + " .char .skill_stack").append(
+                        $("<option></option>").attr("value", i).text(i + mStringData.stack));
+            }
         } else {
             $("." + mGridToUI[grid] + " .char .skill_stack").hide();
         }
@@ -1278,6 +1365,15 @@ function copyObject(o) {
     return JSON.parse(JSON.stringify(o));
 }
 
+function copyList(s) {
+    var d = [];
+    for (var i in s) {
+        var o = s[i];
+        d.push(copyObject(o));
+    }
+    return d;
+}
+
 function getChar(id){
     var grepList = $.grep(mCharData, function(e){return e.id == id;});
     var obj = JSON.parse(JSON.stringify(grepList[0]));
@@ -1422,6 +1518,21 @@ function getAuraTargetGrid(charObj) {
     return grids;
 }
 
+function getColumnTargetGrid(charObj) {
+    var selfPos = gridToXY(charObj.c.selfGrid);
+
+    var grids = [];
+    $.each(GRIDS, function(key, val) {
+        var targetPos = gridToXY(val);
+        var targetGrid = xyToGrid(targetPos.x, targetPos.y);
+        if (selfPos.x == targetPos.x) {
+            grids.push(targetGrid);
+        }
+    });
+
+    return grids;
+}
+
 function updateCharObsForFairyAura() {
     if (mFairy != null) {
         for (var i in GRIDS) {
@@ -1505,6 +1616,11 @@ function updateCharObsForUseSkill() {
             }
         } else if (skillType == "activeWithPassive") {
             usePassiveSkillForCalculateBattle(charObj);
+        }
+
+        if ('passive' in charObj.skill) {
+            var skillEffect = getSkillByLevel(charObj.skill.passive.effect, charObj.c.skillLevel);
+            useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect, CHAR_SKILL_PASSIVE);
         }
     }
 }
@@ -1621,7 +1737,7 @@ function useSkillForCalculateBattle(charObj, ally, enemy) {
     useSkillForCalculateBattle2(charObj, ally, enemy, getSkillEffects(charObj), CHAR_SKILL);
 }
 
-function useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect) {
+function useSkillEffectForCalculateBattle(charObj, ally, enemy, skillEffect) {
     useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect, CHAR_SKILL);
 }
 
@@ -1682,6 +1798,11 @@ function useSkillForCalculateBattle2(obj, ally, enemy, skillEffect, skillUsedBy)
         skillTarget = skill.target;
         skillType = skill.type;
         skillName = skill.name;
+    } else if (skillUsedBy == CHAR_SKILL_PASSIVE) {
+        skill = charObj.skill.passive;
+        skillTarget = skill.target;
+        skillType = skill.type;
+        skillName = skill.name;
     } else if (skillUsedBy == FAIRY_MASTERY) {
         skillTarget = obj.mastery.target;
         skillType = "buff";
@@ -1706,7 +1827,9 @@ function useSkillForCalculateBattle2(obj, ally, enemy, skillEffect, skillUsedBy)
             tSkill[key] = copyObject(val);
             tSkill[key].name = skillName;
             tSkill[key].stack = 1;
-            if (skillUsedBy == CHAR_SKILL && !mIsDetailCalculate && 'stack' in skill && skill.stack) tSkill[key].stack = charObj.c.skillStack;
+            //if (skillUsedBy == CHAR_SKILL && !mIsDetailCalculate && 'stack' in skill && skill.stack) tSkill[key].stack = charObj.c.skillStack;
+            if ((skillUsedBy == CHAR_SKILL || skillUsedBy == CHAR_SKILL_PASSIVE)
+                    && !mIsDetailCalculate && 'stackMax' in val) tSkill[key].stack = charObj.c.skillStack;
             if ('type' in val) tSkillType = val.type;
             if ('target' in val) tSkillTarget = val.target;
             if ('name' in val) tSkill[key].name = val.name;
@@ -1717,6 +1840,10 @@ function useSkillForCalculateBattle2(obj, ally, enemy, skillEffect, skillUsedBy)
                     updateForSkillCalculateBattle(tSkill, [charObj], skillEffect.time.val, "buff");
                 } else if (tSkillTarget == "self_aura_grid") {
                     var targetGrid = getAuraTargetGrid(charObj);
+                    var grepList = $.grep(ally, function(e) {return targetGrid.indexOf(e.c.selfGrid) >= 0;});
+                    updateForSkillCalculateBattle(tSkill, grepList, skillEffect.time.val, "buff");
+                } else if (tSkillTarget == "self_column_grid") {
+                    var targetGrid = getColumnTargetGrid(charObj);
                     var grepList = $.grep(ally, function(e) {return targetGrid.indexOf(e.c.selfGrid) >= 0;});
                     updateForSkillCalculateBattle(tSkill, grepList, skillEffect.time.val, "buff");
                 } else if (TYPES.indexOf(tSkillTarget) >= 0) {
@@ -1734,6 +1861,15 @@ function useSkillForCalculateBattle2(obj, ally, enemy, skillEffect, skillUsedBy)
     }
 }
 
+function getCountByType(type) {
+    var ally = getAlly();
+    ally = ally.filter((v) => {
+        return v.type == type;
+    });
+
+    return ally.length;
+}
+
 function isBuffAttrPercent(key) {
     return SKILL_TYPE_IS_PERCENT.indexOf(key) >= 0;
 }
@@ -1746,14 +1882,16 @@ function updateForSkillCalculateBattle(skillEffect, targetObjs, time, effectType
                 var row = {};
                 row[key] = {};
 
+                var multiply = 1;
+                if ('multiplyByTypeCount' in val) multiply = getCountByType(val.multiplyByTypeCount);
                 if (isBuffAttrPercent(key)) {
                     if (effectType == "buff") {
-                        row[key]["val"] = 1 + 0.01 * val.val;
+                        row[key]["val"] = 1 + 0.01 * val.val * multiply;
                     } else {
-                        row[key]["val"] = 1 - 0.01 * val.val;
+                        row[key]["val"] = 1 - 0.01 * val.val * multiply;
                     }
                 } else {
-                    row[key]["val"] = val.val * 1.0;
+                    row[key]["val"] = val.val * 1.0 * multiply;
                 }
 
                 row[key]["time"] = time * FRAME_PER_SECOND;
@@ -1763,9 +1901,32 @@ function updateForSkillCalculateBattle(skillEffect, targetObjs, time, effectType
                 row[key]["stack"] = val.stack;
                 if ('stackMax' in val && mIsDetailCalculate) {
                     row[key]["stackMax"] = val.stackMax;
-                    row[key]["stackUpWhenEveryTime"] = val.stackUpWhenEveryTime * FRAME_PER_SECOND;
+                    if ('stackUpWhenEveryTime' in val) {
+                        row[key]["stackUpWhenEveryTime"] = val.stackUpWhenEveryTime * FRAME_PER_SECOND;
+                    }
                     row[key]["stack"] = 0;
                     if ('initStack' in val) row[key]["stack"] = val.initStack;
+                }
+
+                var exist = false;
+                if ('stackMax' in val) {
+                    var sameBuff = t.cb.buff.filter((v) => {
+                        for (var j in v) {
+                            if (v[j]["skillName"] == val.name && j == key) {
+                                return true;
+                            }
+                            return false;
+                        }
+                    });
+
+                    if (sameBuff.length > 0) {
+                        exist = true;
+                        for (var j in sameBuff[0]) {
+                            sameBuff[0][j]["time"] = time * FRAME_PER_SECOND;
+                            sameBuff[0][j]["stack"]++;
+                            if (sameBuff[0][j]["stack"] > val.stackMax) sameBuff[0][j]["stack"] = val.stackMax;
+                        }
+                    }
                 }
 
                 if ('cleanBuff' in val) {
@@ -1783,7 +1944,8 @@ function updateForSkillCalculateBattle(skillEffect, targetObjs, time, effectType
                         }
                     });
                 }
-                t.cb.buff.push(row);
+                if (!exist)
+                    t.cb.buff.push(row);
             }
         }
     });
@@ -1842,12 +2004,12 @@ function updateAttrBeforAction(charObj) {
         }
     });
 
-    charObj.cb.attr.dmg = Math.floor(charObj.cb.attr.dmg);
+//    charObj.cb.attr.dmg = Math.floor(charObj.cb.attr.dmg);
     charObj.cb.attr.dmg_o = charObj.cb.attr.dmg;
-    charObj.cb.attr.hit = Math.floor(charObj.cb.attr.hit);
+    charObj.cb.attr.hit = Math.max(1, Math.floor(charObj.cb.attr.hit));
     charObj.cb.attr.dodge = Math.floor(charObj.cb.attr.dodge);
     charObj.cb.attr.fireOfRate = Math.floor(charObj.cb.attr.fireOfRate);
-    charObj.cb.attr.criRate = Math.floor(charObj.cb.attr.criRate);
+    charObj.cb.attr.criRate = charObj.cb.attr.criRate;
     charObj.cb.attr.armor = Math.floor(charObj.cb.attr.armor);
 
     if (charObj.type != "mg") charObj.cb.attr.fireOfRate = Math.min(charObj.cb.attr.fireOfRate, 120);
@@ -1857,6 +2019,7 @@ function updateAttrBeforAction(charObj) {
 
     if (battleisNight) {
         charObj.cb.attr.hit *= 1.0 - (0.9 * 0.01 * Math.max(100 - charObj.c.nightSight * 1, 0));
+        //no sure to floor?
         charObj.cb.attr.hit = Math.floor(charObj.cb.attr.hit);
     }
 }
@@ -1936,6 +2099,280 @@ function calculateActionDmg(charObj, enemy, mode) {
             charObj.cb.skillAttack *= link;
         }
     }
+}
+
+function battleAttackSimulationResult(charObj, enemy) {
+    var isCanCri = true;
+    var attackMultiply = 1.0;
+    var extraAttack = 0.0;
+    var criAttackE = 1.0;
+    var link = 1;
+    var dmgTimes = 1;
+
+    if ('attackTimes' in charObj.cb.attr) {
+        dmgTimes = charObj.cb.attr.attackTimes;
+    }
+
+    if ('criAttack' in charObj.cb.attr) {
+        charObj.cb.attr.criRate = Math.max(charObj.cb.attr.criRate, 100);
+    }
+
+    if ('everyAttackTimesOnNext' in charObj.skill && mode == ACTION) {
+        var skillEveryAttackTimesOnNext = parseInt(charObj.skill.everyAttackTimesOnNext);
+        if (charObj.cb.attackedTimes == skillEveryAttackTimesOnNext) {
+            attackMultiply = getSkillAttrValByLevel(charObj, "attack");
+            isCanCri = false;
+        }
+    }
+
+    if (mDmgLinkMode == MULTI_LINK) {
+        link = charObj.c.link;
+    }
+
+    var totalDmgTimes = dmgTimes * link;
+    var totalDmg = 0;
+    var criRate = 0;
+    if (isCanCri) criRate = charObj.cb.attr.criRate;
+    totalDmg += battleAttackSimulationHarm(charObj, enemy, attackMultiply, criRate, totalDmgTimes);
+    return totalDmg;
+}
+
+function simulationLink(charObj) {
+    var link = 1;
+    if (mDmgLinkMode == MULTI_LINK) {
+        link = charObj.c.link;
+    }
+
+    return link;
+}
+
+function battleAttackSimulationHarm(attacker, target, attackMultiply, criRate, times) {
+    var result = [];
+    for (var i = 1; i <= times; i++) {
+        if (mRandom.bool(attacker.cb.attr.hitRate)) {
+            var isCriDmg = mRandom.bool(criRate / 100.0);
+            var harm = Math.ceil(
+                    Math.max(1, attacker.cb.attr.dmg_o * dmgRandomRange() * attackMultiply + Math.min(2, attacker.c.armorPiercing - target.cb.attr.armor)));
+            if (isCriDmg) harm = harm * (1 + attacker.cb.attr.criDmg / 100.0);
+            result.push(Math.ceil(harm));
+        } else {
+            result.push(0);
+        }
+    }
+
+    return result.reduce((t, v) => {
+        return t + v;
+    }, 0);
+}
+
+function dmgRandomRange() {
+    var r = mRandom.integer(85, 115);
+    return r / 100.0;
+}
+
+function enemyInit(enemy) {
+    var enemyDodge = $('.battle_control .enemyDodge').val();
+    if (enemyDodge == "") {
+        enemyDodge = 0;
+    }
+
+    var enemyArmor = $('.battle_control .enemyArmor').val();
+    if (enemyArmor == "") {
+        enemyArmor = 0;
+    }
+
+    enemy.id = "enemy";
+    enemy.c.dodge = enemyDodge * 1;
+    enemy.c.armor = enemyArmor * 1;
+    enemy.cb = copyObject(enemy.c);
+    enemy.cb.buff = [];
+}
+
+function allyInit(ally) {
+    var battleFortress = $('.battle_control .battleFortress').is(":checked");
+    var fortressLevel = $('.battle_control .fortress_level').val();
+
+    updateCharObsForBase();
+    updateCharObsForFairyAura();
+    updateCharObsForAura();
+
+    for (var i in ally) {
+        var charObj = ally[i];
+        charObj.cb = copyObject(charObj.c);
+        charObj.cb.attr = copyObject(charObj.c);
+        charObj.cb.actionFrame = getAttackFrame(charObj);
+        charObj.cb.actionType = "attack";
+//        charObj.cb.skillCD = getSkillFirstCooldownTime(charObj) * 30 - walkTime;
+        charObj.cb.skillCD = getSkillFirstCooldownTime(charObj) * 30;
+        charObj.cb.skillUsedTimes = 0;
+        charObj.cb.attackedTimes = 0;
+        charObj.cb.buff = [];
+        var skillType = charObj.skill.type;
+        if (skillType == "activeWithPassive") {
+            usePassiveSkillForCalculateBattle(charObj);
+        }
+    }
+
+    if (mFairy != null) {
+        useFairyMasteryForCalculateBattle(mFairy, ally);
+        if (mFairy.isUseSkill && mFairy.skill.type == BUFF) {
+            useFairySkillForCalculateBattle(mFairy, ally, null);
+        }
+    }
+    if (battleFortress) {
+        useFortressForCalculateBattle(ally, fortressLevel);
+    }
+}
+
+function battleSimulation(endTime, walkTime, ally, enemy) {
+    var dmgTable = {};
+    dmgTable.x = [];
+    dmgTable.y = [];
+
+    for (var i in ally) {
+        dmgTable.y[i] = {};
+        dmgTable.y[i]["name"] = ally[i].name;
+        dmgTable.y[i]["data"] = [];
+        dmgTable.y[i]["data"][0] = 0;
+    }
+
+    for (var nowFrame = 1; nowFrame <= walkTime; nowFrame++) {
+        for (var i in ally) {
+            var charObj = ally[i];
+            charObj.cb.skillCD--;
+            updateAttrBeforAction(charObj);
+        }
+    }
+
+    dmgTable.x.push(0);
+    for (var nowFrame = 1; nowFrame <= endTime; nowFrame++) {
+        dmgTable.x.push(parseInt((nowFrame / 30.0 * 100)) / 100.0);
+
+        for (var i in ally) {
+            var charObj = ally[i];
+            charObj.cb.skillCD--;
+            if (charObj.c.isUseSkill) {
+                var skillType = charObj.skill.type;
+                if (charObj.cb.skillCD <= 0 && charObj.cb.actionType == "attack" && skillType != "passive") {
+                    if ('prepareTime' in charObj.skill) {
+                        charObj.cb.actionType = PREPARE_TO_USE_SKILL;
+                        charObj.cb.actionFrame = charObj.skill.prepareTime * 30;
+
+                        if (charObj.id == "183") {
+                            useSkillForCalculateBattle(charObj, ally, enemy);
+                        }
+                    } else if (skillType == "buff" || skillType == "debuff" || skillType == "activeWithPassive") {
+                        useSkillForCalculateBattle(charObj, ally, enemy);
+                    } else if (skillType == "attack") {
+                        charObj.cb.actionType = USE_ATTACK_SKILL;
+                        charObj.cb.actionFrame = 0;
+                    }
+                    charObj.cb.skillCD = getSkillCooldownTime(charObj.skill, charObj.c.skillLevel, charObj.c.cooldownTimeReduction) * 30;
+                    charObj.cb.skillUsedTimes = 0;
+                }
+            }
+        }
+
+        updateAttrBeforAction(enemy);
+        for (var i in ally) {
+            var charObj = ally[i];
+            updateAttrBeforAction(charObj);
+        }
+
+        for (var i in ally) {
+            var charObj = ally[i];
+            var harmThisFrame = 0;
+            charObj.cb.actionFrame--;
+            if (charObj.cb.actionFrame <= 0) {
+                if (charObj.cb.actionType == "attack") {
+                    calculateArmorPiercing(charObj, enemy);
+                    calculateHitRate(charObj, enemy);
+                    calculateActionDmg(charObj, enemy, ACTION);
+                    harmThisFrame  += battleAttackSimulationResult(charObj, enemy);
+                    var resetAttackedTimes = false;
+                    if ('everyAttackTimesOnNext' in charObj.skill) {
+                        var skillEveryAttackTimesOnNext = parseInt(charObj.skill.everyAttackTimesOnNext);
+                        if (charObj.cb.attackedTimes == skillEveryAttackTimesOnNext) {
+                            resetAttackedTimes = true;
+                        }
+                    }
+
+                    if ('everyAttack' in charObj.skill) {
+                        if ('extraAttack' in charObj.skill.effect) {
+                            var rate = getSkillAttrValByLevel(charObj, "extraAttack", "rate");
+                            if (mRandom.bool(rate)) {
+                                harmThisFrame  += battleAttackSimulationHarm(charObj, enemy, 1.5, charObj.cb.attr.criRate, simulationLink(charObj));
+                            }
+                        }
+                    }
+
+                    if (EVERY_ATTACK_CHANCE in charObj.skill) {
+                        if (mRandom.bool(0.01 * parseInt(charObj.skill[EVERY_ATTACK_CHANCE]))) {
+                            var skillEffect = getSkillByLevel(charObj.skill.passive.effect, charObj.c.skillLevel);
+                            useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect, CHAR_SKILL_PASSIVE);
+                        }
+                    }
+
+                    charObj.cb.attackedTimes++;
+                    if (resetAttackedTimes) charObj.cb.attackedTimes = 0;
+                    charObj.cb.actionFrame = getAttackFrame(charObj);
+                    if (charObj.type == "mg") {
+                        charObj.cb.belt--;
+                        if (charObj.cb.belt <= 0) {
+                            charObj.cb.actionFrame = getMgChangeBeltFrame(charObj.cb.attr.fireOfRate);
+                            charObj.cb.actionType = "changeBelt";
+
+                            if ('everyChangeBelt' in charObj.skill) {
+                                useSkillForCalculateBattle(charObj, ally, null);
+                            }
+                        }
+                    }
+                } else if (charObj.cb.actionType == "changeBelt") {
+                    charObj.cb.belt = charObj.c.belt;
+                    charObj.cb.actionFrame = getAttackFrame(charObj);
+                    charObj.cb.actionType = "attack";
+                    charObj.cb.attackedTimes = 0;
+                } else if (charObj.cb.actionType == PREPARE_TO_USE_SKILL || charObj.cb.actionType == USE_ATTACK_SKILL) {
+                    charObj.cb.skillUsedTimes++;
+                    var attackMultiply = getSkillAttrValByLevel(charObj, "attack");
+                    var attackMultiplyExtra = getSkillAttrValByLevel(charObj, "attack", "extraToTarget");
+                    var link = 1;
+
+                    if (isArmorUnit(enemy)) {
+                        var attackToArmor = getSkillAttrValByLevel(charObj, "attack", "attackToArmor");
+                        if (attackToArmor != null) attackMultiply = attackToArmor;
+                    }
+
+                    if (attackMultiplyExtra != null) {
+                        attackMultiply += attackMultiplyExtra;
+                    }
+
+                    if (mDmgLinkMode == MULTI_LINK) {
+                        link = charObj.c.link;
+                    }
+                    if ('radius' in charObj.skill) {
+                        link = 1;
+                    }
+
+                    harmThisFrame += parseInt(charObj.cb.attr.dmg_o * attackMultiply * link * (2.0 - enemy.cb.attr.reducedDamage));
+
+                    if ('skillTimes' in charObj.skill && charObj.cb.skillUsedTimes < charObj.skill.skillTimes) {
+                        charObj.cb.actionType = PREPARE_TO_USE_SKILL;
+                        if ('prepareTime' in charObj.skill) {
+                            charObj.cb.actionFrame = charObj.skill.prepareTime * 30;
+                        } else {
+                            charObj.cb.actionFrame = 1 * 30;
+                        }
+                    } else {
+                        charObj.cb.actionFrame = 12;
+                        charObj.cb.actionType = "attack";
+                    }
+                }
+            }
+            dmgTable.y[i]["data"][nowFrame] = dmgTable.y[i]["data"][nowFrame - 1] + harmThisFrame;
+        }
+    }
+    return dmgTable;
 }
 
 function calculateBattle() {

@@ -61,10 +61,12 @@
 
     <div class="panel">
         <div class="calculate_control">
-            <div class="button hover calculate">顯示詳細計算輸出表</div>
+            <div class="button hover calculate">期望計算輸出表</div>
             <div class="control_input"><input type="text" class="endTime" value="20"/>秒</div>
             <div class="control_input walkTime">戰鬥開場走路<input type="text" value="0"/>秒</div>
             <div class="button hover dmgLinkSwitch ">單一小人傷害</div>
+            <div class="clear"></div>
+            <div class="button hover simulation">模擬計算輸出表</div>
         </div>
         <div class="clear"></div>
         <div class="performance_header">
@@ -235,6 +237,9 @@
 </div>
 
 <div id="detailCalculate" title="">
+    <div class="control_input"><input type="text" id="times" value="100"/>次數</div>
+    <div class="button hover startSimulation">開始模擬</div>
+    <div id="text"></div>
     <div id="detailCalculateContainer" style="min-width: 1000px; height: 400px; margin: 0 auto"></div>
     <div class="button hover close">關閉</div>
 </div>
@@ -297,12 +302,6 @@
                 </div>
                 <div class="item">
                     <select class="skill_stack">
-                        <option value="5">5層</option>
-                        <option value="4">4層</option>
-                        <option value="3">3層</option>
-                        <option value="2">2層</option>
-                        <option value="1">1層</option>
-                        <option value="0">0層</option>
                     </select>
                 </div>
                 <div class="item">

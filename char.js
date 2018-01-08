@@ -8,8 +8,13 @@ function getCharSkillDetail(charT) {
 
     var text = [];
     var skillEffect = getSkillByLevel(charT.skill.effect, charT.c.skillLevel);
+    var pSkillEffect = null;
+    if ('passive' in charT.skill) {
+        pSkillEffect = getSkillByLevel(charT.skill.passive.effect, charT.c.skillLevel);
+    }
     if (charT.id == "183") text.push(getCharSkillDetailId183(skillEffect, detailText));
     if (charT.id == "188") text.push(getCharSkillDetailId188(skillEffect, detailText));
+    if (charT.id == "197") text.push(getCharSkillDetailId197(skillEffect, pSkillEffect, detailText));
     if (charT.id == "1001") text.push(getCharSkillDetailId1001(skillEffect, detailText));
     if (charT.id == "1002") text.push(getCharSkillDetailId1002(skillEffect, detailText));
     if (charT.id == "1004") text.push(getCharSkillDetailId1004(skillEffect, detailText));
@@ -22,6 +27,10 @@ function getCharSkillDetailId183(skillEffect, detailText) {
 
 function getCharSkillDetailId188(skillEffect, detailText) {
     return detailText.format(skillEffect.shield.val, skillEffect.time.val);
+}
+
+function getCharSkillDetailId197(skillEffect, pSkillEffect, detailText) {
+    return detailText.format(skillEffect.criRate.val, skillEffect.time.val, pSkillEffect.criRate.val);
 }
 
 function getCharSkillDetailId1001(skillEffect, detailText) {

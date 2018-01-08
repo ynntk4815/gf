@@ -3877,7 +3877,7 @@
             "detailText":{
                 "val":"未釋放技能時<br> 每2秒回避上升{0}% 傷害下降{1}% 最多疊加5層。<br> 主動效果:清空當前所有被動效果，釋放後每2秒傷害上升{2}%，回避下降{3}% 最多疊加5層。"
                 },
-            "stack":true,
+            "stack":5,
             "effect":{
                 "dodge":{"1":"10", "10":"10", "type":"buff", "stackMax":"5", "stackUpWhenEveryTime":"2", "name":"102_p"},
                 "dmg":{"1":"-5", "10":"-5", "type":"buff", "stackMax":"5", "stackUpWhenEveryTime":"2", "name":"102_p"},
@@ -4259,6 +4259,43 @@
                 "cooldownTime":{"1":"18", "5":"18"}},
             "grid":[
                 {"x":"1", "y":"1"},
-                {"x":"1", "y":"-1"}]}}
+                {"x":"1", "y":"-1"}]}},
+    {"id":"197", "name":"卡爾卡諾M1891", "type":"rf", "rarity":"5",
+        "hp":{"1":"40", "100":"80"},
+        "dmg":{"1":"45", "100":"138"},
+        "dodge":{"1":"6", "100":"42"},
+        "hit":{"1":"13", "100":"85"},
+        "fireOfRate":{"1":"22", "100":"34"},
+        "skill":{
+            "name":"瑪爾斯號角",
+            "type":"buff",
+            "target":"self",
+            "everyAttackChance":"40",
+            "firstCooldownTime":"6",
+            "cooldownTime":{"1":"10", "10": "8"},
+            "detailText":{
+                "val":"主動:使用後<br>隊伍中每存在一組步槍人形<br>自身暴擊與射速提升{0}%<br>持續{1}秒。被動：攻擊有40%機率使同列所有我方人形暴擊與射速提升{2}%<br>持續2秒(疊加上限3層)."
+                },
+            "stack":3,
+            "effect":{
+                "criRate":{"1":"5", "10":"8", "multiplyByTypeCount": "rf"},
+                "fireOfRate":{"1":"5", "10":"8", "multiplyByTypeCount": "rf"},
+                "time":{"1":"5", "10":"7.5"}},
+            "passive":{
+                "name":"瑪爾斯號角p",
+                "howOccur":"attack",
+                "type":"buff",
+                "target":"self_column_grid",
+                "effect":{
+                    "criRate":{"1":"2", "10":"4", "initStack":"1", "stackMax":"3"},
+                    "fireOfRate":{"1":"2", "10":"4", "initStack":"1", "stackMax":"3"},
+                "time":{"1":"2", "10":"2"}}}},
+        "aura":{
+            "target":"rf", "effect":{
+                "cooldownTime":{"1":"10", "5":"10"}},
+            "self":{"x":"-1", "y":"-1"},
+            "grid":[
+                {"x":"-1", "y":"0"},
+                {"x":"-1", "y":"1"}]}}
 ]
 }

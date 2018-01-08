@@ -52,5 +52,6 @@
     "attackToArmor":"若對裝甲{0}倍傷害",
     "extraToTarget":"目標額外",
     "contact":"聯絡方式",
-    "updateLog":"更新紀錄"
+    "updateLog":"更新紀錄",
+    "stack":"層"
 }}
