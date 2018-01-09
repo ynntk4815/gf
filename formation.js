@@ -2073,7 +2073,8 @@ function calculateActionDmg(charObj, enemy, mode) {
     if ('everyAttack' in charObj.skill) {
         if ('extraAttack' in charObj.skill.effect) {
             var rate = getSkillAttrValByLevel(charObj, "extraAttack", "rate");
-            extraAttack = getCriAttackExpectedValue(100, charObj.cb.attr.criDmg) * rate * 0.01;
+            //extraAttack = getCriAttackExpectedValue(100, charObj.cb.attr.criDmg) * rate * 0.01;
+            attackMultiply += 1.5 * rate * 0.01;
         }
     }
 
