@@ -1657,7 +1657,7 @@ function getAttackFrame(charObj) {
 }
 
 function getMgChangeBeltFrame(fireOfRate) {
-    return (4 + (200 / fireOfRate)) * 30;
+    return Math.ceil((4 + (200 / fireOfRate)) * 30);
 }
 
 function getSkillFirstCooldownTime(charObj) {
