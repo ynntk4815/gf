@@ -2299,7 +2299,7 @@ function battleSimulation(endTime, walkTime, ally, enemy) {
 
                     if ('everyAttack' in charObj.skill) {
                         if ('extraAttack' in charObj.skill.effect) {
-                            var rate = getSkillAttrValByLevel(charObj, "extraAttack", "rate");
+                            var rate = getSkillAttrValByLevel(charObj, "extraAttack", "rate") * 0.01;
                             if (mRandom.bool(rate)) {
                                 harmThisFrame  += battleAttackSimulationHarm(charObj, enemy, 1.5, charObj.cb.attr.criRate, simulationLink(charObj));
                             }
