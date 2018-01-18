@@ -930,8 +930,7 @@ function initData() {
     });
     $.getJSON("update.json", function(data) {
         $.each(data.update, function(key, val) {
-            var msec = Date.parse(val.date);
-            val.date = new Date(msec);
+            val.date = new Date(val.date);
             mUpdate.push(val);
         });
     }).fail(function() {
