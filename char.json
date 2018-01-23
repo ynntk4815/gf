@@ -4296,6 +4296,31 @@
             "self":{"x":"-1", "y":"-1"},
             "grid":[
                 {"x":"-1", "y":"0"},
-                {"x":"-1", "y":"1"}]}}
+                {"x":"-1", "y":"1"}]}},
+    {"id":"196", "name":"Zas M21", "type":"ar", "rarity":"5",
+        "hp":{"1":61, "100":121},
+        "dmg":{"1":19, "100":55},
+        "dodge":{"1":5, "100":41},
+        "hit":{"1":6, "100":48},
+        "fireOfRate":{"1":49, "100":74},
+        "skill":{
+            "name":"夜梟轟鳴",
+            "firstCooldownTime":4,
+            "cooldownTime":{"1":20, "10": 16},
+            "detailText":{
+                "val":"發射榴彈對半徑2.5範圍內的敵人造成{0}%的傷害<br>若命中3個及以上單位則對目標附加{1}%的增傷效果<br>持續{2}秒;若命中3個以下敵人則提升自身傷害{3}%<br>持續{4}秒。"},
+            "effects":[
+                {"filter":"active", "type":"attack", "target":"enemy", "radius":2.5, "allLinkDo":false, "value":{"1":1.2, "10":3}},
+                {"filter":"activeAttacked", "countGreaterOrEqual":3, "type":"debuff", "target":"enemyActiveAttacked",
+                    "attribute":"reducedDamage", "value":{"1":10, "10":15}, "time":{"1":2, "10":3}},
+                {"filter":"activeAttacked", "countLess":3, "type":"buff", "target":"self", "attribute":"dmg", "value":{"1":40, "10":60}, "time":{"1":5, "10":8}}
+            ]},
+        "aura":{
+            "target":"smg", "effect":{
+                "fireOfRate":{"0":12},
+                "dodge":{"0":15}},
+            "grid":[
+                {"x":1, "y":-1},
+                {"x":1, "y":1}]}}
 ]
 }
