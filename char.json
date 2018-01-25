@@ -3082,7 +3082,7 @@
             "name":"火力專注",
             "type":"buff",
             "target":"self",
-            "firstCooldownTime":"6",
+            "firstCooldownTime":"5",
             "cooldownTime":{"1":"10", "10": "8"},
             "effect":{
                 "dmg":{"1":"40", "10":"65"},
