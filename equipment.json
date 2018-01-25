@@ -178,7 +178,7 @@
         }},
     {"id":"61", "name":"Titan火控晶片", "type":"chip", "rarity":"5", "can_char":["75"], "strengthenCoefficient":"0.05",
         "effect":{
-            "belt":{"min": "3", "max":"4"},
+            "ammoCount":{"min": "3", "max":"4"},
             "dmg":{"min": "-4", "max":"-2"},
             "fireOfRate":{"min": "-8", "max":"-1"}
         }},
@@ -209,12 +209,12 @@
         }},
     {"id":"67", "name":"IOP大容量彈鏈箱", "type":"belt_box", "rarity":"4", "strengthenCoefficient":"0.07",
         "effect":{
-            "belt":{"min": "1", "max":"1"},
+            "ammoCount":{"min": "1", "max":"1"},
             "dodge":{"min": "-1", "max":"-1"}
         }},
     {"id":"68", "name":"IOP極限彈鏈箱", "type":"belt_box", "rarity":"5", "strengthenCoefficient":"0.07",
         "effect":{
-            "belt":{"min": "2", "max":"3"},
+            "ammoCount":{"min": "2", "max":"3"},
             "dodge":{"min": "-3", "max":"-2"}
         }},
     {"id":"69", "name":"ILM空尖彈", "type":"status_bullet", "rarity":"2", "strengthenCoefficient":"0.05",

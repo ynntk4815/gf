@@ -548,8 +548,8 @@ function getSkillDetailNormal(charObj) {
                 if ('target' in val) tSkillTarget = val.target;
 
                 var s = "";
-                if ('everyChangeBelt' in charObj.skill) {
-                    s += mStringData.everyChangeBelt;
+                if ('everyChangeAmmoCount' in charObj.skill) {
+                    s += mStringData.everyChangeAmmoCount;
                 }
                 if ('everyAttack' in charObj.skill) {
                     s += mStringData.everyAttack;
@@ -588,8 +588,8 @@ function getSkillDetailNormal(charObj) {
                 } else if (key == "criAttack") {
                     s += mStringData.criAttack;
                     text.push(s);
-                } else if (key == "belt") {
-                    s += mStringData.addBelt.format(val.val);
+                } else if (key == "ammoCount") {
+                    s += mStringData.addAmmoCount.format(val.val);
                     text.push(s);
                 }
             });
@@ -1315,7 +1315,7 @@ function updatePerformance() {
             .find(".value.criDmg").html(charObj.cb.attr.criDmg + "%").end()
             .find(".value.skillAttack").html(skillAttack).end()
             .find(".value.armorPiercing").html(charObj.c.armorPiercing).end()
-            .find(".value.belt").html(charObj.cb.belt).end()
+            .find(".value.ammoCount").html(charObj.cb.ammoCount).end()
             .find(".value.dps").html(charObj.cb.attr.dps.toFixed(2)).end()
             .find(".value.armor").html(charObj.cb.attr.armor).end();
 
@@ -1463,8 +1463,8 @@ function updateCharObsForBase2(charObj, grid) {
     charObj.c.movementSpeed = charObj.movementSpeed;
     charObj.c.shield = 0;
     charObj.c.reducedDamage = 1;
-    if (charObj.type == "mg") {
-        charObj.c.belt = parseInt(charObj.belt);
+    if (charObj.type == "mg" || charObj.type == "sg") {
+        charObj.c.ammoCount = parseInt(charObj.ammoCount);
     }
 
     if (charObj.type == "sg") {
@@ -1542,6 +1542,7 @@ function updateCharObsForBase2(charObj, grid) {
 }
 
 function calculateValue(value, level, toFixedCount) {
+    if ("0" in value) return value["0"];
     var result = 0;
     if (level in value) {
         result = value[level];
@@ -1735,8 +1736,12 @@ function getAttackFrame(charObj) {
     }
 }
 
-function getMgChangeBeltFrame(fireOfRate) {
+function getMgChangeAmmoCountFrame(fireOfRate) {
     return Math.ceil((4 + (200 / fireOfRate)) * 30);
+}
+
+function getSgChangeAmmoCountFrame(ammoCount) {
+    return Math.ceil((1.4 + ammoCount * 0.5) * FRAME_PER_SECOND);
 }
 
 function getSkillFirstCooldownTime(charObj) {
@@ -1947,7 +1952,8 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
     if (effect.target == "enemy" || effect.target == "enemyActiveAttacked") targets = [enemy];
 
     var buff = {};
-    var time = effect.time;
+    var time = 0;
+    if ("time" in effect) time = effect.time;
     var multiply = 1;
     var value = effect.value;
     if (effect.attribute == "reducedDamage") value = -value;
@@ -2133,11 +2139,11 @@ function updateAttrBeforAction(charObj) {
     charObj.cb.buff.forEach(v => {
         if (v.attribute == "attackTimes" || v.attribute == "criAttack") {
             charObj.cb.attr[v.attribute] = v.value;
-        } else if (v.attribute == "belt" || v.attribute == "shield") {
+        } else if (v.attribute == "ammoCount" || v.attribute == "shield") {
             charObj.cb[v.attribute] += v.value;
             v.time = -1;
             v.infinitetime = false;
-        } else {
+        } else if (isBuffAttrPercent(v.attribute)) {
             for (var i = 0; i < v.stack; i++) {
                 charObj.cb.attr[v.attribute] = charObj.cb.attr[v.attribute] * v.value;
             }
@@ -2485,19 +2491,30 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                     charObj.cb.attackedTimes++;
                     if (resetAttackedTimes) charObj.cb.attackedTimes = 0;
                     charObj.cb.actionFrame = getAttackFrame(charObj);
-                    if (charObj.type == "mg") {
-                        charObj.cb.belt--;
-                        if (charObj.cb.belt <= 0) {
-                            charObj.cb.actionFrame = getMgChangeBeltFrame(charObj.cb.attr.fireOfRate);
-                            charObj.cb.actionType = "changeBelt";
+                    if (charObj.type == "mg" || charObj.type == "sg") {
+                        charObj.cb.ammoCount--;
+                        if (charObj.cb.ammoCount <= 0) {
+                            var changeAmmoCountFrame = 0;
+                            if (charObj.type == "mg") changeAmmoCountFrame = getMgChangeAmmoCountFrame(charObj.cb.attr.fireOfRate);
+                            if (charObj.type == "sg") changeAmmoCountFrame = getSgChangeAmmoCountFrame(charObj.c.ammoCount);
+                            changeAmmoCountFrame += FRAME_PER_SECOND * charObj.cb.buff.reduce((r, v) => {
+                                if (v.attribute == "changeAmmoTime") {
+                                    v.time = -1;
+                                    v.infinitetime = false;
+                                    return r + v.value;
+                                }
+                                return r;
+                            }, 0);
+                            charObj.cb.actionFrame = changeAmmoCountFrame;
+                            charObj.cb.actionType = "changeAmmoCount";
 
-                            if ('everyChangeBelt' in charObj.skill) {
+                            if ('everyChangeAmmoCount' in charObj.skill) {
                                 useSkillForCalculateBattle(charObj, ally, null);
                             }
                         }
                     }
-                } else if (charObj.cb.actionType == "changeBelt") {
-                    charObj.cb.belt = charObj.c.belt;
+                } else if (charObj.cb.actionType == "changeAmmoCount") {
+                    charObj.cb.ammoCount = charObj.c.ammoCount;
                     charObj.cb.actionFrame = getAttackFrame(charObj);
                     charObj.cb.actionType = "attack";
                     charObj.cb.attackedTimes = 0;
