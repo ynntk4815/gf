@@ -4347,6 +4347,30 @@
                 "hit":{"0":15}},
             "self":{"x":1, "y":0},
             "grid":[
-                {"x":-1, "y":-1}]}}
+                {"x":-1, "y":-1}]}},
+    {"id":"203", "name":"密獾", "type":"smg", "rarity":"4",
+        "hp":{"1":99, "100":198},
+        "dmg":{"1":14, "100":33},
+        "dodge":{"1":10, "100":60},
+        "hit":{"1":2, "100":13},
+        "fireOfRate":{"1":60, "100":82},
+        "skill":{
+            "name":"機動專注",
+            "firstCooldownTime":6,
+            "cooldownTime":{"1":10, "10": 8},
+            "detailText":{
+                "val":"提升自身火力{0}%和迴避{1}%,持續{2}秒"},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dmg", "value":{"1":110, "10":160}, "time":{"1":3, "10":5}},
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dodge", "value":{"1":25, "10":40}, "time":{"1":3, "10":5}}
+            ]},
+        "aura":{
+            "target":"ar", "effect":{
+                "dmg":{"0":20},
+                "criRate":{"0":20}},
+            "self":{"x":0, "y":-1},
+            "grid":[
+                {"x":-1, "y":-1},
+                {"x":-1, "y":1}]}}
 ]
 }

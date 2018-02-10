@@ -17,6 +17,7 @@ function getCharSkillDetail(charT) {
     if (charT.id == "189") text.push(getCharSkillDetailId189(charT, detailText));
     if (charT.id == "196") text.push(getCharSkillDetailId196(charT, detailText));
     if (charT.id == "197") text.push(getCharSkillDetailId197(skillEffect, pSkillEffect, detailText));
+    if (charT.id == "203") text.push(getCharSkillDetailId203(charT, detailText));
     if (charT.id == "1001") text.push(getCharSkillDetailId1001(skillEffect, detailText));
     if (charT.id == "1002") text.push(getCharSkillDetailId1002(skillEffect, detailText));
     if (charT.id == "1004") text.push(getCharSkillDetailId1004(skillEffect, detailText));
@@ -49,6 +50,13 @@ function getCharSkillDetailId196(charT, detailText) {
 
 function getCharSkillDetailId197(skillEffect, pSkillEffect, detailText) {
     return detailText.format(skillEffect.criRate.val, skillEffect.time.val, pSkillEffect.criRate.val);
+}
+
+function getCharSkillDetailId203(charT, detailText) {
+    var v0 = charT.c.skills[0].effects[0].value;
+    var v1 = charT.c.skills[0].effects[1].value;
+    var v2 = charT.c.skills[0].effects[1].time;
+    return detailText.format(v0, v1, v2);
 }
 
 function getCharSkillDetailId1001(skillEffect, detailText) {
