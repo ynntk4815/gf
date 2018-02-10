@@ -54,6 +54,7 @@ var mVersion = "tw";
 var mRandom = new Random();
 var mData;
 var mIsCancel = true;
+var mColors = ['#058DC7', '#50B432', '#ED561B', '#ffa500', '#A252F8', '#24CBE5', '#FF9655', '#FFF263', '#6AF9C4'];
 
 function init() {
     initData();
@@ -457,6 +458,9 @@ function startBattleSimulation() {
 }
 
 function updateCalculateChart(data) {
+    Highcharts.setOptions({
+        colors: mColors
+    });
     Highcharts.chart('detailCalculateContainer', {
         title: {
             text: mStringData["calculateTitle"]
@@ -681,7 +685,9 @@ function removeChar(grid) {
     updateCharObs();
 
     var g = getGridUiObj(grid).attr("grid_value");
+    var removedColor = mColors.splice(mGridHasChar.indexOf(g), 1);
     mGridHasChar = $.grep(mGridHasChar, function(e) {return e != g;});
+    removedColor.forEach(v => mColors.splice(mGridHasChar.length, 0, v));
     updatePerformance();
 }
 
@@ -1292,6 +1298,7 @@ function getCharImgUIObj(id) {
 function updatePerformance() {
     var index = 1;
     var dpsSum = 0;
+    $(".grid_container").css('border-top-color', "white");
     for (var i in mGridHasChar) {
         var grid = getGridByUIValue(mGridHasChar[i]);
         if (mGridToChar[grid] != "") {
@@ -1302,9 +1309,10 @@ function updatePerformance() {
                 skillAttack = charObj.cb.skillAttack.toFixed(2);
             }
 
+            $(".grid_container_" + mGridHasChar[i]).css('border-top-color', mColors[index - 1]);
             var cp = $(".char_performance_" + index);
             cp.find(".value").html("-").end()
-            .find(".value.name").html(charObj.name).end()
+            .find(".value.name").html(charObj.name).css('color', mColors[index - 1]).end()
             .find(".value.hp").html(charObj.cb.hp).end()
             .find(".value.dmg").html(charObj.cb.attr.dmg).end()
             .find(".value.hit").html(charObj.cb.attr.hit).end()
@@ -1750,9 +1758,10 @@ function getSkillFirstCooldownTime(charObj) {
 
 function getAlly() {
     var ally = [];
-    for (var i in GRIDS) {
-        if (mGridToChar[GRIDS[i]] != "") {
-            var charObj = mGridToChar[GRIDS[i]];
+    for (var i in mGridHasChar) {
+        var grid = getGridByUIValue(mGridHasChar[i]);
+        if (mGridToChar[grid] != "") {
+            var charObj = mGridToChar[grid];
             ally.push(charObj);
         }
     }

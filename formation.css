@@ -21,9 +21,9 @@
     height:165px;
 }
 
-.grid_container .grid_container {
-    width:165px;
-    height:165px;
+.grid_container {
+    border-top-style: solid;
+    border-top-color: White;
 }
 
 .grid_container .equipment_penel {
