@@ -34,6 +34,8 @@ const CHAR_RARITY_LISTS = ["2", "3", "4", "5", "extra"];
 const CRI_RATE = "criRate";
 const VERSION = "version";
 const EVERY_ATTACK_CHANCE = "everyAttackChance";
+const DAY = "day";
+const NIGHT = "night";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -55,6 +57,17 @@ var mRandom = new Random();
 var mData;
 var mIsCancel = true;
 var mColors = ['#058DC7', '#50B432', '#ED561B', '#ffa500', '#A252F8', '#24CBE5', '#FF9655', '#FFF263', '#6AF9C4'];
+var environmentFilter = (v => {
+    var battleisNight = $('.battle_control .battleisNight').is(":checked");
+    if ('environment' in v) {
+        if (battleisNight) {
+            return v.environment == NIGHT;
+        } else {
+            return v.environment == DAY;
+        }
+    }
+    return true;
+});
 
 function init() {
     initData();
@@ -2412,10 +2425,10 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
             if (charObj.c.isUseSkill) {
                 if ("effects" in charObj.skill) {
                     if (charObj.cb.skillCD <= 0) {
-                        charObj.c.skills[0].effects.filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                             useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                         });
-                        charObj.c.skills[0].effects.filter(v => v.filter == "active" && v.type == "attack").forEach(v => {
+                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && v.type == "attack").forEach(v => {
                             charObj.cb.actionType = USE_ATTACK_SKILL;
                             charObj.cb.actionFrame = 0;
                             if ('prepareTime' in v) {
@@ -2424,7 +2437,7 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             }
                         });
 
-                        charObj.c.skills[0].effects.filter(v => v.filter == "active").forEach(v => {
+                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active").forEach(v => {
                             charObj.cb.skillCD = getSkillCooldownTime(charObj.skill, charObj.c.skillLevel, charObj.c.cooldownTimeReduction) * FRAME_PER_SECOND;
                             charObj.cb.skillUsedTimes = 0;
                         });
@@ -2531,7 +2544,7 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                     charObj.cb.skillUsedTimes++;
                     if ("effects" in charObj.skill) {
                         var enemyActiveAttacked = enemyCount;
-                        charObj.c.skills[0].effects.filter(v => v.filter == "active" && v.type == "attack").forEach(v => {
+                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && v.type == "attack").forEach(v => {
                             var attackMultiply = v.value;
                             var link = 1;
                             if (mDmgLinkMode == MULTI_LINK && v.allLinkDo) {
@@ -2553,7 +2566,7 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             }
 
                         });
-                        charObj.c.skills[0].effects.filter(v => v.filter == "activeAttacked").forEach(v => {
+                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "activeAttacked").forEach(v => {
                             if ('countGreaterOrEqual' in v && enemyActiveAttacked >= v.countGreaterOrEqual) {
                                 useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                             }
@@ -2665,15 +2678,15 @@ function updateCharObs() {
     ally.forEach(charObj => {
         if ("effects" in charObj.skill) {
             if (charObj.c.isUseSkill) {
-                charObj.c.skills[0].effects.filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                     useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                 });
 
-                charObj.c.skills[0].effects.filter(v => v.filter == "active" && (v.type == "attack")).forEach(v => {
+                charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && (v.type == "attack")).forEach(v => {
                     charObj.cb.skillAttack = v.value;
                 });
 
-                charObj.c.skills[0].effects.filter(v => v.filter == "activeAttacked").forEach(v => {
+                charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "activeAttacked").forEach(v => {
                     if ('countGreaterOrEqual' in v && enemyActiveAttacked >= v.countGreaterOrEqual) {
                         useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                     }
