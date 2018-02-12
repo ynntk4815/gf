@@ -2282,7 +2282,7 @@ function battleAttackSimulationResult(charObj, enemy) {
         charObj.cb.attr.criRate = Math.max(charObj.cb.attr.criRate, 100);
     }
 
-    if ('everyAttackTimesOnNext' in charObj.skill && mode == ACTION) {
+    if ('everyAttackTimesOnNext' in charObj.skill) {
         var skillEveryAttackTimesOnNext = parseInt(charObj.skill.everyAttackTimesOnNext);
         if (charObj.cb.attackedTimes == skillEveryAttackTimesOnNext) {
             attackMultiply = getSkillAttrValByLevel(charObj, "attack");
