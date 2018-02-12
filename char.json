@@ -4395,6 +4395,72 @@
                 "fireOfRate":{"0":10},
                 "dodge":{"0":15}},
             "grid":[
-                {"x":1, "y":0}]}}
+                {"x":1, "y":0}]}},
+    {"id":"20055", "name":"M4A1", "type":"ar", "rarity":"5", "mod":true,
+        "hp":{"mod1":112, "mod2":113, "mod3":113},
+        "dmg":{"mod1":50, "mod2":50, "mod3":50},
+        "dodge":{"mod1":49, "mod2":49, "mod3":50},
+        "hit":{"mod1":49, "mod2":49, "mod3":50},
+        "fireOfRate":{"mod1":80, "mod2":80, "mod3":80},
+        "skill":{
+            "name":"火力專注T",
+            "firstCooldownTime":4,
+            "cooldownTime":{"1":20, "10": 16},
+            "detailText":{
+                "val":"提升自身火力{0}%,持續{1}秒"},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dmg", "value":{"1":45, "10":75}, "time":{"1":6, "10":10}}
+            ]},
+        "mod2Skill":{
+            "name":"伸冤者印記",
+            "detailText":{
+                "val":"開啟火力專注期間會對目標附加伸冤者印記<br>當我方場上單位數量為3及以下時, 以攻速降低70%為代價,<br>每次普攻對目標造成{0}%的傷害,同時對2.5範圍內的目標<br>附加印記並造成100%的濺射傷害(期間火力專注仍然有效) "},
+            "effects":[
+                {"filter":"active", "allyCountLessOrEqualFilter":3, "type":"debuff", "target":"self", "attribute":"fireOfRate", "value":{"0":70}, "untilBuffEnd":"火力專注T"},
+                {"filter":"attackReplace", "buffFilter":"伸冤者印記", "type":"attack", "target":"enemy", "certainToHit":true, "ignoreArmor":true, "canCri":false, "value":{"1":3, "10":6}},
+                {"filter":"attackAttacked", "buffFilter":"火力專注T", "type":"debuff", "target":"enemyAttackAttacked", "attribute":"dmg", "value":{"0":0}},
+                {"filter":"attack", "buffFilter":"伸冤者印記", "type":"attack", "target":"enemy", "radius":2.5, "allLinkDo":false, "value":{"0":1}}
+            ]},
+        "aura":{
+            "target":"ar", "effect":{
+                "dmg":{"0":20},
+                "criRate":{"0":32}},
+            "grid":[
+                {"x":0, "y":1},
+                {"x":1, "y":1},
+                {"x":1, "y":0},
+                {"x":0, "y":-1},
+                {"x":1, "y":-1}]}},
+    {"id":"20057", "name":"ST AR-15", "type":"ar", "rarity":"5", "mod":true,
+        "hp":{"mod1":106, "mod2":107, "mod3":108},
+        "dmg":{"mod1":49, "mod2":49, "mod3":50},
+        "dodge":{"mod1":51, "mod2":51, "mod3":52},
+        "hit":{"mod1":54, "mod2":54, "mod3":55},
+        "fireOfRate":{"mod1":78, "mod2":78, "mod3":78},
+        "skill":{
+            "name":"突擊專注T",
+            "firstCooldownTime":4,
+            "cooldownTime":{"1":20, "10": 16},
+            "detailText":{
+                "val":"提升自身射速{0}%,持續{1}秒"},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"fireOfRate", "value":{"1":30, "10":50}, "time":{"1":9, "10":15}}
+            ]},
+        "mod2Skill":{
+            "name":"罪與罰",
+            "detailText":{
+                "val":"開啟突擊專注時會使用主副武器同時攻擊,<br>副武器造成{0}%的傷害,對受伸冤者印記影響的目標造成{1}%的傷害"},
+            "effects":[
+                {"filter":"attack", "buffFilter":"突擊專注T", "type":"attack", "target":"enemy", "targetNotWithBuff":"伸冤者印記", "value":{"1":0.05, "10":0.1}},
+                {"filter":"attack", "buffFilter":"突擊專注T", "type":"attack", "target":"enemy", "targetWithBuff":"伸冤者印記", "value":{"1":0.1, "10":0.2}}
+            ]},
+        "aura":{
+            "target":"smg", "effect":{
+                "fireOfRate":{"0":10},
+                "dodge":{"0":15}},
+            "grid":[
+                {"x":1, "y":1},
+                {"x":1, "y":0},
+                {"x":1, "y":-1}]}}
 ]
 }

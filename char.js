@@ -6,6 +6,15 @@ function getCharSkillDetail(charT) {
         detailText = charT.skill.detailText["val"];
     }
 
+    var detailText2 = null;
+    if (charT.c.modLevel >= 2) {
+        if (charT.c.mod2SkillLevel in charT.mod2Skill.detailText) {
+            detailText2 = charT.mod2Skill.detailText[charT.c.mod2SkillLevel];
+        } else {
+            detailText2 = charT.mod2Skill.detailText["val"];
+        }
+    }
+
     var text = [];
     var skillEffect = getSkillByLevel(charT.skill.effect, charT.c.skillLevel);
     var pSkillEffect = null;
@@ -22,6 +31,8 @@ function getCharSkillDetail(charT) {
     if (charT.id == "1001") text.push(getCharSkillDetailId1001(skillEffect, detailText));
     if (charT.id == "1002") text.push(getCharSkillDetailId1002(skillEffect, detailText));
     if (charT.id == "1004") text.push(getCharSkillDetailId1004(skillEffect, detailText));
+    if (charT.id == "20055") text.push(getCharSkillDetailId20055(charT, detailText, detailText2));
+    if (charT.id == "20057") text.push(getCharSkillDetailId20057(charT, detailText, detailText2));
     return text;
 }
 
@@ -79,5 +90,32 @@ function getCharSkillDetailId1002(skillEffect, detailText) {
 
 function getCharSkillDetailId1004(skillEffect, detailText) {
     return detailText.format(skillEffect.attack.val, skillEffect.time.val);
+}
+
+function getCharSkillDetailId20055(charT, detailText, detailText2) {
+    var result = [];
+    var v0 = charT.c.skills[0].effects[0].value;
+    var v1 = charT.c.skills[0].effects[0].time;
+
+    result.push(detailText.format(v0, v1));
+    if (detailText2 != null) {
+        var v2 = charT.c.skills[1].effects[1].value * 100;
+        result.push(detailText2.format(v2));
+    }
+    return result.join("<br>");
+}
+
+function getCharSkillDetailId20057(charT, detailText, detailText2) {
+    var result = [];
+    var v0 = charT.c.skills[0].effects[0].value;
+    var v1 = charT.c.skills[0].effects[0].time;
+
+    result.push(detailText.format(v0, v1));
+    if (detailText2 != null) {
+        var v2 = charT.c.skills[1].effects[0].value * 100;
+        var v3 = charT.c.skills[1].effects[1].value * 100;
+        result.push(detailText2.format(v2, v3));
+    }
+    return result.join("<br>");
 }
 //alert(JSON.stringify(charObj));

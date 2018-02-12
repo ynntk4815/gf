@@ -88,12 +88,18 @@ function init() {
         updatePerformance();
     });
 
+    $('.char .modLevel').change(function() {
+        updateCharObs();
+        updateModControlUIByGrid($(this).attr("grid_value"));
+        updatePerformance();
+    });
+
     $('.equipment_container select').change(function() {
         updateCharObs();
         updatePerformance();
     });
 
-    $('.char .skill_level').change(function() {
+    $('.char .skill_level, .char .mod_skill_level').change(function() {
         updateCharObs();
         updatePerformance();
     });
@@ -243,7 +249,9 @@ function init() {
             $.each(formation, function(key, val) {
                 var controlUI = getGridUiObj(""+val.g).find(".control_container");
                 var equipmentUI = getGridUiObj(""+val.g).find(".equipment_container");
-                controlUI.find(".level").val(val.lv);
+                if ('lv' in val) controlUI.find(".level").val(val.lv);
+                if ('modlv' in val) controlUI.find(".modLevel").val(val.modlv);
+                if ('mod2slv' in val) controlUI.find(".mod_skill_level").val(val.mod2slv);
                 controlUI.find(".skill_level").val(val.slv);
                 addChar(val.g, val.id);
                 for (var i in val.eq) {
@@ -728,7 +736,9 @@ function initFormation() {
                     .find(".add_button").attr("grid_value", order).end()
                     .find(".img").attr("grid_value", order).end()
                     .find(".level").attr("grid_value", order).end()
+                    .find(".modLevel").attr("grid_value", order).end()
                     .find(".skill_level").attr("grid_value", order).end()
+                    .find(".mod_skill_level").attr("grid_value", order).end()
                     .find(".skill_control").attr("grid_value", order).end()
                     .find(".aura_container").attr("grid_value", order).end()
                     .find(".skill_control_container").attr("grid_value", order).end()
@@ -1003,7 +1013,9 @@ function addChar(grid, id) {
     $('#picker_by_type').dialog("close");
     $('#picker').dialog("close");
 
-    mGridToChar[grid] = getChar(id);
+    var t = getChar(id);
+    var ui = $("." + mGridToUI[grid]);
+    mGridToChar[grid] = t;
 
     $("." + mGridToUI[grid] + " .add_button").hide();
     $("." + mGridToUI[grid] + " .char .img").html(getCharImgUIObj(id));
@@ -1029,6 +1041,20 @@ function addChar(grid, id) {
             $("." + mGridToUI[grid] + " .char .skill_stack").hide();
         }
     }
+    if ('mod' in t && t.mod) {
+        ui.find(".level").hide();
+        ui.find(".modLevel").show();
+        var modLv = parseInt(ui.find(".modLevel").val());
+        if (modLv >= 2) {
+            ui.find(".mod_skill_level").show();
+        } else {
+            ui.find(".mod_skill_level").hide();
+        }
+    } else {
+        ui.find(".level").show();
+        ui.find(".modLevel").hide();
+        ui.find(".mod_skill_level").hide();
+    }
     if ($('.view_equipment').is(":checked")) {
         $("." + mGridToUI[grid] + " .char").hide();
         $("." + mGridToUI[grid] + " .equipment_container").show();
@@ -1038,16 +1064,15 @@ function addChar(grid, id) {
     }
 
     var auraUI = $("." + mGridToUI[grid] + " .aura_container");
-    updateCharObs();
-    updateAuraUI(auraUI, mGridToChar[grid]);
-    updateEquipmentUI(mGridToChar[grid]);
-
     var g = getGridUiObj(grid).attr("grid_value");
     if (mGridHasChar.indexOf(g) >= 0) {
 
     } else {
         mGridHasChar.push(g);
     }
+    updateCharObs();
+    updateAuraUI(auraUI, mGridToChar[grid]);
+    updateEquipmentUI(mGridToChar[grid]);
     updatePerformance();
 }
 
@@ -1059,6 +1084,19 @@ function updateEquipmentUIByGrid(grid) {
 function getEquipmentById(id) {
     var grepList = $.grep(mEquipmentData.equipment, function(e){return e.id == id;});
     return grepList[0];
+}
+
+function updateModControlUIByGrid(grid) {
+    var g = getGridByUIValue(grid);
+    updateModControlUI(getCharObjByGrid(g));
+}
+
+function updateModControlUI(charObj) {
+    if (charObj.c.modLevel >= 2) {
+        charObj.ui.controlUI.find(".mod_skill_level").show();
+    } else {
+        charObj.ui.controlUI.find(".mod_skill_level").hide();
+    }
 }
 
 function updateEquipmentUI(charObj) {
@@ -1338,6 +1376,7 @@ function updatePerformance() {
             .find(".value.armorPiercing").html(charObj.c.armorPiercing).end()
             .find(".value.ammoCount").html(charObj.cb.ammoCount).end()
             .find(".value.dps").html(charObj.cb.attr.dps.toFixed(2)).end()
+            .find(".value.perDmg").html(charObj.cb.attr.dmg_single.toFixed(2)).end()
             .find(".value.armor").html(charObj.cb.attr.armor).end();
 
             dpsSum += charObj.cb.attr.dps;
@@ -1377,7 +1416,14 @@ function updatePerformance() {
             var charRow = {};
             charRow.g = grid;
             charRow.id = charObj.id;
-            charRow.lv = charObj.c.level;
+            if (charObj.c.modLevel > 0) {
+                charRow.modlv = charObj.c.modLevel;
+            } else {
+                charRow.lv = charObj.c.level;
+            }
+            if (charObj.c.modLevel >= 2) {
+                charRow.mod2slv = charObj.c.mod2SkillLevel;
+            }
             charRow.slv = charObj.c.skillLevel;
             charRow.eq = charObj.equipment_code;
             formation.push(charRow);
@@ -1402,6 +1448,10 @@ function updatePerformance() {
 function charGetAttrByLevel(attr, lv) {
     var v = ((1.0 * attr["100"] - 1.0 * attr["1"]) / 99 * (lv - 1) + attr["1"] * 1.0);
     return parseInt(v.toFixed(0));
+}
+
+function charGetAttrByModLevel(attr, lv) {
+    return attr[lv];
 }
 
 function copyObject(o) {
@@ -1472,13 +1522,26 @@ function updateCharObsForBase2(charObj, grid) {
     charObj.c.skillStack = parseInt(charObj.ui.controlUI.find(".skill_stack").val());
     charObj.c.skillLevel = parseInt(charObj.ui.controlUI.find(".skill_level").val());
     charObj.c.friendship = charObj.ui.friendship.attr("value");
+    charObj.c.modLevel = 0;
+    charObj.c.mod2SkillLevel = 0;
+    if ('mod' in charObj && charObj.mod) {
+        charObj.c.modLevel = parseInt(charObj.ui.controlUI.find(".modLevel").val());
+        charObj.c.mod2SkillLevel = parseInt(charObj.ui.controlUI.find(".mod_skill_level").val());
+        charObj.c.level = 100;
+        var modLevel = "mod" + charObj.c.modLevel;
+        charObj.c.hp = charGetAttrByModLevel(charObj.hp, modLevel);
+        charObj.c.dmg = charGetAttrByModLevel(charObj.dmg, modLevel);
+        charObj.c.hit = charGetAttrByModLevel(charObj.hit, modLevel);
+        charObj.c.dodge = charGetAttrByModLevel(charObj.dodge, modLevel);
+        charObj.c.fireOfRate = charGetAttrByModLevel(charObj.fireOfRate, modLevel);
+    } else {
+        charObj.c.hp = charGetAttrByLevel(charObj.hp, charObj.c.level);
+        charObj.c.dmg = charGetAttrByLevel(charObj.dmg, charObj.c.level);
+        charObj.c.hit = charGetAttrByLevel(charObj.hit, charObj.c.level);
+        charObj.c.dodge = charGetAttrByLevel(charObj.dodge, charObj.c.level);
+        charObj.c.fireOfRate = charGetAttrByLevel(charObj.fireOfRate, charObj.c.level);
+    }
     charObj.c.link = getLink(charObj.c.level);
-    charObj.c.hp = charGetAttrByLevel(charObj.hp, charObj.c.level);
-    charObj.c.dmg = charGetAttrByLevel(charObj.dmg, charObj.c.level);
-
-    charObj.c.hit = charGetAttrByLevel(charObj.hit, charObj.c.level);
-    charObj.c.dodge = charGetAttrByLevel(charObj.dodge, charObj.c.level);
-    charObj.c.fireOfRate = charGetAttrByLevel(charObj.fireOfRate, charObj.c.level);
     charObj.c.criRate = charObj.criRate;
     charObj.c.criDmg = charObj.criDmg;
     charObj.c.movementSpeed = charObj.movementSpeed;
@@ -1560,6 +1623,42 @@ function updateCharObsForBase2(charObj, grid) {
         });
         charObj.c.skills.push(skill);
     }
+
+    if (charObj.c.modLevel >= 2) {
+        var skill = {};
+        skill.name = charObj.mod2Skill.name;
+        skill.effects = copyList(charObj.mod2Skill.effects);
+        skill.effects.forEach((v, i) => {
+            v.name = skill.name;
+            var toFixedCount = 0;
+            if (v.type == "attack") {
+                toFixedCount = 2;
+            }
+            v.value = calculateValue(v.value, charObj.c.mod2SkillLevel, toFixedCount);
+            if ("time" in v) v.time = calculateValue(v.time, charObj.c.mod2SkillLevel, 1);
+        });
+        charObj.c.skills.push(skill);
+    }
+}
+
+function getEffects(charObj) {
+    return charObj.c.skills.map(v => v.effects).reduce((t, v) => t.concat(v), []);
+}
+
+function getFilterEffects(charObj) {
+    return getEffects(charObj).filter(v => {
+        if ('buffFilter' in v) {
+            return isHaveBuff(charObj, v.buffFilter);
+        } else {
+            return true;
+        }
+    }).filter(v => {
+        if ('allyCountLessOrEqualFilter' in v) {
+            return getAllyCount() <= v.allyCountLessOrEqualFilter;
+        } else {
+            return true;
+        }
+    }).filter(environmentFilter);
 }
 
 function calculateValue(value, level, toFixedCount) {
@@ -1742,7 +1841,6 @@ function updateCharObsForBattle() {
     for (var i in ally) {
         var charObj = ally[i];
         updateAttrBeforAction(charObj);
-        calculateArmorPiercing(charObj, enemy);
         calculateHitRate(charObj, enemy);
         calculateActionDmg(charObj, enemy, PERFORMANCE);
     }
@@ -1971,7 +2069,7 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
     var targets = [];
     if (effect.target == "self") targets = [user];
     if (effect.target == "ally") targets = ally;
-    if (effect.target == "enemy" || effect.target == "enemyActiveAttacked") targets = [enemy];
+    if (effect.target == "enemy" || effect.target == "enemyActiveAttacked" || effect.target == "enemyAttackAttacked") targets = [enemy];
 
     var buff = {};
     var time = 0;
@@ -1996,6 +2094,7 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
     buff.skillName = effect.name;
     buff.stack = 1;
     buff.value = value;
+    if ('untilBuffEnd' in effect) buff.untilBuffEnd = effect.untilBuffEnd;
     if ("stack" in effect) buff.stack = effect.stack;
 
     if ('stackMax' in effect && mIsDetailCalculate) {
@@ -2049,6 +2148,10 @@ function getCountByType(type) {
     });
 
     return ally.length;
+}
+
+function getAllyCount() {
+    return getAlly().length;
 }
 
 function isBuffAttrPercent(key) {
@@ -2158,6 +2261,14 @@ function updateAttrBeforAction(charObj) {
         }
     });
 
+    charObj.cb.buff = charObj.cb.buff.filter(v => {
+        if ('untilBuffEnd' in v) {
+            return isHaveBuff(charObj, v.untilBuffEnd);
+        } else {
+            return true;
+        }
+    });
+
     charObj.cb.buff.forEach(v => {
         if (v.attribute == "attackTimes" || v.attribute == "criAttack") {
             charObj.cb.attr[v.attribute] = v.value;
@@ -2173,7 +2284,6 @@ function updateAttrBeforAction(charObj) {
     });
 
 //    charObj.cb.attr.dmg = Math.floor(charObj.cb.attr.dmg);
-    charObj.cb.attr.dmg_o = charObj.cb.attr.dmg;
     charObj.cb.attr.hit = Math.max(1, Math.floor(charObj.cb.attr.hit));
     charObj.cb.attr.dodge = Math.floor(charObj.cb.attr.dodge);
     charObj.cb.attr.fireOfRate = Math.floor(charObj.cb.attr.fireOfRate);
@@ -2192,16 +2302,6 @@ function updateAttrBeforAction(charObj) {
     }
 }
 
-function calculateArmorPiercing(charObj, enemy) {
-    if (charObj.c.armorPiercing - enemy.cb.attr.armor >= 2) {
-        charObj.cb.attr.dmg += 2;
-    } else if (enemy.cb.attr.armor > charObj.c.armorPiercing) {
-        charObj.cb.attr.dmg -= enemy.cb.attr.armor - charObj.c.armorPiercing;
-    }
-
-    charObj.cb.attr.dmg = Math.max(charObj.cb.attr.dmg, 1);
-}
-
 function calculateHitRate(charObj, enemy) {
     charObj.cb.attr.hitRate = charObj.cb.attr.hit / (charObj.cb.attr.hit + enemy.cb.attr.dodge);
 }
@@ -2214,14 +2314,16 @@ function getCriAttackExpectedValue(criRate, criDmg) {
 
 function calculateActionDmg(charObj, enemy, mode) {
     var isCanCri = true;
-    var attackMultiply = 1.0;
-    var extraAttack = 0.0;
-    var criAttackE = 1.0;
+    var attackMultiplyWithLinks = 1.0;
     var link = 1;
+    var attackTimes = 1;
+    var isCertainToHit = false;
+    var isIgnoreArmor = false;
+    var attackList = [];
+    var attackNoLinkList = [];
 
-    charObj.cb.attr.dmg_single = charObj.cb.attr.dmg * charObj.cb.attr.hitRate;
     if ('attackTimes' in charObj.cb.attr) {
-        charObj.cb.attr.dmg_single *= charObj.cb.attr.attackTimes;
+        attackTimes = charObj.cb.attr.attackTimes;
     }
 
     if ('criAttack' in charObj.cb.attr) {
@@ -2231,7 +2333,7 @@ function calculateActionDmg(charObj, enemy, mode) {
     if ('everyAttackTimesOnNext' in charObj.skill && mode == ACTION) {
         var skillEveryAttackTimesOnNext = parseInt(charObj.skill.everyAttackTimesOnNext);
         if (charObj.cb.attackedTimes == skillEveryAttackTimesOnNext) {
-            attackMultiply = getSkillAttrValByLevel(charObj, "attack");
+            attackMultiplyWithLinks = getSkillAttrValByLevel(charObj, "attack");
             isCanCri = false;
         }
     }
@@ -2240,25 +2342,74 @@ function calculateActionDmg(charObj, enemy, mode) {
         if ('extraAttack' in charObj.skill.effect) {
             var rate = getSkillAttrValByLevel(charObj, "extraAttack", "rate");
             //extraAttack = getCriAttackExpectedValue(100, charObj.cb.attr.criDmg) * rate * 0.01;
-            attackMultiply += 1.5 * rate * 0.01;
+            attackList.push(1.5 * rate * 0.01);
         }
     }
 
-    if (isCanCri) {
-        criAttackE = getCriAttackExpectedValue(charObj.cb.attr.criRate, charObj.cb.attr.criDmg);
-    }
+    getFilterEffects(charObj).filter(v => v.filter == "attack" && v.type == "attack").forEach(v => {
+        var r = 0;
+        if ('targetWithBuff' in v) {
+            if (isHaveBuff(enemy, v.targetWithBuff))
+                r = v.value;
+        } else if ('targetNotWithBuff' in v) {
+            if (!isHaveBuff(enemy, v.targetNotWithBuff))
+                r = v.value;
+        } else {
+            r = v.value;
+        }
+
+        if ('allLinkDo' in v) {
+            if (v.allLinkDo)
+                attackList.push(r);
+            else
+                attackNoLinkList.push(r);
+        } else {
+            attackList.push(r);
+        }
+    });
+
+    getFilterEffects(charObj).filter(v => v.filter == "attackReplace" && v.type == "attack").forEach(v => {
+        attackMultiplyWithLinks = v.value;
+        if (v.canCri === true || v.canCri === false) isCanCri = v.canCri;
+        if (v.certainToHit === true || v.certainToHit === false) isCertainToHit = v.certainToHit;
+        if (v.ignoreArmor === true || v.ignoreArmor === false) isIgnoreArmor = v.ignoreArmor;
+    });
+
 
     if (mDmgLinkMode == MULTI_LINK) {
         link = charObj.c.link;
     }
 
+    var criAttackE = getCriAttackExpectedValue(charObj.cb.attr.criRate, charObj.cb.attr.criDmg);
+    var harm = charObj.cb.attr.dmg * attackMultiplyWithLinks;
+    if (!isIgnoreArmor) {
+        harm = Math.max(1, harm + Math.min(2, charObj.c.armorPiercing - enemy.cb.attr.armor));
+    }
+    if (isCanCri) harm *= criAttackE;
+    if (!isCertainToHit) harm *= charObj.cb.attr.hitRate;
+    harm = harm * enemy.cb.attr.reducedDamage * link * attackTimes;
+    harm += attackNoLinkList.filter(v => v > 0).map(v => {
+        v *= charObj.cb.attr.dmg;
+        v = Math.max(1, v + Math.min(2, charObj.c.armorPiercing - enemy.cb.attr.armor));
+        v *= criAttackE;
+        v *= charObj.cb.attr.hitRate;
+        return v * enemy.cb.attr.reducedDamage;
+    }).reduce((t, v) => t + v, 0);
+    harm += attackList.filter(v => v > 0).map(v => {
+        v *= charObj.cb.attr.dmg;
+        v = Math.max(1, v + Math.min(2, charObj.c.armorPiercing - enemy.cb.attr.armor));
+        v *= criAttackE;
+        v *= charObj.cb.attr.hitRate;
+        return v * enemy.cb.attr.reducedDamage * link;
+    }).reduce((t, v) => t + v, 0);
+    charObj.cb.attr.dmg_single = harm;
     if (mode == ACTION) {
-        charObj.cb.attr.dmg_frame = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * link * enemy.cb.attr.reducedDamage;
+        charObj.cb.attr.dmg_frame = charObj.cb.attr.dmg_single;
     } else if (mode == PERFORMANCE) {
         charObj.cb.attr.attackFrame = getAttackFrame(charObj);
         var attackTimesPerSecond = 30.0 / charObj.cb.attr.attackFrame;
-        charObj.cb.attr.dps = charObj.cb.attr.dmg_single * (criAttackE + extraAttack) * attackMultiply * attackTimesPerSecond * link * enemy.cb.attr.reducedDamage;
-        charObj.cb.skillAttack = charObj.cb.skillAttack * charObj.cb.attr.dmg_o * enemy.cb.attr.reducedDamage;
+        charObj.cb.attr.dps = charObj.cb.attr.dmg_single * attackTimesPerSecond;
+        charObj.cb.skillAttack = charObj.cb.skillAttack * charObj.cb.attr.dmg * enemy.cb.attr.reducedDamage;
         if ('radius' in charObj.skill) {
         } else {
             charObj.cb.skillAttack *= link;
@@ -2269,10 +2420,10 @@ function calculateActionDmg(charObj, enemy, mode) {
 function battleAttackSimulationResult(charObj, enemy) {
     var isCanCri = true;
     var attackMultiply = 1.0;
-    var extraAttack = 0.0;
-    var criAttackE = 1.0;
     var link = 1;
     var dmgTimes = 1;
+    var isCertainToHit = false;
+    var isIgnoreArmor = false;
 
     if ('attackTimes' in charObj.cb.attr) {
         dmgTimes = charObj.cb.attr.attackTimes;
@@ -2290,6 +2441,13 @@ function battleAttackSimulationResult(charObj, enemy) {
         }
     }
 
+    getFilterEffects(charObj).filter(v => v.filter == "attackReplace" && v.type == "attack").forEach(v => {
+        attackMultiply = v.value;
+        if (v.canCri === true || v.canCri === false) isCanCri = v.canCri;
+        if (v.certainToHit === true || v.certainToHit === false) isCertainToHit = v.certainToHit;
+        if (v.ignoreArmor === true || v.ignoreArmor === false) isIgnoreArmor = v.ignoreArmor;
+    });
+
     if (mDmgLinkMode == MULTI_LINK) {
         link = charObj.c.link;
     }
@@ -2298,7 +2456,7 @@ function battleAttackSimulationResult(charObj, enemy) {
     var totalDmg = 0;
     var criRate = 0;
     if (isCanCri) criRate = charObj.cb.attr.criRate;
-    totalDmg += battleAttackSimulationHarm(charObj, enemy, attackMultiply, criRate, totalDmgTimes);
+    totalDmg += battleAttackSimulationHarm(charObj, enemy, attackMultiply, criRate, totalDmgTimes, isCertainToHit, isIgnoreArmor);
     return totalDmg;
 }
 
@@ -2311,15 +2469,17 @@ function simulationLink(charObj) {
     return link;
 }
 
-function battleAttackSimulationHarm(attacker, target, attackMultiply, criRate, times) {
+function battleAttackSimulationHarm(attacker, target, attackMultiply, criRate, times, isCertainToHit, isIgnoreArmor) {
     var result = [];
     for (var i = 1; i <= times; i++) {
-        if (mRandom.bool(attacker.cb.attr.hitRate)) {
+        if (isCertainToHit || mRandom.bool(attacker.cb.attr.hitRate)) {
             var isCriDmg = mRandom.bool(criRate / 100.0);
-            var harm = Math.ceil(
-                    Math.max(1, attacker.cb.attr.dmg_o * dmgRandomRange() * attackMultiply + Math.min(2, attacker.c.armorPiercing - target.cb.attr.armor)));
+            var harm = attacker.cb.attr.dmg * dmgRandomRange() * attackMultiply;
+            if (!isIgnoreArmor) {
+                harm = Math.ceil(Math.max(1, harm + Math.min(2, attacker.c.armorPiercing - target.cb.attr.armor)));
+            }
             if (isCriDmg) harm = harm * (1 + attacker.cb.attr.criDmg / 100.0);
-            result.push(Math.ceil(harm));
+            result.push(Math.ceil(harm * target.cb.attr.reducedDamage));
         } else {
             result.push(0);
         }
@@ -2389,6 +2549,15 @@ function allyInit(ally) {
     }
 }
 
+function isHaveBuff(t, name) {
+    return t.cb.buff.filter(v => {
+        if (v.skillName == name) {
+            return true;
+        }
+        return false;
+    }).length > 0;
+}
+
 function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
     var enemyCount = $('.battle_control .enemyCount').val();
     if ($.isNumeric(enemyCount)) {
@@ -2425,10 +2594,10 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
             if (charObj.c.isUseSkill) {
                 if ("effects" in charObj.skill) {
                     if (charObj.cb.skillCD <= 0) {
-                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                        getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                             useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                         });
-                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && v.type == "attack").forEach(v => {
+                        getFilterEffects(charObj).filter(v => v.filter == "active" && v.type == "attack").forEach(v => {
                             charObj.cb.actionType = USE_ATTACK_SKILL;
                             charObj.cb.actionFrame = 0;
                             if ('prepareTime' in v) {
@@ -2437,7 +2606,7 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             }
                         });
 
-                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active").forEach(v => {
+                        getFilterEffects(charObj).filter(v => v.filter == "active").forEach(v => {
                             charObj.cb.skillCD = getSkillCooldownTime(charObj.skill, charObj.c.skillLevel, charObj.c.cooldownTimeReduction) * FRAME_PER_SECOND;
                             charObj.cb.skillUsedTimes = 0;
                         });
@@ -2477,7 +2646,6 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
             charObj.cb.actionFrame--;
             if (charObj.cb.actionFrame <= 0) {
                 if (charObj.cb.actionType == "attack") {
-                    calculateArmorPiercing(charObj, enemy);
                     calculateHitRate(charObj, enemy);
                     if (isSimulation) {
                         harmThisFrame += battleAttackSimulationResult(charObj, enemy);
@@ -2498,7 +2666,7 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                         if ('extraAttack' in charObj.skill.effect) {
                             var rate = getSkillAttrValByLevel(charObj, "extraAttack", "rate") * 0.01;
                             if (isSimulation && mRandom.bool(rate)) {
-                                harmThisFrame  += battleAttackSimulationHarm(charObj, enemy, 1.5, charObj.cb.attr.criRate, simulationLink(charObj));
+                                harmThisFrame += battleAttackSimulationHarm(charObj, enemy, 1.5, charObj.cb.attr.criRate, simulationLink(charObj), false, false);
                             }
                         }
                     }
@@ -2509,6 +2677,25 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             useSkillForCalculateBattle2(charObj, ally, enemy, skillEffect, CHAR_SKILL_PASSIVE);
                         }
                     }
+                    if (isSimulation) {
+                        getFilterEffects(charObj).filter(v => v.filter == "attack" && v.type == "attack").forEach(v => {
+                            var allLinkDo = true;
+                            if (v.allLinkDo === true || v.allLinkDo === false) allLinkDo = v.allLinkDo;
+                            var link = allLinkDo ? simulationLink(charObj) : 1;
+                            if ('targetWithBuff' in v) {
+                                if (isHaveBuff(enemy, v.targetWithBuff))
+                                    harmThisFrame += battleAttackSimulationHarm(charObj, enemy, v.value, charObj.cb.attr.criRate, link, false, false);
+                            } else if ('targetNotWithBuff' in v) {
+                                if (!isHaveBuff(enemy, v.targetNotWithBuff))
+                                    harmThisFrame  += battleAttackSimulationHarm(charObj, enemy, v.value, charObj.cb.attr.criRate, link, false, false);
+                            } else {
+                                harmThisFrame += battleAttackSimulationHarm(charObj, enemy, v.value, charObj.cb.attr.criRate, link, false, false);
+                            }
+                        });
+                    }
+                    getFilterEffects(charObj).filter(v => v.filter == "attackAttacked").forEach(v => {
+                        useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                    });
 
                     charObj.cb.attackedTimes++;
                     if (resetAttackedTimes) charObj.cb.attackedTimes = 0;
@@ -2544,14 +2731,14 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                     charObj.cb.skillUsedTimes++;
                     if ("effects" in charObj.skill) {
                         var enemyActiveAttacked = enemyCount;
-                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && v.type == "attack").forEach(v => {
+                        getFilterEffects(charObj).filter(v => v.filter == "active" && v.type == "attack").forEach(v => {
                             var attackMultiply = v.value;
                             var link = 1;
                             if (mDmgLinkMode == MULTI_LINK && v.allLinkDo) {
                                 link = charObj.c.link;
                             }
 
-                            harmThisFrame += parseInt(charObj.cb.attr.dmg_o * attackMultiply * link * enemy.cb.attr.reducedDamage);
+                            harmThisFrame += parseInt(charObj.cb.attr.dmg * attackMultiply * link * enemy.cb.attr.reducedDamage);
 
                             if ('skillTimes' in v && charObj.cb.skillUsedTimes < v.skillTimes) {
                                 charObj.cb.actionType = PREPARE_TO_USE_SKILL;
@@ -2566,7 +2753,7 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             }
 
                         });
-                        charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "activeAttacked").forEach(v => {
+                        getFilterEffects(charObj).filter(v => v.filter == "activeAttacked").forEach(v => {
                             if ('countGreaterOrEqual' in v && enemyActiveAttacked >= v.countGreaterOrEqual) {
                                 useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                             }
@@ -2596,7 +2783,7 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             link = 1;
                         }
 
-                        harmThisFrame += parseInt(charObj.cb.attr.dmg_o * attackMultiply * link * enemy.cb.attr.reducedDamage);
+                        harmThisFrame += parseInt(charObj.cb.attr.dmg * attackMultiply * link * enemy.cb.attr.reducedDamage);
 
                         if ('skillTimes' in charObj.skill && charObj.cb.skillUsedTimes < charObj.skill.skillTimes) {
                             charObj.cb.actionType = PREPARE_TO_USE_SKILL;
@@ -2678,15 +2865,15 @@ function updateCharObs() {
     ally.forEach(charObj => {
         if ("effects" in charObj.skill) {
             if (charObj.c.isUseSkill) {
-                charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                     useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                 });
 
-                charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "active" && (v.type == "attack")).forEach(v => {
+                getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "attack")).forEach(v => {
                     charObj.cb.skillAttack = v.value;
                 });
 
-                charObj.c.skills[0].effects.filter(environmentFilter).filter(v => v.filter == "activeAttacked").forEach(v => {
+                getFilterEffects(charObj).filter(v => v.filter == "activeAttacked").forEach(v => {
                     if ('countGreaterOrEqual' in v && enemyActiveAttacked >= v.countGreaterOrEqual) {
                         useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                     }
@@ -2694,6 +2881,10 @@ function updateCharObs() {
                     if ("countLess" in v && enemyActiveAttacked < v.countLess) {
                         useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                     }
+                });
+
+                getFilterEffects(charObj).filter(v => v.filter == "attackAttacked").forEach(v => {
+                    useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                 });
             }
         }
