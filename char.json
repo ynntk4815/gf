@@ -4491,6 +4491,60 @@
                 "cooldownTime":{"0":15}},
             "grid":[
                 {"x":1, "y":1},
+                {"x":1, "y":-1}]}},
+    {"id":"205", "name":"AN-94", "type":"ar", "rarity":"5",
+        "hp":{"1":58, "100":116},
+        "dmg":{"1":18, "100":55},
+        "dodge":{"1":6, "100":48},
+        "hit":{"1":9, "100":67},
+        "fireOfRate":{"1":48, "100":76},
+        "skill":{
+            "name":"人偶板機",
+            "firstCooldownTime":6,
+            "cooldownTime":{"1":10, "10":8},
+            "detailText":{
+                "0":"變更攻擊目標時會造成兩次傷害。<br>開啟技能期間每次攻擊都會造成兩次傷害,持續{0}秒",
+                "format":[{"textIndex":0, "effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dmg", "value":{"0":0}, "time":{"1":3, "10":5}},
+                {"filter":"attack", "buffFilter":"人偶板機", "type":"attack", "target":"enemy", "value":{"0":1}}
+            ]},
+        "aura":{
+            "target":"smg", "effect":{
+                "hit":{"0":55},
+                "dodge":{"0":16}},
+            "self":{"x":0, "y":-1},
+            "grid":[
+                {"x":1, "y":1},
+                {"x":1, "y":0},
+                {"x":1, "y":-1}]}},
+    {"id":"206", "name":"AK-12", "type":"ar", "rarity":"5",
+        "hp":{"1":55, "100":110},
+        "dmg":{"1":20, "100":56},
+        "dodge":{"1":8, "100":52},
+        "hit":{"1":9, "100":62},
+        "fireOfRate":{"1":50, "100":78},
+        "skill":{
+            "name":"雪狼之眼",
+            "firstCooldownTime":6,
+            "cooldownTime":{"1":10, "10":8},
+            "detailText":{
+                "0":"提升{0}%火力,射速,命中和暴擊率,持續{1}秒",
+                "format":[{"textIndex":0, "effectIndex":0, "attr":"value"}, {"textIndex":1, "effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dmg", "value":{"1":15, "10":35}, "time":{"1":3, "10":5}},
+                {"filter":"active", "type":"buff", "target":"self","attribute":"fireOfRate", "value":{"1":15, "10":35}, "time":{"1":3, "10":5}},
+                {"filter":"active", "type":"buff", "target":"self","attribute":"hit", "value":{"1":15, "10":35}, "time":{"1":3, "10":5}},
+                {"filter":"active", "type":"buff", "target":"self","attribute":"criRate", "value":{"1":15, "10":35}, "time":{"1":3, "10":5}}
+            ]},
+        "aura":{
+            "target":"smg", "effect":{
+                "dmg":{"0":25},
+                "fireOfRate":{"0":15}},
+            "self":{"x":0, "y":1},
+            "grid":[
+                {"x":1, "y":1},
+                {"x":1, "y":0},
                 {"x":1, "y":-1}]}}
 ]
 }
