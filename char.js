@@ -2,16 +2,20 @@ function getCharSkillDetail(charT) {
     var detailText = null;
     if (charT.skillLevel in charT.skill.detailText) {
         detailText = charT.skill.detailText[charT.skillLevel];
-    } else {
+    } else if ("val" in charT.skill.detailText) {
         detailText = charT.skill.detailText["val"];
+    } else {
+        detailText = charT.skill.detailText["0"];
     }
 
     var detailText2 = null;
     if (charT.c.modLevel >= 2) {
         if (charT.c.mod2SkillLevel in charT.mod2Skill.detailText) {
             detailText2 = charT.mod2Skill.detailText[charT.c.mod2SkillLevel];
-        } else {
+        } else if ("val" in charT.mod2Skill.detailText) {
             detailText2 = charT.mod2Skill.detailText["val"];
+        } else {
+            detailText2 = charT.mod2Skill.detailText["0"];
         }
     }
 
@@ -33,6 +37,8 @@ function getCharSkillDetail(charT) {
     if (charT.id == "1004") text.push(getCharSkillDetailId1004(skillEffect, detailText));
     if (charT.id == "20055") text.push(getCharSkillDetailId20055(charT, detailText, detailText2));
     if (charT.id == "20057") text.push(getCharSkillDetailId20057(charT, detailText, detailText2));
+    if ("format" in charT.skill.detailText) text.push(getCharSkillDetailFormat(charT, detailText, 0, charT.skill.detailText.format));
+    if (detailText2 != null && "format" in charT.mod2Skill.detailText) text.push(getCharSkillDetailFormat(charT, detailText2, 1, charT.mod2Skill.detailText.format));
     return text;
 }
 
@@ -117,5 +123,14 @@ function getCharSkillDetailId20057(charT, detailText, detailText2) {
         result.push(detailText2.format(v2, v3));
     }
     return result.join("<br>");
+}
+
+function getCharSkillDetailFormat(charT, detailText, skillIndex, format) {
+    var result = detailText;
+    format.forEach(v => {
+        var value = charT.c.skills[skillIndex].effects[v.effectIndex][v.attr];
+        result = result.replace("{" + v.textIndex + "}", value);
+    });
+    return result;
 }
 //alert(JSON.stringify(charObj));

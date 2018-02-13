@@ -526,7 +526,7 @@ function getSkillDetail(grid) {
         text.push(mStringData.firstCooldownTime.format(getSkillFirstCooldownTime(charObj)));
         text.push(mStringData.cooldownTime.format(getSkillCooldownTime(charObj.skill, charObj.c.skillLevel, charObj.c.cooldownTimeReduction)));
         if (charObj.id != "102") {
-            text.push(getCharSkillDetail(charObj));
+            text = text.concat(getCharSkillDetail(charObj));
         } else {
             var skillEffect = getSkillByLevel(skill.effect, charObj.c.skillLevel);
             var skillEffect2 = getSkillByLevel(skill.effect2, charObj.c.skillLevel);

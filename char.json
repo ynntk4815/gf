@@ -4461,6 +4461,36 @@
             "grid":[
                 {"x":1, "y":1},
                 {"x":1, "y":0},
+                {"x":1, "y":-1}]}},
+    {"id":"20051", "name":"FN-49", "type":"rf", "rarity":"4", "mod":true,
+        "hp":{"mod1":94, "mod2":95, "mod3":95},
+        "dmg":{"mod1":118, "mod2":119, "mod3":120},
+        "dodge":{"mod1":33, "mod2":33, "mod3":33},
+        "hit":{"mod1":62, "mod2":63, "mod3":64},
+        "fireOfRate":{"mod1":34, "mod2":34, "mod3":34},
+        "skill":{
+            "name":"火力專注",
+            "firstCooldownTime":5,
+            "cooldownTime":{"1":10, "10": 8},
+            "detailText":{
+                "0":"提升自身火力{0}%,持續{1}秒",
+                "format":[{"textIndex":0, "effectIndex":0, "attr":"value"}, {"textIndex":1, "effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dmg", "value":{"1":40, "10":65}, "time":{"1":3, "10":5}}
+            ]},
+        "mod2Skill":{
+            "name":"凜冽鬥志",
+            "detailText":{
+                "0":"火力專注發動時會額外提升射速{0}%,持續{1}秒",
+                "format":[{"textIndex":0, "effectIndex":0, "attr":"value"}, {"textIndex":1, "effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"fireOfRate", "value":{"1":6, "10":15}, "time":{"1":3, "10":5}}
+            ]},
+        "aura":{
+            "target":"hg", "effect":{
+                "cooldownTime":{"0":15}},
+            "grid":[
+                {"x":1, "y":1},
                 {"x":1, "y":-1}]}}
 ]
 }
