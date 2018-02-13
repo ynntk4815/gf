@@ -4545,6 +4545,33 @@
             "grid":[
                 {"x":1, "y":1},
                 {"x":1, "y":0},
-                {"x":1, "y":-1}]}}
+                {"x":1, "y":-1}]}},
+    {"id":"28", "name":"MP7", "type":"smg", "rarity":"5",
+        "hp":{"1":99, "100":198},
+        "dmg":{"1":13, "100":30},
+        "hit":{"1":3, "100":13},
+        "dodge":{"1":12, "100":69},
+        "fireOfRate":{"1":65, "100":91},
+        "skill":{
+            "name":"弦月舞者",
+            "firstCooldownTime":6,
+            "cooldownTime":{"1":10, "10":8},
+            "detailText":{
+                "0":"降低攻速和命中{0}%,提升移速{1}%和閃避{2}%,持續{3}秒",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":2, "attr":"value"}, {"effectIndex":3, "attr":"value"}, {"effectIndex":3, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"debuff", "target":"self","attribute":"fireOfRate", "value":{"1":40, "10":20}, "time":{"1":3, "10":5}},
+                {"filter":"active", "type":"debuff", "target":"self","attribute":"hit", "value":{"1":40, "10":20}, "time":{"1":3, "10":5}},
+                {"filter":"active", "type":"buff", "target":"self","attribute":"movementSpeed", "value":{"1":30, "10":50}, "time":{"1":3, "10":5}},
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dodge", "value":{"1":100, "10":180}, "time":{"1":3, "10":5}}
+            ]},
+        "aura":{
+            "target":"ar", "effect":{
+                "fireOfRate":{"0":15},
+                "hit":{"0":25}},
+            "grid":[
+                {"x":-1, "y":1},
+                {"x":-1, "y":0},
+                {"x":-1, "y":-1}]}}
 ]
 }

@@ -127,9 +127,12 @@ function getCharSkillDetailId20057(charT, detailText, detailText2) {
 
 function getCharSkillDetailFormat(charT, detailText, skillIndex, format) {
     var result = detailText;
+    var i = 0;
     format.forEach(v => {
+        if ("textIndex" in v) i = v.textIndex;
         var value = charT.c.skills[skillIndex].effects[v.effectIndex][v.attr];
-        result = result.replace("{" + v.textIndex + "}", value);
+        result = result.replace("{" + i + "}", value);
+        i++;
     });
     return result;
 }
