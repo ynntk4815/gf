@@ -36,6 +36,7 @@ const VERSION = "version";
 const EVERY_ATTACK_CHANCE = "everyAttackChance";
 const DAY = "day";
 const NIGHT = "night";
+const COUNT = "count";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -112,6 +113,7 @@ function init() {
     $('.char .skill_control').change(function() {
         updateCharObs();
         updatePerformance();
+        updateSkillControlUIByGrid($(this).attr("grid_value"));
 
         var allCheck  = true;
         $(".skill_control").filter(function(i, x) {
@@ -381,6 +383,8 @@ function init() {
         var state = $(this).prop("checked");
         $(".skill_control").filter(function(i, x) {
             return $(x).prop("disabled") == false;
+        }).filter(function(i, x) {
+            return mGridHasChar.indexOf($(x).attr("grid_value")) >= 0;
         }).each(function(i, x) {
             var elementState = $(x).prop("checked");
             if (state ^ elementState) $(x).prop("checked", state).change();
@@ -1074,6 +1078,41 @@ function addChar(grid, id) {
     updateAuraUI(auraUI, mGridToChar[grid]);
     updateEquipmentUI(mGridToChar[grid]);
     updatePerformance();
+    updateSkillControlUI(t);
+}
+
+function updateSkillControlUIByGrid(grid) {
+    var g = getGridByUIValue(grid);
+    updateSkillControlUI(getCharObjByGrid(g));
+}
+
+function workWhenHaveBuffFilter(charObj) {
+    return (v => {
+        if ("workWhenHaveBuff" in v) {
+            return isHaveBuff(charObj, v.workWhenHaveBuff);
+        }
+        return true;
+    });
+}
+
+function updateSkillControlUI(charObj) {
+    if (!("effects" in charObj.skill)) return;
+    var haveStack = getFilterEffects(charObj).filter(workWhenHaveBuffFilter(charObj)).filter(v => v.type == "buff" || v.type == "debuff").filter(v => {
+        return "stackMax" in v;
+    });
+    if (haveStack.length > 0) {
+        var count = haveStack[0].stackMax
+        charObj.ui.controlUI.find(".skill_stack").show();
+        charObj.ui.controlUI.find(".skill_stack").empty();
+        for (var i = 0; i <= count; i++) {
+            charObj.ui.controlUI.find(".skill_stack").append(
+                $("<option></option>").attr("value", i).text(i + mStringData.stack));
+        }
+        charObj.ui.controlUI.find(".skill_stack").val(0);
+        charObj.ui.controlUI.find(".skill_stack").trigger("change");
+    } else {
+        charObj.ui.controlUI.find(".skill_stack").hide();
+    }
 }
 
 function updateEquipmentUIByGrid(grid) {
@@ -1613,11 +1652,12 @@ function updateCharObsForBase2(charObj, grid) {
         skill.cooldownTime = calculateValue(charObj.skill.cooldownTime, charObj.c.skillLevel, 1);
         skill.effects = copyList(charObj.skill.effects);
         skill.effects.forEach((v, i) => {
-            v.name = skill.name;
+            if (!("name" in v)) v.name = skill.name;
             var toFixedCount = 0;
             if (v.type == "attack") {
                 toFixedCount = 1;
             }
+            if ("toFixedCount" in v) toFixedCount = v.toFixedCount;
             v.value = calculateValue(v.value, charObj.c.skillLevel, toFixedCount);
             if ("time" in v) v.time = calculateValue(v.time, charObj.c.skillLevel, 1);
         });
@@ -1629,7 +1669,7 @@ function updateCharObsForBase2(charObj, grid) {
         skill.name = charObj.mod2Skill.name;
         skill.effects = copyList(charObj.mod2Skill.effects);
         skill.effects.forEach((v, i) => {
-            v.name = skill.name;
+            if (!("name" in v)) v.name = skill.name;
             var toFixedCount = 0;
             if (v.type == "attack") {
                 toFixedCount = 2;
@@ -2080,9 +2120,9 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
     if ('multiplyByTypeCount' in effect) multiply = getCountByType(effect.multiplyByTypeCount);
     if (isBuffAttrPercent(effect.attribute)) {
         if (effect.type == "buff") {
-            value = 1 + 0.01 * value * multiply;
+            value = 0.01 * value * multiply;
         } else {
-            value = 1 - 0.01 * value * multiply;
+            value = -0.01 * value * multiply;
         }
     } else {
         value = value * multiply;
@@ -2095,6 +2135,9 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
     buff.stack = 1;
     buff.value = value;
     if ('untilBuffEnd' in effect) buff.untilBuffEnd = effect.untilBuffEnd;
+    if ('workWhenHaveBuff' in effect) buff.workWhenHaveBuff = effect.workWhenHaveBuff;
+    if ('workWhenStackGreater' in effect) buff.workWhenStackGreater = effect.workWhenStackGreater;
+    if ('stackType' in effect) buff.stackType = effect.stackType;
     if ("stack" in effect) buff.stack = effect.stack;
 
     if ('stackMax' in effect && mIsDetailCalculate) {
@@ -2104,6 +2147,9 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
         }
         buff.stack = 0;
         if ('initStack' in effect) buff.stack = effect.initStack;
+    }
+    if ('stackMax' in effect && !mIsDetailCalculate) {
+        buff.stack = user.c.skillStack;
     }
 
     buff.attribute = effect.attribute;
@@ -2122,8 +2168,12 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
                 exist = true;
                 sameBuff.forEach(v => {
                     v.time = time * FRAME_PER_SECOND;
-                    v.stack++;
+                    if ('stackAdd' in effect)
+                        v.stack += effect.stackAdd;
+                    else
+                        v.stack++;
                     if (v.stack > effect.stackMax) v.stack = effect.stackMax;
+                    if (v.stack < 0) v.stack = 0;
                 })
             }
         }
@@ -2169,9 +2219,9 @@ function updateForSkillCalculateBattle(skillEffect, targets, time, effectType) {
             if ('multiplyByTypeCount' in val) multiply = getCountByType(val.multiplyByTypeCount);
             if (isBuffAttrPercent(key)) {
                 if (effectType == "buff") {
-                    value = 1 + 0.01 * value * multiply;
+                    value = 0.01 * value * multiply;
                 } else {
-                    value = 1 - 0.01 * value * multiply;
+                    value = -0.01 * value * multiply;
                 }
             } else {
                 value = value * multiply;
@@ -2269,7 +2319,12 @@ function updateAttrBeforAction(charObj) {
         }
     });
 
-    charObj.cb.buff.forEach(v => {
+    charObj.cb.buff.filter(workWhenHaveBuffFilter(charObj)).filter(v => {
+        if ("workWhenStackGreater" in v) {
+            return v.stack > v.workWhenStackGreater;
+        }
+        return true;
+    }).forEach(v => {
         if (v.attribute == "attackTimes" || v.attribute == "criAttack") {
             charObj.cb.attr[v.attribute] = v.value;
         } else if (v.attribute == "ammoCount" || v.attribute == "shield") {
@@ -2277,8 +2332,12 @@ function updateAttrBeforAction(charObj) {
             v.time = -1;
             v.infinitetime = false;
         } else if (isBuffAttrPercent(v.attribute)) {
-            for (var i = 0; i < v.stack; i++) {
-                charObj.cb.attr[v.attribute] = charObj.cb.attr[v.attribute] * v.value;
+            if (v.stackType == COUNT) {
+                charObj.cb.attr[v.attribute] = charObj.cb.attr[v.attribute] * (1 + v.value * v.stack);
+            } else {
+                for (var i = 0; i < v.stack; i++) {
+                    charObj.cb.attr[v.attribute] = charObj.cb.attr[v.attribute] * (1 + v.value);
+                }
             }
         }
     });
@@ -2536,6 +2595,10 @@ function allyInit(ally) {
         if (skillType == "activeWithPassive") {
             usePassiveSkillForCalculateBattle(charObj);
         }
+
+        getFilterEffects(charObj).filter(v => v.filter == "battleStart" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+            useStatEffectForCalculateBattle(charObj, ally, null, v);
+        });
     }
 
     if (mFairy != null) {
@@ -2693,6 +2756,9 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             }
                         });
                     }
+                    getFilterEffects(charObj).filter(v => v.filter == "attack" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                        useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                    });
                     getFilterEffects(charObj).filter(v => v.filter == "attackAttacked").forEach(v => {
                         useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                     });
@@ -2864,6 +2930,10 @@ function updateCharObs() {
     updateCharObsForUseSkill();
     ally.forEach(charObj => {
         if ("effects" in charObj.skill) {
+            getFilterEffects(charObj).filter(v => v.filter == "battleStart" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                useStatEffectForCalculateBattle(charObj, ally, null, v);
+            });
+
             if (charObj.c.isUseSkill) {
                 getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                     useStatEffectForCalculateBattle(charObj, ally, enemy, v);
@@ -2887,6 +2957,9 @@ function updateCharObs() {
                     useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                 });
             }
+            getFilterEffects(charObj).filter(v => v.filter == "attack" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+            });
         }
     });
     if (mFairy != null) {

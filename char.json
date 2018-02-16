@@ -4572,6 +4572,39 @@
             "grid":[
                 {"x":-1, "y":1},
                 {"x":-1, "y":0},
-                {"x":-1, "y":-1}]}}
+                {"x":-1, "y":-1}]}},
+    {"id":"194", "name":"K2", "type":"ar", "rarity":"5",
+        "hp":{"1":64, "100":127},
+        "dmg":{"1":19, "100":50},
+        "hit":{"1":7, "100":51},
+        "dodge":{"1":6, "100":42},
+        "fireOfRate":{"1":54, "100":78},
+        "skill":{
+            "name":"熱力過載",
+            "firstCooldownTime":8,
+            "cooldownTime":{"1":5, "10":3},
+            "detailText":{
+                "0":"戰鬥內點擊技能可切換攻擊模式。<br>Fever模式(預設):短點射模式<br>攻擊造成3次{0}%的傷害且槍管溫度提升1。溫度超過15後當前每點溫度降低命中和傷害{1}%(上限20層）。<br>Note模式:單發模式<br>每次攻擊溫度下降1<br>移速和回避降低{2}%<br>攻擊同一敵人時每次攻擊傷害上升{3}%（上限10層）。 ",
+                "format":[{"effectIndex":1, "attr":"value", "percent":true}, {"effectIndex":6, "attr":"value"}, {"effectIndex":4, "attr":"value"}, {"effectIndex":10, "attr":"value"}]},
+            "effects":[
+                {"filter":"battleStart", "name":"Fever模式", "type":"buff", "target":"self","attribute":"dmg", "value":{"0":0}},
+                {"filter":"attackReplace", "buffFilter":"Fever模式", "type":"attack", "target":"enemy", "value":{"1":0.40, "9":0.496, "10":0.52}, "toFixedCount":3},
+                {"filter":"attack", "buffFilter":"Fever模式", "type":"attack", "target":"enemy", "value":{"1":0.40, "9":0.496, "10":0.52}, "toFixedCount":3},
+                {"filter":"attack", "buffFilter":"Fever模式", "type":"attack", "target":"enemy", "value":{"1":0.40, "9":0.496, "10":0.52}, "toFixedCount":3},
+                {"filter":"active", "buffFilter":"Fever模式", "name":"Note模式", "type":"debuff", "target":"self","attribute":"dodge", "value":{"1":60, "9":44, "10":40}, "cleanBuff":"Fever模式"},
+                {"filter":"active", "buffFilter":"Note模式", "name":"Fever模式", "type":"buff", "target":"self","attribute":"dmg", "value":{"0":0}, "cleanBuff":"Note模式"},
+                {"filter":"attack", "buffFilter":"Fever模式", "type":"debuff", "target":"self","attribute":"hit", "value":{"1":3.2, "10":2}, "toFixedCount":1, "stackMax":20, "workWhenHaveBuff":"Fever模式", "workWhenStackGreater":15, "stackType":"count", "initStack":1},
+                {"filter":"attack", "buffFilter":"Note模式", "type":"debuff", "target":"self","attribute":"hit", "value":{"1":3.2, "10":2}, "toFixedCount":1, "stackMax":20, "workWhenHaveBuff":"Fever模式", "workWhenStackGreater":15, "stackType":"count", "stackAdd":-1},
+                {"filter":"attack", "buffFilter":"Fever模式", "type":"debuff", "target":"self","attribute":"dmg", "value":{"1":3.2, "10":2}, "toFixedCount":1, "stackMax":20, "workWhenHaveBuff":"Fever模式", "workWhenStackGreater":15, "stackType":"count", "initStack":1},
+                {"filter":"attack", "buffFilter":"Note模式", "type":"debuff", "target":"self","attribute":"dmg", "value":{"1":3.2, "10":2}, "toFixedCount":1, "stackMax":20, "workWhenHaveBuff":"Fever模式", "workWhenStackGreater":15, "stackType":"count", "stackAdd":-1},
+                {"filter":"attack", "buffFilter":"Note模式", "name":"Note模式", "type":"buff", "target":"self","attribute":"dmg", "value":{"1":2, "3":2.6, "4":3, "6":3.6, "7":4, "9":4.6, "10":5}, "toFixedCount":1, "stackMax":10, "stackType":"count", "initStack":1}
+            ]},
+        "aura":{
+            "target":"smg", "effect":{
+                "dmg":{"0":25},
+                "hit":{"0":50}},
+            "grid":[
+                {"x":1, "y":1},
+                {"x":1, "y":-1}]}}
 ]
 }

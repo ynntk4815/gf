@@ -131,6 +131,7 @@ function getCharSkillDetailFormat(charT, detailText, skillIndex, format) {
     format.forEach(v => {
         if ("textIndex" in v) i = v.textIndex;
         var value = charT.c.skills[skillIndex].effects[v.effectIndex][v.attr];
+        if (v.percent) value *= 100;
         result = result.replace("{" + i + "}", value);
         i++;
     });
