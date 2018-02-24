@@ -4605,6 +4605,54 @@
                 "hit":{"0":50}},
             "grid":[
                 {"x":1, "y":1},
-                {"x":1, "y":-1}]}}
+                {"x":1, "y":-1}]}},
+    {"id":"210", "name":"CZ52", "type":"hg", "rarity":"3",
+        "hp":{"1":38, "100":76},
+        "dmg":{"1":12, "100":33},
+        "hit":{"1":7, "100":50},
+        "dodge":{"1":9, "100":68},
+        "fireOfRate":{"1":36, "100":53},
+        "skill":{
+            "name":"火力號令",
+            "firstCooldownTime":6,
+            "cooldownTime":{"1":15, "10":12},
+            "detailText":{
+                "0":"提升我方全體火力{0}%,持續{1}秒",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"ally","attribute":"dmg", "value":{"1":11, "10":20}, "time":{"1":5, "2":6, "4":6, "5":7, "7":7, "8":8, "10":8}}
+            ]},
+        "aura":{
+            "target":"all", "effect":{
+                "dmg":{"1":10, "5":20},
+                "dodge":{"1":10, "5":20}},
+            "grid":[
+                {"x":0, "y":1},
+                {"x":0, "y":-1},
+                {"x":1, "y":1},
+                {"x":1, "y":-1}]}},
+    {"id":"200", "name":"XM3", "type":"rf", "rarity":"4",
+        "hp":{"1":41, "100":82},
+        "dmg":{"1":45, "100":130},
+        "hit":{"1":11, "100":90},
+        "dodge":{"1":4, "100":32},
+        "fireOfRate":{"1":23, "100":35},
+        "skill":{
+            "name":"突擊專注N",
+            "firstCooldownTime":8,
+            "cooldownTime":{"1":10, "10":8},
+            "detailText":{
+                "0":"夜間作戰時,提升自身射速{0}%(晝間衰減至{1}%),持續{2}秒",
+                "format":[{"effectIndex":1, "attr":"value"}, {"effectIndex":0, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "environment":"day", "type":"buff", "target":"self", "attribute":"fireOfRate", "value":{"1":18, "10":32}, "time":{"1":3, "10":5}},
+                {"filter":"active", "environment":"night", "type":"buff", "target":"self", "attribute":"fireOfRate", "value":{"1":55, "10":100}, "time":{"1":3, "10":5}}
+            ]},
+        "aura":{
+            "target":"hg", "effect":{
+                "cooldownTime":{"0":15}},
+            "grid":[
+                {"x":1, "y":-1},
+                {"x":1, "y":0}]}}
 ]
 }
