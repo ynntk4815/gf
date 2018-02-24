@@ -4653,6 +4653,28 @@
                 "cooldownTime":{"0":15}},
             "grid":[
                 {"x":1, "y":-1},
+                {"x":1, "y":0}]}},
+    {"id":"201", "name":"獵豹M1", "type":"rf", "rarity":"3",
+        "hp":{"1":44, "100":88},
+        "dmg":{"1":51, "100":143},
+        "hit":{"1":10, "100":77},
+        "dodge":{"1":4, "100":28},
+        "fireOfRate":{"1":20, "100":30},
+        "skill":{
+            "name":"阻斷射擊",
+            "firstCooldownTime":15,
+            "cooldownTime":{"1":20, "10":16},
+            "detailText":{
+                "0":"進行2秒的瞄準，對最近目標造成{0}倍的傷害。",
+                "format":[{"effectIndex":0, "attr":"value"}]},
+            "effects":[
+                {"filter":"active", "type":"attack", "target":"enemy", "prepareTime":2, "allLinkDo":true, "value":{"1":3, "10":6.5}, "toFixedCount":2}
+            ]},
+        "aura":{
+            "target":"hg", "effect":{
+                "cooldownTime":{"0":12}},
+            "grid":[
+                {"x":1, "y":1},
                 {"x":1, "y":0}]}}
 ]
 }
