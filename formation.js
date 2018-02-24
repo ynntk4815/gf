@@ -2473,6 +2473,13 @@ function calculateActionDmg(charObj, enemy, mode) {
         } else {
             charObj.cb.skillAttack *= link;
         }
+
+        if (charObj.c.isUseSkill) {
+            getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "attack")).forEach(v => {
+                charObj.cb.skillAttack = v.value * charObj.cb.attr.dmg * enemy.cb.attr.reducedDamage;
+                if (v.allLinkDo) charObj.cb.skillAttack *= link;
+            });
+        }
     }
 }
 
@@ -2937,10 +2944,6 @@ function updateCharObs() {
             if (charObj.c.isUseSkill) {
                 getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                     useStatEffectForCalculateBattle(charObj, ally, enemy, v);
-                });
-
-                getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "attack")).forEach(v => {
-                    charObj.cb.skillAttack = v.value;
                 });
 
                 getFilterEffects(charObj).filter(v => v.filter == "activeAttacked").forEach(v => {
