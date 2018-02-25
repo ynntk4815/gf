@@ -4675,6 +4675,31 @@
                 "cooldownTime":{"0":12}},
             "grid":[
                 {"x":1, "y":1},
+                {"x":1, "y":0}]}},
+    {"id":"199", "name":"80式", "type":"mg", "rarity":"4",
+        "hp":{"1":87, "100":174},
+        "dmg":{"1":36, "100":93},
+        "hit":{"1":4, "100":26},
+        "dodge":{"1":4, "100":24},
+        "fireOfRate":{"1":83, "100":118},
+        "ammoCount":10,
+        "skill":{
+            "name":"火力專注MG",
+            "firstCooldownTime":8,
+            "cooldownTime":{"1":18, "10":18},
+            "detailText":{
+                "0":"提升自身火力{0}%,持續{1}秒",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dmg", "value":{"1":25, "10":70}, "time":{"1":4, "10":6}}
+            ]},
+        "aura":{
+            "target":"sg", "effect":{
+                "dmg":{"0":10},
+                "hit":{"0":15}},
+            "self":{"x":-1, "y":1},
+            "grid":[
+                {"x":1, "y":-1},
                 {"x":1, "y":0}]}}
 ]
 }
