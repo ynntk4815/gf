@@ -37,6 +37,7 @@ const EVERY_ATTACK_CHANCE = "everyAttackChance";
 const DAY = "day";
 const NIGHT = "night";
 const COUNT = "count";
+const MOD = "mod";
 
 var mPickerType = "";
 var mPickerEquipmentIndex = "";
@@ -661,13 +662,14 @@ function initDialog() {
     $('#updateDialog').dialog({position: {my: "left bottom", at: "left top", of: ".update_log"}});
 
     var row = $('<tr></tr>');
-    for (var i in TYPES) {
-        var v = TYPES[i];
+    var typeList = copyObject(TYPES);
+    typeList.push(MOD);
+    typeList.forEach(v => {
         var item = $('<div></div>').addClass("pick_button hover").html(v).attr("value", v).click(function() {
             openDialogPickerByType($(this).attr("value"));
         });
         $('<td></td>').append(item).appendTo(row);
-    }
+    });
 
     $('#picker table').append(row);
 
@@ -817,7 +819,12 @@ function updatePickerByType(type, auraAttr) {
         var rows = [];
         var row = $('<tr></tr>');
         var grepList = $.grep(mCharData, function(e) {
-            var result = e.type == type && e.rarity == nowVal;
+            var result = e.rarity == nowVal;
+            if (type == MOD) {
+                result &= e.mod;
+            } else {
+                result &= e.type == type;
+            }
             if (auraAttr != null) {
                 result &= auraAttr in e.aura.effect;
             }
