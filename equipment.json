@@ -348,6 +348,43 @@
         "effect":{
             "dmg":{"min": "5", "max":"5", "strengthenCoefficient":"0.06"},
             "nightSight":{"min": "100", "max":"100", "strengthenCoefficient":"0.00"}
+        }},
+    {"id":"94", "name":"專用戰術記憶體", "type":"chip", "rarity":"5", "can_char":["185"],
+        "effect":{
+            "dmg":{"min":3, "max":5, "strengthenCoefficient":0.06},
+            "hit":{"min":-5, "max":-3, "strengthenCoefficient":0},
+            "ammoCount":{"min":3, "max":4, "strengthenCoefficient":0.05}
+        }},
+    {"id":"99", "name":"遺留的武器庫", "type":"special_human_form", "rarity":"5", "can_char":["20055"],
+        "effect":{
+            "dmg":{"min":2, "max":3, "strengthenCoefficient":0.07},
+            "armor":{"min":9, "max":12, "strengthenCoefficient":0.025}
+        }},
+    {"id":"100", "name":"輕量化導軌套件", "type":"special_accessory", "rarity":"5", "can_char":["20057"],
+        "effect":{
+            "hit":{"min":4, "max":6, "strengthenCoefficient":0.07},
+            "criDmg":{"min":11, "max":15, "strengthenCoefficient":0.035}
+        }},
+    {"id":"101", "name":"XM261短彈", "type":"status_bullet", "rarity":"5", "can_char":["20002"],
+        "effect":{
+            "dmg":{"min":8, "max":11, "strengthenCoefficient":0.055},
+            "armorPiercing":{"min":-10, "max":-7, "strengthenCoefficient":0}
+        }},
+    {"id":"102", "name":"性能升級卡帶", "type":"chip", "rarity":"5", "can_char":["20093"],
+        "effect":{
+            "dmg":{"min":-10, "max":-6, "strengthenCoefficient":0},
+            "dodge":{"min":21, "max":27, "strengthenCoefficient":0.045},
+            "fireOfRate":{"min":1, "max":2, "strengthenCoefficient":0.05}
+        }},
+    {"id":"103", "name":"64專用消音器", "type":"silencer", "rarity":"5", "can_char":["20094"],
+        "effect":{
+            "dodge":{"min":8, "max":11, "strengthenCoefficient":0.04},
+            "criRate":{"min":12, "max":15, "strengthenCoefficient":0.035}
+        }},
+    {"id":"104", "name":"快慢機扳機組", "type":"special_accessory", "rarity":"5", "can_char":["20051"],
+        "effect":{
+            "fireOfRate":{"min":2, "max":3, "strengthenCoefficient":0.07},
+            "criRate":{"min":18, "max":26, "strengthenCoefficient":0.1}
         }}
 
 ],
@@ -365,7 +402,10 @@
     {"type":"silencer", "can_not_type":["mg","sg"], "classification":"accessory"},
     {"type":"belt_box", "can_type":["mg"], "classification":"human_form"},
     {"type":"chip", "can_type":["all"], "classification":"human_form"},
-    {"type":"cloak", "can_type":["rf"], "classification":"human_form"}
+    {"type":"cloak", "can_type":["rf"], "classification":"human_form"},
+    {"type":"special_human_form", "can_type":["all"], "classification":"human_form"},
+    {"type":"special_accessory", "can_type":["all"], "classification":"accessory"},
+    {"type":"special_magazine", "can_type":["all"], "classification":"magazine"}
 ],
 "char_can_equipment_type":[
     {"type":"hg", "classification_type":{"1":"accessory", "2":"magazine", "3":"human_form"}},
