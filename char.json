@@ -4729,6 +4729,42 @@
             "target":"ar", "effect":{
                 "fireOfRate":{"0":24}},
             "grid":[
+                {"x":-1, "y":0}]}},
+    {"id":"20002", "name":"M1911", "type":"hg", "rarity":"4", "mod":true,
+        "hp":{"mod1":74, "mod2":74, "mod3":75},
+        "dmg":{"mod1":28, "mod2":28, "mod3":29},
+        "hit":{"mod1":51, "mod2":51, "mod3":52},
+        "dodge":{"mod1":76, "mod2":77, "mod3":78},
+        "fireOfRate":{"mod1":58, "mod2":58, "mod3":58},
+        "skill":{
+            "name":"煙霧彈",
+            "firstCooldownTime":1,
+            "cooldownTime":{"1":15, "10":12},
+            "detailText":{
+                "0":"投擲煙霧彈對半徑2.5範圍內的敵人, 降低其{0}的攻擊速度和{1}的移動速度, 持續{2}秒",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":1, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"debuff", "target":"enemy","attribute":"fireOfRate", "value":{"1":25, "10":40}, "time":{"1":2.5, "10":4}},
+                {"filter":"active", "type":"debuff", "target":"enemy","attribute":"movementSpeed", "value":{"1":30, "10":50}, "time":{"1":2.5, "10":4}}
+            ]},
+        "mod2Skill":{
+            "name":"絕境神射手",
+            "detailText":{
+                "0":"扔出煙霧彈後,接下來7次攻擊會依次瞄準從遠至近的目標,每次攻擊造成{0}%的傷害",
+                "format":[{"effectIndex":1, "attr":"value", "percent":true}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dmg", "value":{"0":0}, "initStack":7, "cleanBuff":"same"},
+                {"filter":"attackReplace", "buffFilter":"絕境神射手", "type":"attack", "target":"enemy", "value":{"1":1.2, "10":1.8}},
+                {"filter":"attack", "buffFilter":"絕境神射手", "type":"buffStackAdd", "target":"self","buffName":"絕境神射手", "value":{"0":-1}}
+            ]},
+        "aura":{
+            "target":"all", "effect":{
+                "fireOfRate":{"1":12, "5":24},
+                "hit":{"1":25, "5":50}},
+            "grid":[
+                {"x":0, "y":1},
+                {"x":0, "y":-1},
+                {"x":1, "y":0},
                 {"x":-1, "y":0}]}}
 ]
 }

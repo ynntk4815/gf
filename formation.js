@@ -2112,6 +2112,22 @@ function useSkillForCalculateBattle2(obj, ally, enemy, skillEffect, skillUsedBy)
     }
 }
 
+function buffStackAdd(user, ally, enemy, effect) {
+    var targets = [];
+    if (effect.target == "self") targets = [user];
+    if (effect.target == "ally") targets = ally;
+    if (effect.target == "enemy" || effect.target == "enemyActiveAttacked" || effect.target == "enemyAttackAttacked") targets = [enemy];
+
+    targets.forEach(t => {
+        t.cb.buff.filter(v => {
+            return v.skillName == effect.buffName;
+        }).forEach(v => {
+            v.stack += effect.value;
+            if (v.stack < 0) v.stack = 0;
+        });
+    });
+}
+
 function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
     var targets = [];
     if (effect.target == "self") targets = [user];
@@ -2147,15 +2163,16 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
     if ('stackType' in effect) buff.stackType = effect.stackType;
     if ("stack" in effect) buff.stack = effect.stack;
 
-    if ('stackMax' in effect && mIsDetailCalculate) {
-        buff.stackMax = effect.stackMax;
-        if ('stackUpWhenEveryTime' in effect) {
-            buff.stackUpWhenEveryTime = effect.stackUpWhenEveryTime * FRAME_PER_SECOND;
+    if (mIsDetailCalculate) {
+        if ('stackMax' in effect) {
+            buff.stackMax = effect.stackMax;
+            if ('stackUpWhenEveryTime' in effect) {
+                buff.stackUpWhenEveryTime = effect.stackUpWhenEveryTime * FRAME_PER_SECOND;
+            }
+            buff.stack = 0;
         }
-        buff.stack = 0;
         if ('initStack' in effect) buff.stack = effect.initStack;
-    }
-    if ('stackMax' in effect && !mIsDetailCalculate) {
+    } else if ('stackMax' in effect && !mIsDetailCalculate) {
         buff.stack = user.c.skillStack;
     }
 
@@ -2629,7 +2646,7 @@ function allyInit(ally) {
 function isHaveBuff(t, name) {
     return t.cb.buff.filter(v => {
         if (v.skillName == name) {
-            return true;
+            return true && v.stack > 0;
         }
         return false;
     }).length > 0;
@@ -2772,6 +2789,9 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                     }
                     getFilterEffects(charObj).filter(v => v.filter == "attack" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                         useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                    });
+                    getFilterEffects(charObj).filter(v => v.filter == "attack" && v.type == "buffStackAdd").forEach(v => {
+                        buffStackAdd(charObj, ally, enemy, v);
                     });
                     getFilterEffects(charObj).filter(v => v.filter == "attackAttacked").forEach(v => {
                         useStatEffectForCalculateBattle(charObj, ally, enemy, v);
