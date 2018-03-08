@@ -4765,6 +4765,40 @@
                 {"x":0, "y":1},
                 {"x":0, "y":-1},
                 {"x":1, "y":0},
-                {"x":-1, "y":0}]}}
+                {"x":-1, "y":0}]}},
+    {"id":"20093", "name":"IDW", "type":"smg", "rarity":"4", "mod":true,
+        "hp":{"mod1":152, "mod2":153, "mod3":154},
+        "dmg":{"mod1":27, "mod2":27, "mod3":27},
+        "hit":{"mod1":16, "mod2":16, "mod3":16},
+        "dodge":{"mod1":90, "mod2":91, "mod3":92},
+        "fireOfRate":{"mod1":75, "mod2":75, "mod3":75},
+        "skill":{
+            "name":"掩護專注",
+            "firstCooldownTime":6,
+            "cooldownTime":{"1":10, "10":8},
+            "detailText":{
+                "0":"提升自身迴避{0}%, 持續{1}秒",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dodge", "value":{"1":70, "10":130}, "time":{"1":3, "10":5}}
+            ]},
+        "mod2Skill":{
+            "name":"電光大狂歡",
+            "detailText":{
+                "0":"戰鬥開始時擁有3格電量,每一點電量會提供額外{0}%的射速及{1}%的火力<br>電量每{2}秒消耗一格<br>開啟掩護專注時電量會充滿",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":1, "attr":"value"}, {"effectIndex":1, "attr":"stackDownWhenEveryTime"}]},
+            "effects":[
+                {"filter":"battleStart", "type":"buff", "target":"self","attribute":"fireOfRate", "value":{"1":6, "10":10}, "initStack":3, "stackMax":3, "stackDownWhenEveryTime":{"1":1, "10":2}},
+                {"filter":"battleStart", "type":"buff", "target":"self","attribute":"dmg", "value":{"1":12, "10":20}, "initStack":3, "stackMax":3, "stackDownWhenEveryTime":{"1":1, "10":2}},
+                {"filter":"active", "type":"buffStackAdd", "target":"self","buffName":"電光大狂歡", "value":{"0":3}}
+            ]},
+        "aura":{
+            "target":"ar", "effect":{
+                "dodge":{"0":20},
+                "criRate":{"0":10}},
+            "grid":[
+                {"x":-1, "y":-1},
+                {"x":-1, "y":0},
+                {"x":-1, "y":1}]}}
 ]
 }

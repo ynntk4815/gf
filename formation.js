@@ -93,6 +93,7 @@ function init() {
     $('.char .modLevel').change(function() {
         updateCharObs();
         updateModControlUIByGrid($(this).attr("grid_value"));
+        updateSkillControlUIByGrid($(this).attr("grid_value"));
         updatePerformance();
     });
 
@@ -1683,6 +1684,7 @@ function updateCharObsForBase2(charObj, grid) {
             }
             v.value = calculateValue(v.value, charObj.c.mod2SkillLevel, toFixedCount);
             if ("time" in v) v.time = calculateValue(v.time, charObj.c.mod2SkillLevel, 1);
+            if ("stackDownWhenEveryTime" in v) v.stackDownWhenEveryTime = calculateValue(v.stackDownWhenEveryTime, charObj.c.mod2SkillLevel, 1);
         });
         charObj.c.skills.push(skill);
     }
@@ -1709,6 +1711,7 @@ function getFilterEffects(charObj) {
 }
 
 function calculateValue(value, level, toFixedCount) {
+    if ($.isNumeric(value)) return value;
     if ("0" in value) return value["0"];
     var result = 0;
     if (level in value) {
@@ -2124,6 +2127,8 @@ function buffStackAdd(user, ally, enemy, effect) {
         }).forEach(v => {
             v.stack += effect.value;
             if (v.stack < 0) v.stack = 0;
+            if ("stackMax" in v && v.stack > v.stackMax) v.stack = v.stackMax;
+            v.existDuration = 0;
         });
     });
 }
@@ -2168,6 +2173,9 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
             buff.stackMax = effect.stackMax;
             if ('stackUpWhenEveryTime' in effect) {
                 buff.stackUpWhenEveryTime = effect.stackUpWhenEveryTime * FRAME_PER_SECOND;
+            }
+            if ('stackDownWhenEveryTime' in effect) {
+                buff.stackDownWhenEveryTime = effect.stackDownWhenEveryTime * FRAME_PER_SECOND;
             }
             buff.stack = 0;
         }
@@ -2322,6 +2330,12 @@ function updateAttrBeforAction(charObj) {
             if (v.existDuration > 0 && v.existDuration % v.stackUpWhenEveryTime == 0) {
                 v.stack++;
                 if (v.stack > v.stackMax) v.stack = v.stackMax;
+            }
+        }
+        if ('stackDownWhenEveryTime' in v) {
+            if (v.existDuration > 0 && v.existDuration % v.stackDownWhenEveryTime == 0) {
+                v.stack--;
+                if (v.stack < 0) v.stack = 0;
             }
         }
         v.existDuration++;
@@ -2703,6 +2717,9 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                         getFilterEffects(charObj).filter(v => v.filter == "active").forEach(v => {
                             charObj.cb.skillCD = getSkillCooldownTime(charObj.skill, charObj.c.skillLevel, charObj.c.cooldownTimeReduction) * FRAME_PER_SECOND;
                             charObj.cb.skillUsedTimes = 0;
+                        });
+                        getFilterEffects(charObj).filter(v => v.filter == "active" && v.type == "buffStackAdd").forEach(v => {
+                            buffStackAdd(charObj, ally, enemy, v);
                         });
                     }
                 } else {
