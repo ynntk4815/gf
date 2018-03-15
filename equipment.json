@@ -385,6 +385,11 @@
         "effect":{
             "fireOfRate":{"min":2, "max":3, "strengthenCoefficient":0.07},
             "criRate":{"min":18, "max":26, "strengthenCoefficient":0.1}
+        }},
+    {"id":"105", "name":"PM 5-25X56", "type":"optical_gunsight", "rarity":"5", "can_char":["46"],
+        "effect":{
+            "criDmg":{"min":10, "max":10, "strengthenCoefficient":0.1},
+            "criRate":{"min":24, "max":24, "strengthenCoefficient":0.1}
         }}
 
 ],
