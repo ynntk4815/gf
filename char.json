@@ -4822,6 +4822,28 @@
                 "cooldownTime":{"0":18}},
             "grid":[
                 {"x":1, "y":1},
-                {"x":1, "y":0}]}}
+                {"x":1, "y":0}]}},
+    {"id":"209", "name":"OTs-39", "type":"smg", "rarity":"3",
+        "hp":{"1":96, "100":190},
+        "dmg":{"1":11, "100":27},
+        "hit":{"1":2, "100":14},
+        "dodge":{"1":10, "100":72},
+        "fireOfRate":{"1":52, "100":74},
+        "skill":{
+            "name":"閃光彈",
+            "firstCooldownTime":5,
+            "cooldownTime":{"1":20, "10":16},
+            "detailText":{
+                "0":"投擲閃光彈對半徑2.5範圍內的敵人造成持續{0}秒的暈眩",
+                "format":[{"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"debuff", "target":"enemy","attribute":"stun", "value":{"0":1}, "time":{"1":2, "10":3.5}}
+            ]},
+        "aura":{
+            "target":"ar", "effect":{
+                "dmg":{"0":16}},
+            "grid":[
+                {"x":-1, "y":-1},
+                {"x":-1, "y":0}]}}
 ]
 }
