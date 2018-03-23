@@ -4844,6 +4844,33 @@
                 "dmg":{"0":16}},
             "grid":[
                 {"x":-1, "y":-1},
-                {"x":-1, "y":0}]}}
+                {"x":-1, "y":0}]}},
+    {"id":"208", "name":"HK21", "type":"mg", "rarity":"5",
+        "hp":{"1":85, "100":169},
+        "dmg":{"1":32, "100":92},
+        "hit":{"1":4, "100":29},
+        "dodge":{"1":4, "100":33},
+        "fireOfRate":{"1":90, "100":135},
+        "ammoCount":10,
+        "skill":{
+            "name":"無差別崩壞",
+            "firstCooldownTime":8,
+            "cooldownTime":{"1":18, "10":18},
+            "detailText":{
+                "0":"提升裝彈量{0}<br>火力{1}%以及命中{2}%<br>同時進入掃射模式<br>每次攻擊都會切換攻擊目標<br>但移動速度下降50%<br>持續{3}秒。",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":1, "attr":"value"}, {"effectIndex":2, "attr":"value"}, {"effectIndex":2, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self", "attribute":"ammoCount", "value":{"1":1, "3":1, "4":2, "10":2}},
+                {"filter":"active", "type":"buff", "target":"self", "attribute":"dmg", "value":{"1":10, "10":40}, "time":{"1":6, "10":8}},
+                {"filter":"active", "type":"buff", "target":"self", "attribute":"hit", "value":{"1":15, "10":30}, "time":{"1":6, "10":8}}
+            ]},
+        "aura":{
+            "target":"sg", "effect":{
+                "dmg":{"0":15},
+                "armor":{"0":15}},
+            "self":{"x":-1, "y":0},
+            "grid":[
+                {"x":1, "y":1},
+                {"x":1, "y":0}]}}
 ]
 }
