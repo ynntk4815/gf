@@ -4871,6 +4871,35 @@
             "self":{"x":-1, "y":0},
             "grid":[
                 {"x":1, "y":1},
+                {"x":1, "y":0}]}},
+    {"id":"212", "name":"K5", "type":"hg", "rarity":"4",
+        "hp":{"1":33, "100":66},
+        "dmg":{"1":11, "100":29},
+        "hit":{"1":7, "100":52},
+        "dodge":{"1":11, "100":81},
+        "fireOfRate":{"1":43, "100":62},
+        "skill":{
+            "name":"戰地哲學館",
+            "firstCooldownTime":6,
+            "cooldownTime":{"1":15, "10":12},
+            "detailText":{
+                "0":"根據位於影響格上隊友的種類提升不同能力:手槍/衝鋒槍提升閃避{0}%<br>步槍/突擊步槍提升傷害{1}%<br>機槍/霰彈槍提升命中{2}%<br>持續{3}秒。",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":1, "attr":"value"}, {"effectIndex":2, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self_aura_grid", "targetTypes":["hg", "smg"], "attribute":"dodge", "value":{"1":20, "10":40}, "time":{"1":5, "10":8}},
+                {"filter":"active", "type":"buff", "target":"self_aura_grid", "targetTypes":["rf", "ar"], "attribute":"dmg", "value":{"1":10, "10":22}, "time":{"1":5, "10":8}},
+                {"filter":"active", "type":"buff", "target":"self_aura_grid", "targetTypes":["mg", "sg"], "attribute":"hit", "value":{"1":40, "10":80}, "time":{"1":5, "10":8}}
+            ]},
+        "aura":{
+            "target":"all", "effect":{
+                "dmg":{"1":15, "5":30},
+                "hit":{"1":20, "5":40}},
+            "grid":[
+                {"x":-1, "y":-1},
+                {"x":-1, "y":0},
+                {"x":-1, "y":1},
+                {"x":0, "y":-1},
+                {"x":0, "y":1},
                 {"x":1, "y":0}]}}
 ]
 }

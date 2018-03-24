@@ -2138,6 +2138,13 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
     if (effect.target == "self") targets = [user];
     if (effect.target == "ally") targets = ally;
     if (effect.target == "enemy" || effect.target == "enemyActiveAttacked" || effect.target == "enemyAttackAttacked") targets = [enemy];
+    if (effect.target == "self_aura_grid") {
+        var targetGrid = getAuraTargetGrid(user);
+        targets = ally.filter(v => targetGrid.indexOf(v.c.selfGrid) >= 0);
+    }
+    if ("targetTypes" in effect) {
+        targets = targets.filter(v => effect.targetTypes.indexOf(v.type) >= 0);
+    }
 
     var buff = {};
     var time = 0;
