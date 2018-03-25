@@ -4926,6 +4926,32 @@
                 "hit":{"0":65}},
             "grid":[
                 {"x":1, "y":1},
-                {"x":1, "y":0}]}}
+                {"x":1, "y":0}]}},
+    {"id":"213", "name":"C-MS", "type":"smg", "rarity":"5",
+        "hp":{"1":93, "100":185},
+        "dmg":{"1":12, "100":32},
+        "hit":{"1":2, "100":15},
+        "dodge":{"1":10, "100":75},
+        "fireOfRate":{"1":60, "100":87},
+        "skill":{
+            "name":"心情連結",
+            "firstCooldownTime":1,
+            "cooldownTime":{"1":1, "10":1},
+            "detailText":{
+                "0":"點擊技能在不同彈藥間進行切換<br>每種彈藥提供不同的常駐狀態效果:亞音速彈(默認):提升回避{0}%/勺尖彈:提升火力{1}%/標準彈:提升命中{2}%",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":1, "attr":"value"}, {"effectIndex":2, "attr":"value"}]},
+            "effects":[
+                {"filter":"battleStart", "name":"亞音速彈", "type":"buff", "target":"self", "attribute":"dodge", "value":{"1":30, "10":65}, "grouped":true, "indexGrouped":1},
+                {"filter":"battleStart", "name":"勺尖彈", "type":"buff", "target":"self", "attribute":"dmg", "value":{"1":40, "10":85}, "grouped":true, "indexGrouped":2},
+                {"filter":"battleStart", "name":"標準彈", "type":"buff", "target":"self", "attribute":"hit", "value":{"1":110, "10":200}, "grouped":true, "indexGrouped":3}
+            ]},
+        "aura":{
+            "target":"ar", "effect":{
+                "dmg":{"0":15},
+                "fireOfRate":{"0":5}},
+            "grid":[
+                {"x":-1, "y":-1},
+                {"x":-1, "y":1},
+                {"x":-1, "y":0}]}}
 ]
 }

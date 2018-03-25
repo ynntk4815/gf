@@ -107,7 +107,7 @@ function init() {
         updatePerformance();
     });
 
-    $('.char .skill_stack').change(function() {
+    $('.char .skill_stack, .char .skill_effect').change(function() {
         updateCharObs();
         updatePerformance();
     });
@@ -1015,8 +1015,9 @@ function compare(a,b) {
 
 function getSkillType(charObj) {
     return charObj.skill.effects.reduce((r, v) => {
-        if (r == "active" || v == "active") return "active";
-        if (r == "passive" || v == "passive") return "passive";
+        if (r == "active" || v.filter == "active") return "active";
+        if (r == "passive" || v.filter == "passive") return "passive";
+        if (r == "battleStart" || v.filter == "battleStart") return "battleStart";
         return r;
     });
 }
@@ -1033,8 +1034,12 @@ function addChar(grid, id) {
     $("." + mGridToUI[grid] + " .char .img").html(getCharImgUIObj(id));
     var skillType = null;
     if ("type" in mGridToChar[grid].skill) skillType = mGridToChar[grid].skill;
-    if ("effects" in mGridToChar[grid].skill) skillType = getSkillType(mGridToChar[grid]);
-    if (skillType == "passive") {
+    if ("effects" in mGridToChar[grid].skill) {
+        skillType = getSkillType(mGridToChar[grid]);
+    } else {
+        $("." + mGridToUI[grid] + " .char .skill_effect").hide();
+    }
+    if (skillType == "passive" || skillType == "battleStart") {
         $("." + mGridToUI[grid] + " .char .skill_control").prop("disabled", true);
         $("." + mGridToUI[grid] + " .char .skill_control").prop("checked", true);
     } else {
@@ -1120,6 +1125,23 @@ function updateSkillControlUI(charObj) {
         charObj.ui.controlUI.find(".skill_stack").trigger("change");
     } else {
         charObj.ui.controlUI.find(".skill_stack").hide();
+    }
+
+    var effectGrouped = getFilterEffectsForUI(charObj).filter(workWhenHaveBuffFilter(charObj)).filter(v => v.type == "buff" || v.type == "debuff").filter(v => {
+        return v.grouped;
+    });
+    var effectItem = charObj.ui.controlUI.find(".skill_effect");
+    if (effectGrouped.length > 0) {
+        effectItem.show();
+        effectItem.empty();
+        effectGrouped.forEach(v => {
+            effectItem.append(
+                $("<option></option>").attr("value", v.indexGrouped).text(v.name));
+        });
+        effectItem.val(1);
+        effectItem.trigger("change");
+    } else {
+        effectItem.hide();
     }
 }
 
@@ -1567,6 +1589,7 @@ function updateCharObsForBase2(charObj, grid) {
     charObj.c.level = parseInt(charObj.ui.controlUI.find(".level").val());
     charObj.c.isUseSkill = charObj.ui.controlUI.find(".skill_control").is(":checked");
     charObj.c.skillStack = parseInt(charObj.ui.controlUI.find(".skill_stack").val());
+    charObj.c.skillEffect = parseInt(charObj.ui.controlUI.find(".skill_effect").val());
     charObj.c.skillLevel = parseInt(charObj.ui.controlUI.find(".skill_level").val());
     charObj.c.friendship = charObj.ui.friendship.attr("value");
     charObj.c.modLevel = 0;
@@ -1695,6 +1718,16 @@ function getEffects(charObj) {
 }
 
 function getFilterEffects(charObj) {
+    return getFilterEffectsForUI(charObj).filter(v => {
+        if (v.grouped) {
+            return charObj.c.skillEffect == v.indexGrouped;
+        } else {
+            return true;
+        }
+    });
+}
+
+function getFilterEffectsForUI(charObj) {
     return getEffects(charObj).filter(v => {
         if ('buffFilter' in v) {
             return isHaveBuff(charObj, v.buffFilter);
