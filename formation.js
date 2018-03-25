@@ -1707,6 +1707,13 @@ function getFilterEffects(charObj) {
         } else {
             return true;
         }
+    }).filter(v => {
+        if ('allyInFrontOfMe' in v) {
+            var targetGrid = getFrontTargetGrid(charObj);
+            return getAlly().filter(v => targetGrid.indexOf(v.c.selfGrid) >= 0).length > 0 == v.allyInFrontOfMe;
+        } else {
+            return true;
+        }
     }).filter(environmentFilter);
 }
 
@@ -1763,6 +1770,19 @@ function getAuraTargetGrid(charObj) {
             grids.push(targetGrid);
         }
     });
+
+    return grids;
+}
+
+function getFrontTargetGrid(charObj) {
+    var selfPos = gridToXY(charObj.c.selfGrid);
+    var grids = [];
+    var targetX = selfPos.x + 1;
+    var targetY = selfPos.y;
+    var targetGrid = xyToGrid(targetX, targetY);
+    if (targetGrid != -1) {
+        grids.push(targetGrid);
+    }
 
     return grids;
 }
@@ -2140,6 +2160,10 @@ function useStatEffectForCalculateBattle(user, ally, enemy, effect) {
     if (effect.target == "enemy" || effect.target == "enemyActiveAttacked" || effect.target == "enemyAttackAttacked") targets = [enemy];
     if (effect.target == "self_aura_grid") {
         var targetGrid = getAuraTargetGrid(user);
+        targets = ally.filter(v => targetGrid.indexOf(v.c.selfGrid) >= 0);
+    }
+    if (effect.target == "allyInFrontOfMe") {
+        var targetGrid = getFrontTargetGrid(user);
         targets = ally.filter(v => targetGrid.indexOf(v.c.selfGrid) >= 0);
     }
     if ("targetTypes" in effect) {

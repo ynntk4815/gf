@@ -4900,6 +4900,32 @@
                 {"x":-1, "y":1},
                 {"x":0, "y":-1},
                 {"x":0, "y":1},
+                {"x":1, "y":0}]}},
+    {"id":"215", "name":"MDR", "type":"ar", "rarity":"5",
+        "hp":{"1":60, "100":119},
+        "dmg":{"1":20, "100":56},
+        "hit":{"1":6, "100":50},
+        "dodge":{"1":5, "100":41},
+        "fireOfRate":{"1":51, "100":76},
+        "skill":{
+            "name":"危機嗅探器",
+            "firstCooldownTime":4,
+            "cooldownTime":{"1":20, "10":16},
+            "detailText":{
+                "0":"若戰鬥內前方一格存在隊友時為隊友提供護盾{0}點和閃避{1}%<br>若不存在則提升自身火力{2}%和射速{3}%<br>持續{4}秒",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":1, "attr":"value"}, {"effectIndex":2, "attr":"value"}, {"effectIndex":3, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "allyInFrontOfMe":true, "type":"buff", "target":"allyInFrontOfMe", "attribute":"shield", "value":{"1":15, "10":40}, "time":{"1":6, "10":10}},
+                {"filter":"active", "allyInFrontOfMe":true, "type":"buff", "target":"allyInFrontOfMe", "attribute":"dodge", "value":{"1":40, "10":80}, "time":{"1":6, "10":10}},
+                {"filter":"active", "allyInFrontOfMe":false, "type":"buff", "target":"self", "attribute":"dmg", "value":{"1":20, "10":45}, "time":{"1":6, "10":10}},
+                {"filter":"active", "allyInFrontOfMe":false, "type":"buff", "target":"self", "attribute":"fireOfRate", "value":{"1":10, "10":22}, "time":{"1":6, "10":10}}
+            ]},
+        "aura":{
+            "target":"smg", "effect":{
+                "dmg":{"0":25},
+                "hit":{"0":65}},
+            "grid":[
+                {"x":1, "y":1},
                 {"x":1, "y":0}]}}
 ]
 }
