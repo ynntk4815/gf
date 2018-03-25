@@ -4952,6 +4952,28 @@
             "grid":[
                 {"x":-1, "y":-1},
                 {"x":-1, "y":1},
-                {"x":-1, "y":0}]}}
+                {"x":-1, "y":0}]}},
+    {"id":"216", "name":"XM8", "type":"ar", "rarity":"4",
+        "hp":{"1":54, "100":108},
+        "dmg":{"1":18, "100":48},
+        "hit":{"1":6, "100":46},
+        "dodge":{"1":6, "100":42},
+        "fireOfRate":{"1":54, "100":79},
+        "skill":{
+            "name":"殺傷榴彈",
+            "firstCooldownTime":8,
+            "cooldownTime":{"1":20, "10": 16},
+            "detailText":{
+                "0":"發射榴彈對半徑1.5範圍內的敵人造成{0}倍的傷害。",
+                "format":[{"effectIndex":0, "attr":"value"}]},
+            "effects":[
+                {"filter":"active", "type":"attack", "target":"enemy", "radius":1.5, "allLinkDo":false, "value":{"1":5, "10":12}}
+            ]},
+        "aura":{
+            "target":"smg", "effect":{
+                "dmg":{"0":20},
+                "dodge":{"0":15}},
+            "grid":[
+                {"x":1, "y":-1}]}}
 ]
 }
