@@ -390,6 +390,12 @@
         "effect":{
             "criDmg":{"min":10, "max":10, "strengthenCoefficient":0.1},
             "criRate":{"min":24, "max":24, "strengthenCoefficient":0.1}
+        }},
+    {"id":"108", "name":"藍色加厚披風", "type":"cloak", "rarity":"5", "can_char":["42"],
+        "effect":{
+            "criDmg":{"max":15, "strengthenCoefficient":0.07},
+            "fireOfRate":{"max":2, "strengthenCoefficient":0.1},
+            "movementSpeed":{"max":-3}
         }}
 
 ],
