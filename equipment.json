@@ -403,6 +403,12 @@
             "hit":{"max":-10},
             "dodge":{"max":-2},
             "ammoCount":{"max":20, "strengthenCoefficient":0.05}
+        }},
+    {"id":"106", "name":"EOT XPS3", "type":"holographic_sight", "rarity":"5", "can_char":["65"],
+        "effect":{
+            "dmg":{"max":6, "strengthenCoefficient":0.04},
+            "hit":{"max":10, "strengthenCoefficient":0.04},
+            "criRate":{"max":15, "strengthenCoefficient":0.07}
         }}
 
 ],
