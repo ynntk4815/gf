@@ -4974,6 +4974,28 @@
                 "dmg":{"0":20},
                 "dodge":{"0":15}},
             "grid":[
-                {"x":1, "y":-1}]}}
+                {"x":1, "y":-1}]}},
+    {"id":"217", "name":"SM-1", "type":"rf", "rarity":"3",
+        "hp":{"1":41, "100":81},
+        "dmg":{"1":35, "100":95},
+        "hit":{"1":10, "100":79},
+        "dodge":{"1":5, "100":40},
+        "fireOfRate":{"1":27, "100":40},
+        "skill":{
+            "name":"突擊專注T",
+            "firstCooldownTime":5,
+            "cooldownTime":{"1":20, "10":16},
+            "detailText":{
+                "0":"提升自身射速{0}%,持續{1}秒",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self","attribute":"fireOfRate", "value":{"1":22, "10":40}, "time":{"1":9, "10":15}}
+            ]},
+        "aura":{
+            "target":"hg", "effect":{
+                "cooldownTime":{"0":12}},
+            "grid":[
+                {"x":0, "y":-1},
+                {"x":0, "y":1}]}}
 ]
 }
