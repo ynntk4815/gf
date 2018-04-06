@@ -7,6 +7,7 @@ const SKILL_EFFECT_KEY_NESTED = ["rate", "attackToArmor", "extraToTarget"];
 const CHAR_LEVEL_EQUIPMENT = [20, 50, 80];
 const FRAME_PER_SECOND = 30;
 const PREPARE_TO_USE_SKILL = "prepareToUseSkill";
+const PREPARE_TO_ATTACK = "prepareToAttack";
 const USE_ATTACK_SKILL = "useAttackSkill";
 const CONTROL_CONTAINER = "control_container";
 const EQUIPMENT_CONTAINER = "equipment_container";
@@ -2774,7 +2775,7 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             charObj.cb.actionFrame = 0;
                             if ('prepareTime' in v) {
                                 charObj.cb.actionType = PREPARE_TO_USE_SKILL;
-                                charObj.cb.actionFrame = v.prepareTime * FRAME_PER_SECOND;
+                                charObj.cb.actionFrame = v.prepareTime * FRAME_PER_SECOND + 1;
                             }
                         });
 
@@ -2928,6 +2929,9 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                                 } else {
                                     charObj.cb.actionFrame = 1 * 30;
                                 }
+                            } else if (v.postReloadTime > 0) {
+                                charObj.cb.actionFrame = v.postReloadTime * FRAME_PER_SECOND;
+                                charObj.cb.actionType = PREPARE_TO_ATTACK;
                             } else {
                                 charObj.cb.actionFrame = 12;
                                 charObj.cb.actionType = "attack";
@@ -2978,6 +2982,10 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             charObj.cb.actionType = "attack";
                         }
                     }
+                } else if (charObj.cb.actionType == PREPARE_TO_ATTACK) {
+                    charObj.cb.actionFrame = getAttackFrame(charObj);
+                    charObj.cb.actionType = "attack";
+                    charObj.cb.attackedTimes = 0;
                 }
             }
             dmgTable.y[i]["data"][nowFrame] = dmgTable.y[i]["data"][nowFrame - 1] + harmThisFrame;

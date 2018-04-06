@@ -4996,6 +4996,29 @@
                 "cooldownTime":{"0":12}},
             "grid":[
                 {"x":0, "y":-1},
-                {"x":0, "y":1}]}}
+                {"x":0, "y":1}]}},
+    {"id":"202", "name":"雷電", "type":"hg", "rarity":"4",
+        "hp":{"1":43, "100":86},
+        "dmg":{"1":16, "100":46},
+        "hit":{"1":7, "100":57},
+        "dodge":{"1":7, "100":60},
+        "fireOfRate":{"1":24, "100":37},
+        "skill":{
+            "name":"臨界點射擊",
+            "firstCooldownTime":4,
+            "cooldownTime":{"1":15, "10":12},
+            "detailText":{
+                "0":"進行1秒的瞄準後對最近目標造成{0}%的傷害<br>但傷害可能會被閃避且射擊後需要消耗2秒再次裝填。",
+                "format":[{"effectIndex":0, "attr":"value", "percent":true}]},
+            "effects":[
+                {"filter":"active", "type":"attack", "target":"enemy", "prepareTime":1, "postReloadTime":2, "allLinkDo":true, "value":{"1":8, "10":12}, "toFixedCount":1}
+            ]},
+        "aura":{
+            "target":"all", "effect":{
+                "dmg":{"1":18, "5":36}},
+            "grid":[
+                {"x":-1, "y":-1},
+                {"x":-1, "y":1},
+                {"x":1, "y":0}]}}
 ]
 }
