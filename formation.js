@@ -1692,6 +1692,7 @@ function updateCharObsForBase2(charObj, grid) {
             if ("toFixedCount" in v) toFixedCount = v.toFixedCount;
             v.value = calculateValue(v.value, charObj.c.skillLevel, toFixedCount);
             if ("time" in v) v.time = calculateValue(v.time, charObj.c.skillLevel, 1);
+            if ("whenEveryXSeconds" in v) v.whenEveryXSeconds = calculateValue(v.whenEveryXSeconds, charObj.c.skillLevel, 1);
         });
         charObj.c.skills.push(skill);
     }
@@ -2167,6 +2168,25 @@ function useSkillForCalculateBattle2(obj, ally, enemy, skillEffect, skillUsedBy)
             }
         });
     }
+}
+
+function targetsFilterByEffect(user, ally, enemy, effect) {
+    var targets = [];
+    if (effect.target == "self") targets = [user];
+    if (effect.target == "ally") targets = ally;
+    if (effect.target == "enemy" || effect.target == "enemyActiveAttacked" || effect.target == "enemyAttackAttacked") targets = [enemy];
+
+    return targets;
+}
+
+function cleanBuff(user, ally, enemy, effect) {
+    var targets = targetsFilterByEffect(user, ally, enemy, effect);
+
+    targets.forEach(t => {
+        t.cb.buff = t.cb.buff.filter(v => {
+            return v.skillName != effect.buffName;
+        });
+    });
 }
 
 function buffStackAdd(user, ally, enemy, effect) {
@@ -2702,6 +2722,7 @@ function allyInit(ally) {
         charObj.cb.skillUsedTimes = 0;
         charObj.cb.attackedTimes = 0;
         charObj.cb.buff = [];
+        charObj.cb.battleTimer = [];
         var skillType = charObj.skill.type;
         if (skillType == "activeWithPassive") {
             usePassiveSkillForCalculateBattle(charObj);
@@ -2709,6 +2730,12 @@ function allyInit(ally) {
 
         getFilterEffects(charObj).filter(v => v.filter == "battleStart" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
             useStatEffectForCalculateBattle(charObj, ally, null, v);
+        });
+        getFilterEffects(charObj).filter(v => v.filter == "whenEveryXSeconds").forEach(v => {
+            var effectTimer = copyObject(v);
+            effectTimer.timer = 0;
+            effectTimer.interval = effectTimer.whenEveryXSeconds * FRAME_PER_SECOND;
+            charObj.cb.battleTimer.push(effectTimer);
         });
     }
 
@@ -2754,6 +2781,9 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
         for (var i in ally) {
             var charObj = ally[i];
             charObj.cb.skillCD--;
+            charObj.cb.battleTimer.forEach(v => {
+                v.timer++;
+            });
             updateAttrBeforAction(charObj);
         }
     }
@@ -2765,6 +2795,13 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
         for (var i in ally) {
             var charObj = ally[i];
             charObj.cb.skillCD--;
+            charObj.cb.battleTimer.forEach(v => {
+                v.timer++;
+                if (v.timer >= v.interval) {
+                    useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                    v.timer = 0;
+                }
+            });
             if (charObj.c.isUseSkill) {
                 if ("effects" in charObj.skill) {
                     if (charObj.cb.skillCD <= 0) {
@@ -2875,6 +2912,9 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                     });
                     getFilterEffects(charObj).filter(v => v.filter == "attack" && v.type == "buffStackAdd").forEach(v => {
                         buffStackAdd(charObj, ally, enemy, v);
+                    });
+                    getFilterEffects(charObj).filter(v => v.filter == "attack" && v.type == "cleanBuff").forEach(v => {
+                        cleanBuff(charObj, ally, enemy, v);
                     });
                     getFilterEffects(charObj).filter(v => v.filter == "attackAttacked").forEach(v => {
                         useStatEffectForCalculateBattle(charObj, ally, enemy, v);

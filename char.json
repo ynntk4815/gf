@@ -5019,6 +5019,31 @@
             "grid":[
                 {"x":-1, "y":-1},
                 {"x":-1, "y":1},
-                {"x":1, "y":0}]}}
+                {"x":1, "y":0}]}},
+    {"id":"204", "name":"芭莉斯塔", "type":"rf", "rarity":"5",
+        "hp":{"1":41, "100":82},
+        "dmg":{"1":45, "100":139},
+        "hit":{"1":10, "100":92},
+        "dodge":{"1":4, "100":35},
+        "fireOfRate":{"1":23, "100":36},
+        "skill":{
+            "name":"獵鷹刑場",
+            "firstCooldownTime":8,
+            "cooldownTime":{"1":20, "10":16},
+            "detailText":{
+                "0":"被動:每隔{0}秒會週期性給敵人添加1層標記。開啟技能後每次普攻會觸發一次額外攻擊<br>指向被標記目標並消耗1層標記。主動效果持續{1}秒或至標記全部消耗。",
+                "format":[{"effectIndex":0, "attr":"whenEveryXSeconds"}, {"effectIndex":1, "attr":"time"}]},
+            "effects":[
+                {"filter":"whenEveryXSeconds", "whenEveryXSeconds":{"1":3, "10":1.5}, "type":"debuff", "target":"enemy","attribute":"dmg", "value":{"0":0}},
+                {"filter":"active", "type":"buff", "target":"self","attribute":"dmg", "value":{"0":0}, "time":{"1":4, "10":6}},
+                {"filter":"attack", "buffFilter":"獵鷹刑場", "type":"attack", "target":"enemy", "targetWithBuff":"獵鷹刑場", "value":{"0":1}},
+                {"filter":"attack", "buffFilter":"獵鷹刑場", "type":"cleanBuff", "target":"enemy","buffName":"獵鷹刑場", "value":{"0":0}}
+            ]},
+        "aura":{
+            "target":"hg", "effect":{
+                "cooldownTime":{"0":18}},
+            "grid":[
+                {"x":1, "y":-1},
+                {"x":1, "y":1}]}}
 ]
 }
