@@ -2825,7 +2825,7 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
             });
             if (charObj.c.isUseSkill) {
                 if ("effects" in charObj.skill) {
-                    if (charObj.cb.skillCD <= 0) {
+                    if (charObj.cb.skillCD <= 0 && charObj.cb.actionType == "attack") {
                         getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                             useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                         });
