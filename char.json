@@ -5044,6 +5044,34 @@
                 "cooldownTime":{"0":18}},
             "grid":[
                 {"x":1, "y":-1},
-                {"x":1, "y":1}]}}
+                {"x":1, "y":1}]}},
+    {"id":"198", "name":"卡爾卡諾M91/38", "type":"rf", "rarity":"5",
+        "hp":{"1":37, "100":73},
+        "dmg":{"1":47, "100":146},
+        "hit":{"1":10, "100":90},
+        "dodge":{"1":5, "100":44},
+        "fireOfRate":{"1":22, "100":34},
+        "skill":{
+            "name":"墨爾斯假面",
+            "firstCooldownTime":6,
+            "cooldownTime":{"1":10, "10":8},
+            "detailText":{
+                "0":"被動:攻擊有{0}%機率增加2層印記。印記達到18層後<br>下次攻擊對精英單位造成{1}%的傷害(對普通單位造成{2}%)並立即重置印記層數。<br>主動:立即增加{3}層印記。",
+                "format":[{"effectIndex":1, "attr":"rate"}, {"effectIndex":3, "attr":"value", "percent":true}, {"effectIndex":4, "attr":"value", "percent":true}, {"effectIndex":5, "attr":"value"}]},
+            "effects":[
+                {"filter":"battleStart", "type":"buff", "target":"self","attribute":"dmg", "value":{"0":0}},
+                {"filter":"preAttack", "buffFilter":"墨爾斯假面", "type":"buffStackAdd", "target":"self","buffName":"墨爾斯假面", "value":{"1":1, "6":1, "7":2, "10":2}, "rate":{"1":30, "6":55, "7":55, "10":70}},
+                {"filter":"activeAttacked", "buffFilter":"墨爾斯假面", "buffFilterStackGreaterOrEqual":18, "type":"buffStackAdd", "target":"self","buffName":"墨爾斯假面", "value":{"0":-99}},
+                {"filter":"otherActive", "buffFilter":"墨爾斯假面", "buffFilterStackGreaterOrEqual":18, "type":"attack", "target":"enemy", "eliteTarget":true, "certainToHit":true, "ignoreArmor":true, "canCri":false, "value":{"1":1.8, "4":2.1, "5":2.25, "10":3}, "toFixedCount":2},
+                {"filter":"otherActive", "buffFilter":"墨爾斯假面", "buffFilterStackGreaterOrEqual":18, "type":"attack", "target":"enemy", "eliteTarget":false, "certainToHit":true, "ignoreArmor":true, "canCri":false, "value":{"1":27, "4":31.5, "5":33.75, "10":45}, "toFixedCount":2},
+                {"filter":"active", "type":"buffStackAdd", "target":"self","buffName":"墨爾斯假面", "value":{"1":12, "10":18}}
+            ]},
+        "aura":{
+            "target":"rf", "effect":{
+                "cooldownTime":{"0":10}},
+            "self":{"x":-1, "y":1},
+            "grid":[
+                {"x":-1, "y":0},
+                {"x":-1, "y":-1}]}}
 ]
 }

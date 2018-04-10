@@ -71,6 +71,13 @@ var environmentFilter = (v => {
     }
     return true;
 });
+var targetFilter = (v => {
+    if ('eliteTarget' in v) {
+        var eliteTarget = $('.battle_control .enemyEliteTarget').is(":checked");
+        return eliteTarget == v.eliteTarget;
+    }
+    return true;
+});
 
 function init() {
     initData();
@@ -1693,6 +1700,7 @@ function updateCharObsForBase2(charObj, grid) {
             v.value = calculateValue(v.value, charObj.c.skillLevel, toFixedCount);
             if ("time" in v) v.time = calculateValue(v.time, charObj.c.skillLevel, 1);
             if ("whenEveryXSeconds" in v) v.whenEveryXSeconds = calculateValue(v.whenEveryXSeconds, charObj.c.skillLevel, 1);
+            if ("rate" in v) v.rate = calculateValue(v.rate, charObj.c.skillLevel, 1);
         });
         charObj.c.skills.push(skill);
     }
@@ -1732,7 +1740,10 @@ function getFilterEffects(charObj) {
 function getFilterEffectsForUI(charObj) {
     return getEffects(charObj).filter(v => {
         if ('buffFilter' in v) {
-            return isHaveBuff(charObj, v.buffFilter);
+            if ("buffFilterStackGreaterOrEqual" in v) {
+                return isHaveBuffStackGreaterOrEqual(charObj, v.buffFilter, v.buffFilterStackGreaterOrEqual);
+            } else
+                return isHaveBuff(charObj, v.buffFilter);
         } else {
             return true;
         }
@@ -2599,7 +2610,8 @@ function calculateActionDmg(charObj, enemy, mode) {
         }
 
         if (charObj.c.isUseSkill) {
-            getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "attack")).forEach(v => {
+            getFilterEffects(charObj).filter(v => (v.filter == "active" || v.filter == "otherActive") && v.type == "attack")
+                    .filter(targetFilter).forEach(v => {
                 charObj.cb.skillAttack = v.value * charObj.cb.attr.dmg * enemy.cb.attr.reducedDamage;
                 if (v.allLinkDo) charObj.cb.skillAttack *= link;
             });
@@ -2759,6 +2771,15 @@ function isHaveBuff(t, name) {
     }).length > 0;
 }
 
+function isHaveBuffStackGreaterOrEqual(t, name, n) {
+    return t.cb.buff.filter(v => {
+        if (v.skillName == name) {
+            return v.stack >= n;
+        }
+        return false;
+    }).length > 0;
+}
+
 function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
     var enemyCount = $('.battle_control .enemyCount').val();
     if ($.isNumeric(enemyCount)) {
@@ -2825,6 +2846,16 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                             buffStackAdd(charObj, ally, enemy, v);
                         });
                     }
+                    getFilterEffects(charObj).filter(v => v.filter == "otherActive").forEach(v => {
+                        if (v.type == "attack") {
+                            charObj.cb.actionType = USE_ATTACK_SKILL;
+                            charObj.cb.actionFrame = 0;
+                            if ('prepareTime' in v) {
+                                charObj.cb.actionType = PREPARE_TO_USE_SKILL;
+                                charObj.cb.actionFrame = v.prepareTime * FRAME_PER_SECOND + 1;
+                            }
+                        }
+                    });
                 } else {
                     var skillType = charObj.skill.type;
                     if (charObj.cb.skillCD <= 0 && charObj.cb.actionType == "attack" && skillType != "passive") {
@@ -2859,6 +2890,27 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
             var harmThisFrame = 0;
             charObj.cb.actionFrame--;
             if (charObj.cb.actionFrame <= 0) {
+                if (charObj.cb.actionType == "attack") {
+                    getFilterEffects(charObj).filter(v => v.filter == "preAttack" && v.type == "buffStackAdd").forEach(v => {
+                        if ("rate" in v) {
+                            if (isSimulation && mRandom.bool(v.rate * 0.01)) {
+                                buffStackAdd(charObj, ally, enemy, v);
+                            }
+                        } else {
+                            buffStackAdd(charObj, ally, enemy, v);
+                        }
+                    });
+                    getFilterEffects(charObj).filter(v => v.filter == "otherActive").forEach(v => {
+                        if (v.type == "attack") {
+                            charObj.cb.actionType = USE_ATTACK_SKILL;
+                            charObj.cb.actionFrame = 0;
+                            if ('prepareTime' in v) {
+                                charObj.cb.actionType = PREPARE_TO_USE_SKILL;
+                                charObj.cb.actionFrame = v.prepareTime * FRAME_PER_SECOND + 1;
+                            }
+                        }
+                    });
+                }
                 if (charObj.cb.actionType == "attack") {
                     calculateHitRate(charObj, enemy);
                     if (isSimulation) {
@@ -2911,7 +2963,13 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                         useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                     });
                     getFilterEffects(charObj).filter(v => v.filter == "attack" && v.type == "buffStackAdd").forEach(v => {
-                        buffStackAdd(charObj, ally, enemy, v);
+                        if ("rate" in v) {
+                            if (isSimulation && mRandom.bool(v.rate * 0.01)) {
+                                buffStackAdd(charObj, ally, enemy, v);
+                            }
+                        } else {
+                            buffStackAdd(charObj, ally, enemy, v);
+                        }
                     });
                     getFilterEffects(charObj).filter(v => v.filter == "attack" && v.type == "cleanBuff").forEach(v => {
                         cleanBuff(charObj, ally, enemy, v);
@@ -2954,7 +3012,8 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                     charObj.cb.skillUsedTimes++;
                     if ("effects" in charObj.skill) {
                         var enemyActiveAttacked = enemyCount;
-                        getFilterEffects(charObj).filter(v => v.filter == "active" && v.type == "attack").forEach(v => {
+                        getFilterEffects(charObj).filter(v => (v.filter == "active" || v.filter == "otherActive") && v.type == "attack")
+                                .filter(targetFilter).forEach(v => {
                             var attackMultiply = v.value;
                             var link = 1;
                             if (mDmgLinkMode == MULTI_LINK && v.allLinkDo) {
@@ -2980,12 +3039,16 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
 
                         });
                         getFilterEffects(charObj).filter(v => v.filter == "activeAttacked").forEach(v => {
-                            if ('countGreaterOrEqual' in v && enemyActiveAttacked >= v.countGreaterOrEqual) {
-                                useStatEffectForCalculateBattle(charObj, ally, enemy, v);
-                            }
+                            if (v.type == "buffStackAdd") {
+                                buffStackAdd(charObj, ally, enemy, v);
+                            } else {
+                                if ('countGreaterOrEqual' in v && enemyActiveAttacked >= v.countGreaterOrEqual) {
+                                    useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                                }
 
-                            if ("countLess" in v && enemyActiveAttacked < v.countLess) {
-                                useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                                if ("countLess" in v && enemyActiveAttacked < v.countLess) {
+                                    useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                                }
                             }
                         });
                     } else {
@@ -3102,14 +3165,21 @@ function updateCharObs() {
                 getFilterEffects(charObj).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                     useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                 });
+                getFilterEffects(charObj).filter(v => v.filter == "active" && v.type == "buffStackAdd").forEach(v => {
+                    buffStackAdd(charObj, ally, enemy, v);
+                });
 
                 getFilterEffects(charObj).filter(v => v.filter == "activeAttacked").forEach(v => {
-                    if ('countGreaterOrEqual' in v && enemyActiveAttacked >= v.countGreaterOrEqual) {
-                        useStatEffectForCalculateBattle(charObj, ally, enemy, v);
-                    }
+                    if (v.type == "buffStackAdd" && v.value > 0) {
+                        buffStackAdd(charObj, ally, enemy, v);
+                    } else {
+                        if ('countGreaterOrEqual' in v && enemyActiveAttacked >= v.countGreaterOrEqual) {
+                            useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                        }
 
-                    if ("countLess" in v && enemyActiveAttacked < v.countLess) {
-                        useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                        if ("countLess" in v && enemyActiveAttacked < v.countLess) {
+                            useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                        }
                     }
                 });
 
