@@ -53,5 +53,7 @@
     "extraToTarget":"目標額外",
     "contact":"聯絡方式",
     "updateLog":"更新紀錄",
-    "stack":"層"
+    "stack":"層",
+    "criDmg":"暴擊傷害",
+    "nightSight":"夜視能力"
 }}

@@ -1282,6 +1282,27 @@ function openDialogPickerEquipment(index, grid) {
                 addEquipment(mPickerGrid, mPickerEquipmentIndex, $(this).attr("value"));
                 $('#picker_equipment').dialog("close");
             });
+            item.hover(() => {
+                var texts = [];
+                var eObj = getEquipmentById(v.id);
+                $.each(eObj.effect, (key, val) => {
+                    var strengthenCoefficient = eObj.strengthenCoefficient;
+                    if ('strengthenCoefficient' in val) {
+                        strengthenCoefficient = val.strengthenCoefficient;
+                    }
+                    var str = mStringData[key];
+                    str += " " + val.max * 1;
+                    if (val.max > 0) {
+                        str += " ~ " + Math.floor(val.max * 1 * (1 + 10 * strengthenCoefficient));
+                    }
+                    texts.push(str);
+                });
+                $('#detail').dialog({position: {my: "left top", at: "right top", of: item}});
+                $("#detail .detail_container").html(texts.join("<br>"));
+                $('#detail').dialog("open");
+            }, () => {
+                $('#detail').dialog("close");
+            });
 
             $('<td></td>').append(item).appendTo(row);
 
