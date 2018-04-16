@@ -1736,6 +1736,7 @@ function updateCharObsForBase2(charObj, grid) {
             if (v.type == "attack") {
                 toFixedCount = 2;
             }
+            if ("toFixedCount" in v) toFixedCount = v.toFixedCount;
             v.value = calculateValue(v.value, charObj.c.mod2SkillLevel, toFixedCount);
             if ("time" in v) v.time = calculateValue(v.time, charObj.c.mod2SkillLevel, 1);
             if ("stackDownWhenEveryTime" in v) v.stackDownWhenEveryTime = calculateValue(v.stackDownWhenEveryTime, charObj.c.mod2SkillLevel, 1);
@@ -3000,6 +3001,9 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                     });
 
                     charObj.cb.attackedTimes++;
+                    getFilterEffects(charObj).filter(v => v.filter == "attackedTimes" && charObj.cb.attackedTimes == v.attackedTimes && v.type == "cleanBuff").forEach(v => {
+                        cleanBuff(charObj, ally, enemy, v);
+                    });
                     if (resetAttackedTimes) charObj.cb.attackedTimes = 0;
                     charObj.cb.actionFrame = getAttackFrame(charObj);
                     if (charObj.type == "mg" || charObj.type == "sg") {
@@ -3016,12 +3020,18 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                                 }
                                 return r;
                             }, 0);
+                            getFilterEffects(charObj).filter(v => v.filter == "changeAmmo" && v.type == "changeAmmoTime").forEach(v => {
+                                changeAmmoCountFrame = v.value * FRAME_PER_SECOND;
+                            });
                             charObj.cb.actionFrame = changeAmmoCountFrame;
                             charObj.cb.actionType = "changeAmmoCount";
 
                             if ('everyChangeAmmoCount' in charObj.skill) {
                                 useSkillForCalculateBattle(charObj, ally, null);
                             }
+                            getFilterEffects(charObj).filter(v => v.filter == "changeAmmo" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                                useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                            });
                         }
                     }
                 } else if (charObj.cb.actionType == "changeAmmoCount") {

@@ -5072,6 +5072,41 @@
             "self":{"x":-1, "y":1},
             "grid":[
                 {"x":-1, "y":0},
-                {"x":-1, "y":-1}]}}
+                {"x":-1, "y":-1}]}},
+    {"id":"20075", "name":"M1918", "type":"mg", "rarity":"5", "mod":true,
+        "hp":{"mod1":159, "mod2":160, "mod3":161},
+        "dmg":{"mod1":100, "mod2":100, "mod3":101},
+        "hit":{"mod1":33, "mod2":34, "mod3":34},
+        "dodge":{"mod1":33, "mod2":34, "mod3":34},
+        "fireOfRate":{"mod1":115, "mod2":115, "mod3":115},
+        "ammoCount":8,
+        "skill":{
+            "name":"火力專注MG",
+            "firstCooldownTime":8,
+            "cooldownTime":{"1":18, "10":18},
+            "detailText":{
+                "0":"提升自身火力{0}%,持續{1}秒",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"self", "attribute":"dmg", "value":{"1":28, "10":75}, "time":{"1":4, "10":6}}
+            ]},
+        "mod2Skill":{
+            "name":"戰地魔術",
+            "detailText":{
+                "0":"換彈時間縮短至{0}秒,且換彈後的前3次攻擊傷害提升{1}%(包括首輪攻擊)",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":1, "attr":"value"}]},
+            "effects":[
+                {"filter":"changeAmmo", "type":"changeAmmoTime", "target":"self", "attribute":"changeAmmoTime", "value":{"1":5.5, "10":5}, "toFixedCount":1},
+                {"filter":"changeAmmo", "type":"buff", "target":"self", "attribute":"dmg", "value":{"1":25, "10":40}},
+                {"filter":"battleStart", "type":"buff", "target":"self", "attribute":"dmg", "value":{"1":25, "10":40}},
+                {"filter":"attackedTimes", "attackedTimes":3, "type":"cleanBuff", "target":"self","buffName":"戰地魔術", "value":{"0":0}}
+            ]},
+        "aura":{
+            "target":"sg", "effect":{
+                "dmg":{"0":18},
+                "armor":{"0":10}},
+            "self":{"x":-1, "y":0},
+            "grid":[
+                {"x":1, "y":0}]}}
 ]
 }
