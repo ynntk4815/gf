@@ -55,5 +55,7 @@
     "updateLog":"更新紀錄",
     "stack":"層",
     "criDmg":"暴擊傷害",
-    "nightSight":"夜視能力"
+    "nightSight":"夜視能力",
+    "armorPiercing":"穿甲",
+    "ammoCount":"彈量"
 }}
