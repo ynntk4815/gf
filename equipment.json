@@ -409,6 +409,29 @@
             "dmg":{"max":6, "strengthenCoefficient":0.04},
             "hit":{"max":10, "strengthenCoefficient":0.04},
             "criRate":{"max":15, "strengthenCoefficient":0.07}
+        }},
+    {"id":"111", "name":"K6-24X56", "type":"optical_gunsight", "rarity":"5", "can_char":["20039"],
+        "effect":{
+            "hit":{"max":3, "strengthenCoefficient":0.1},
+            "criRate":{"max":25, "strengthenCoefficient":0.1}
+        }},
+    {"id":"112", "name":"CT 4X20", "type":"red_dot_sight", "rarity":"5", "can_char":["20075"],
+        "effect":{
+            "hit":{"max":15, "strengthenCoefficient":0.1},
+            "fireOfRate":{"max":-1},
+            "criRate":{"max":5, "strengthenCoefficient":0.1}
+        }},
+    {"id":"113", "name":"納甘左輪消音器", "type":"silencer", "rarity":"5", "can_char":["20005"],
+        "effect":{
+            "hit":{"max":2, "strengthenCoefficient":0.1},
+            "dodge":{"max":10, "strengthenCoefficient":0.04},
+            "criRate":{"max":15, "strengthenCoefficient":0.035}
+        }},
+    {"id":"114", "name":"MP446C比賽槍管", "type":"special_accessory", "rarity":"5", "can_char":["20091"],
+        "effect":{
+            "hit":{"max":4, "strengthenCoefficient":0.1},
+            "dodge":{"max":8, "strengthenCoefficient":0.03},
+            "criRate":{"max":15, "strengthenCoefficient":0.035}
         }}
 
 ],
