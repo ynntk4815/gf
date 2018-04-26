@@ -2984,6 +2984,10 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                     getFilterEffects(charObj).filter(v => v.filter == "attack" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
                         useStatEffectForCalculateBattle(charObj, ally, enemy, v);
                     });
+                    getFilterEffects(charObj).filter(v => v.filter == "firstAttackEveryXTimes").filter(v => charObj.cb.attackedTimes % v.everyXTimes == 0)
+                            .filter(v => v.type == "buff" || v.type == "debuff").forEach(v => {
+                        useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+                    });
                     getFilterEffects(charObj).filter(v => v.filter == "attack" && v.type == "buffStackAdd").forEach(v => {
                         if ("rate" in v) {
                             if (isSimulation && mRandom.bool(v.rate * 0.01)) {

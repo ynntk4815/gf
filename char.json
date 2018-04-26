@@ -5140,6 +5140,40 @@
                 {"x":0, "y":-1},
                 {"x":-1, "y":-1},
                 {"x":-1, "y":1},
+                {"x":-1, "y":0}]}},
+    {"id":"20005", "name":"納甘左輪", "type":"hg", "rarity":"4", "mod":true,
+        "hp":{"mod1":71, "mod2":71, "mod3":72},
+        "dmg":{"mod1":35, "mod2":35, "mod3":35},
+        "hit":{"mod1":47, "mod2":48, "mod3":48},
+        "dodge":{"mod1":98, "mod2":99, "mod3":100},
+        "fireOfRate":{"mod1":45, "mod2":45, "mod3":45},
+        "skill":{
+            "name":"火力壓制N",
+            "firstCooldownTime":6,
+            "cooldownTime":{"1":15, "10":12},
+            "detailText":{
+                "0":"降低敵方全體射速{0}% 持續{1}秒。",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "environment":"day", "type":"debuff", "target":"enemy_all", "attribute":"dmg", "value":{"1":15, "10":25}, "time":{"1":3, "10":5}},
+                {"filter":"active", "environment":"night", "type":"debuff", "target":"enemy_all", "attribute":"dmg", "value":{"1":25, "10":40}, "time":{"1":5, "2":6, "4":6, "5":7, "7":7, "8":8, "10":8}}
+            ]},
+        "mod2Skill":{
+            "name":"潮音侵襲",
+            "detailText":{
+                "0":"7次攻擊後重新進行裝填<br>裝填後的第一次攻擊會提升全隊的火力{0}%與命中{1}% 持續{2}秒",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":1, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"firstAttackEveryXTimes", "everyXTimes":7, "type":"buff", "target":"ally", "attribute":"dmg", "value":{"1":5, "10":10}, "time":{"1":2, "10":4}},
+                {"filter":"firstAttackEveryXTimes", "everyXTimes":7, "type":"buff", "target":"ally", "attribute":"hit", "value":{"1":5, "10":10}, "time":{"1":2, "10":4}}
+            ]},
+        "aura":{
+            "target":"all", "effect":{
+                "dmg":{"1":18, "5":36},
+                "criRate":{"1":10, "5":20}},
+            "grid":[
+                {"x":0, "y":1},
+                {"x":0, "y":-1},
                 {"x":-1, "y":0}]}}
 ]
 }
