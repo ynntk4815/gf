@@ -1658,7 +1658,7 @@ function updateCharObsForBase2(charObj, grid) {
 
     var friendshipEffect = 0;
     if (charObj.c.friendship == FRIENDLY) friendshipEffect = 0.05;
-    if (charObj.c.friendship == MARRIED) friendshipEffect = 0.1;
+    if (charObj.c.friendship == MARRIED) friendshipEffect = charObj.c.modLevel == 3 ? 0.15 : 0.1;
     charObj.c.dmg = Math.ceil(charObj.c.dmg * (1 + friendshipEffect));
     charObj.c.hit = Math.ceil(charObj.c.hit * (1 + friendshipEffect));
     charObj.c.dodge = Math.ceil(charObj.c.dodge * (1 + friendshipEffect));

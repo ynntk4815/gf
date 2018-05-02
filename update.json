@@ -35,6 +35,7 @@
     {"date": "Wed Feb 14 06:10:35 2018 +0800", "log": ["add MP7 AN-94 AK-12 FN-49"]},
     {"date": "Fri Feb 16 16:23:26 2018 +0800", "log": ["add K2"]},
     {"date": "Sat Mar 17 01:57:04 2018 +0800", "log": ["add SRS"]},
-    {"date": "Wed Mar 21 03:01:00 2018 +0800", "log": ["add OTs-39"]}
+    {"date": "Wed Mar 21 03:01:00 2018 +0800", "log": ["add OTs-39"]},
+    {"date": "Wed May 2 15:27:08 2018 +0800", "log": ["mod3人形誓約加成"]}
 ]
 }
