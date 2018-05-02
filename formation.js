@@ -1575,7 +1575,7 @@ function copyList(s) {
 function getChar(id){
     var grepList = $.grep(mCharData, function(e){return e.id == id;});
     var obj = JSON.parse(JSON.stringify(grepList[0]));
-    obj["criDmg"] = 50;
+    obj["criDmg"] = 150;
     obj["movementSpeed"] = 150;
     obj["equipment"] = [];
     obj["equipment"][1] = "";
@@ -2525,7 +2525,7 @@ function calculateHitRate(charObj, enemy) {
 function getCriAttackExpectedValue(criRate, criDmg) {
     criRate = Math.min(criRate, 100);
     criRate = Math.max(criRate, 0);
-    return 1 - criRate * 0.01 + (1 + criDmg / 100.0) * criRate * 0.01;
+    return 1 - criRate * 0.01 + (criDmg / 100.0) * criRate * 0.01;
 }
 
 function calculateActionDmg(charObj, enemy, mode) {
@@ -2702,7 +2702,7 @@ function battleAttackSimulationHarm(attacker, target, attackMultiply, criRate, t
             if (!isIgnoreArmor) {
                 harm = Math.ceil(Math.max(1, harm + Math.min(2, attacker.c.armorPiercing - target.cb.attr.armor)));
             }
-            if (isCriDmg) harm = harm * (1 + attacker.cb.attr.criDmg / 100.0);
+            if (isCriDmg) harm = harm * (attacker.cb.attr.criDmg / 100.0);
             result.push(Math.ceil(harm * target.cb.attr.reducedDamage));
         } else {
             result.push(0);
