@@ -963,6 +963,29 @@ function updateFairy() {
     mFairy.aura.criDmg =
             (Math.ceil(mFairyData.initRatio.criDmg * mFairy.partyAura.criDmg) + Math.ceil(mFairyData.growRatio.criDmg * mFairy.partyAura.criDmg * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
             mFairyData.rarityRatio[mFairy.rarity];
+
+    mFairy.skills = [];
+    if ("effects" in mFairy.skill) {
+        var skill = {};
+        skill.name = mFairy.skill.name;
+        skill.firstCooldownTime = mFairy.skill.firstCooldownTime;
+        skill.effects = copyList(mFairy.skill.effects);
+        skill.effects.forEach(convertSkillEffects(mFairy.skillLevel, skill.name));
+        mFairy.skills.push(skill);
+    }
+}
+
+function convertSkillEffects(skillLevel, skillName) {
+    return v => {
+        if (!("name" in v)) v.name = skillName;
+        var toFixedCount = 0;
+        if (v.type == "attack") toFixedCount = 1;
+        if ("toFixedCount" in v) toFixedCount = v.toFixedCount;
+        v.value = calculateValue(v.value, skillLevel, toFixedCount);
+        if ("time" in v) v.time = calculateValue(v.time, skillLevel, 1);
+        if ("whenEveryXSeconds" in v) v.whenEveryXSeconds = calculateValue(v.whenEveryXSeconds, skillLevel, 1);
+        if ("rate" in v) v.rate = calculateValue(v.rate, skillLevel, 1);
+    };
 }
 
 function removeFairy() {
@@ -1743,6 +1766,10 @@ function updateCharObsForBase2(charObj, grid) {
         });
         charObj.c.skills.push(skill);
     }
+}
+
+function getFairyEffects(fairy) {
+    return fairy.skills.map(v => v.effects).reduce((t, v) => t.concat(v), []);
 }
 
 function getEffects(charObj) {
@@ -2774,7 +2801,11 @@ function allyInit(ally) {
 
     if (mFairy != null) {
         useFairyMasteryForCalculateBattle(mFairy, ally);
-        if (mFairy.isUseSkill && mFairy.skill.type == BUFF) {
+        if ("effects" in mFairy.skill && mFairy.isUseSkill) {
+            getFairyEffects(mFairy).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                useStatEffectForCalculateBattle(charObj, ally, null, v);
+            });
+        } else if (mFairy.isUseSkill && mFairy.skill.type == BUFF) {
             useFairySkillForCalculateBattle(mFairy, ally, null);
         }
     }
@@ -3228,7 +3259,11 @@ function updateCharObs() {
     });
     if (mFairy != null) {
         useFairyMasteryForCalculateBattle(mFairy, ally);
-        if (mFairy.isUseSkill && mFairy.skill.type == BUFF) {
+        if ("effects" in mFairy.skill && mFairy.isUseSkill) {
+            getFairyEffects(mFairy).filter(v => v.filter == "active" && (v.type == "buff" || v.type == "debuff")).forEach(v => {
+                useStatEffectForCalculateBattle(charObj, ally, enemy, v);
+            });
+        } else if (mFairy.isUseSkill && mFairy.skill.type == BUFF) {
             useFairySkillForCalculateBattle(mFairy, ally, null);
         }
     }

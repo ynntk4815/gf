@@ -2,8 +2,10 @@ function getFairySkillDetail(fairy) {
     var detailText = null;
     if (fairy.skillLevel in fairy.skill.detailText) {
         detailText = fairy.skill.detailText[fairy.skillLevel];
-    } else {
+    } else if ("val" in fairy.skill.detailText) {
         detailText = fairy.skill.detailText["val"];
+    } else {
+        detailText = fairy.skill.detailText["0"];
     }
 
     var text = [];
@@ -28,6 +30,7 @@ function getFairySkillDetail(fairy) {
     if (fairy.id == "1001") text.push(getFairySkillDetailId1001(fairy, detailText));
     if (fairy.id == "1002") text.push(getFairySkillDetailId1002(fairy, detailText));
     if (fairy.id == "1003") text.push(getFairySkillDetailId1003(fairy, detailText));
+    if ("format" in fairy.skill.detailText) text.push(getFairySkillDetailFormat(fairy, detailText, 0, fairy.skill.detailText.format));
     return text;
 }
 
@@ -147,4 +150,17 @@ function getFairySkillDetailId1002(fairy, detailText) {
 function getFairySkillDetailId1003(fairy, detailText) {
     var skillEffect = getSkillByLevel(fairy.skill.effect, fairy.skillLevel);
     return detailText.format(skillEffect.hp.val, skillEffect.fixedDmg.val);
+}
+
+function getFairySkillDetailFormat(fairy, detailText, skillIndex, format) {
+    var result = detailText;
+    var i = 0;
+    format.forEach(v => {
+        if ("textIndex" in v) i = v.textIndex;
+        var value = fairy.skills[skillIndex].effects[v.effectIndex][v.attr];
+        if (v.percent) value *= 100;
+        result = result.replace("{" + i + "}", value);
+        i++;
+    });
+    return result;
 }

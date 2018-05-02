@@ -384,7 +384,25 @@
             "dodge":199,
             "armor":65,
             "criDmg":0,
-            "grow":60}}
+            "grow":60}},
+    {"id":"1005", "name":"世拉&妮娜", "type":"battle",
+        "skill":{
+            "name":"淑女之星",
+            "firstCooldownTime":0,
+            "detailText":{
+                "0":"下場戰鬥中提升本梯隊全體傷害{0}%並降低敵方全體命中{1}%，持續{2}秒。",
+                "format":[{"effectIndex":0, "attr":"value"}, {"effectIndex":1, "attr":"value"}, {"effectIndex":0, "attr":"time"}]},
+            "effects":[
+                {"filter":"active", "type":"buff", "target":"ally", "attribute":"dmg", "value":{"1":5, "10":20}, "time":{"0":20}},
+                {"filter":"active", "type":"debuff", "target":"enemy_all", "attribute":"dmg", "value":{"1":5, "10":10}, "time":{"0":20}}
+            ]},
+        "partyAura":{
+            "dmg":100,
+            "hit":80,
+            "dodge":125,
+            "armor":0,
+            "criDmg":100,
+            "grow":100}}
 ],"mastery":[
     {"id":"1", "name":"殺傷型I", "target":"ally", "effect":{
         "dmg":{"val":12}},
