@@ -462,11 +462,11 @@
         "dmg":{"val":10, "stackMax":3, "initStack":1, "stackUpWhenEveryTime":8}},
         "detailText":{"val":"該場戰鬥中提升我方全體傷害每8秒提升10%，最多疊加3層"}}
 ],"initRatio":{
-    "dmg":0.07,
-    "hit":0.25,
-    "dodge":0.20,
-    "armor":0.05,
-    "criDmg":0.10
+    "dmg":7,
+    "hit":25,
+    "dodge":20,
+    "armor":5,
+    "criDmg":10
 },"growRatio":{
     "dmg":0.076,
     "hit":0.252,

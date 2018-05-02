@@ -949,19 +949,19 @@ function updateFairy() {
     mFairy.aura = {};
 
     mFairy.aura.dmg =
-            (Math.ceil(mFairyData.initRatio.dmg * mFairy.partyAura.dmg) + Math.ceil(mFairyData.growRatio.dmg * mFairy.partyAura.dmg * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            (Math.ceil(mFairyData.initRatio.dmg * mFairy.partyAura.dmg / 100) + Math.ceil(mFairyData.growRatio.dmg * mFairy.partyAura.dmg * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
             mFairyData.rarityRatio[mFairy.rarity];
     mFairy.aura.hit =
-            (Math.ceil(mFairyData.initRatio.hit * mFairy.partyAura.hit) + Math.ceil(mFairyData.growRatio.hit * mFairy.partyAura.hit * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            (Math.ceil(mFairyData.initRatio.hit * mFairy.partyAura.hit / 100) + Math.ceil(mFairyData.growRatio.hit * mFairy.partyAura.hit * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
             mFairyData.rarityRatio[mFairy.rarity];
     mFairy.aura.dodge =
-            (Math.ceil(mFairyData.initRatio.dodge * mFairy.partyAura.dodge) + Math.ceil(mFairyData.growRatio.dodge * mFairy.partyAura.dodge * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            (Math.ceil(mFairyData.initRatio.dodge * mFairy.partyAura.dodge / 100) + Math.ceil(mFairyData.growRatio.dodge * mFairy.partyAura.dodge * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
             mFairyData.rarityRatio[mFairy.rarity];
     mFairy.aura.armor =
-            (Math.ceil(mFairyData.initRatio.armor * mFairy.partyAura.armor) + Math.ceil(mFairyData.growRatio.armor * mFairy.partyAura.armor * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            (Math.ceil(mFairyData.initRatio.armor * mFairy.partyAura.armor / 100) + Math.ceil(mFairyData.growRatio.armor * mFairy.partyAura.armor * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
             mFairyData.rarityRatio[mFairy.rarity];
     mFairy.aura.criDmg =
-            (Math.ceil(mFairyData.initRatio.criDmg * mFairy.partyAura.criDmg) + Math.ceil(mFairyData.growRatio.criDmg * mFairy.partyAura.criDmg * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
+            (Math.ceil(mFairyData.initRatio.criDmg * mFairy.partyAura.criDmg / 100) + Math.ceil(mFairyData.growRatio.criDmg * mFairy.partyAura.criDmg * mFairy.partyAura.grow * (mFairy.level - 1) / 10000)) *
             mFairyData.rarityRatio[mFairy.rarity];
 
     mFairy.skills = [];
