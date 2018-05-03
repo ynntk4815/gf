@@ -1903,11 +1903,11 @@ function updateCharObsForFairyAura() {
             if (mGridToChar[GRIDS[i]] != "") {
                 var charObj = mGridToChar[GRIDS[i]];
 
-                charObj.c.dmg = Math.floor(charObj.c.dmg * (1 + 0.01 * mFairy.aura.dmg));
-                charObj.c.hit = Math.floor(charObj.c.hit * (1 + 0.01 * mFairy.aura.hit));
-                charObj.c.dodge = Math.floor(charObj.c.dodge * (1 + 0.01 * mFairy.aura.dodge));
-                charObj.c.armor = Math.floor(charObj.c.armor * (1 + 0.01 * mFairy.aura.armor));
-                charObj.c.criDmg = Math.floor(charObj.c.criDmg * (1 + 0.01 * mFairy.aura.criDmg));
+                charObj.c.dmg = Math.ceil(charObj.c.dmg * (1 + 0.01 * mFairy.aura.dmg));
+                charObj.c.hit = Math.ceil(charObj.c.hit * (1 + 0.01 * mFairy.aura.hit));
+                charObj.c.dodge = Math.ceil(charObj.c.dodge * (1 + 0.01 * mFairy.aura.dodge));
+                charObj.c.armor = Math.ceil(charObj.c.armor * (1 + 0.01 * mFairy.aura.armor));
+                charObj.c.criDmg = Math.ceil(charObj.c.criDmg * (1 + 0.01 * mFairy.aura.criDmg));
             }
         }
     }
