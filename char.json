@@ -4417,7 +4417,7 @@
                 "val":"開啟火力專注期間會對目標附加伸冤者印記<br>當我方場上單位數量為3及以下時, 以攻速降低70%為代價,<br>每次普攻對目標造成{0}%的傷害,同時對2.5範圍內的目標<br>附加印記並造成100%的濺射傷害(期間火力專注仍然有效) "},
             "effects":[
                 {"filter":"active", "allyCountLessOrEqualFilter":3, "type":"debuff", "target":"self", "attribute":"fireOfRate", "value":{"0":70}, "untilBuffEnd":"火力專注T"},
-                {"filter":"attackReplace", "buffFilter":"伸冤者印記", "type":"attack", "target":"enemy", "certainToHit":true, "ignoreArmor":true, "canCri":false, "value":{"1":3, "10":6}},
+                {"filter":"attackReplace", "buffFilter":"伸冤者印記", "type":"attack", "target":"enemy", "certainToHit":true, "ignoreArmor":true, "canCri":false, "value":{"1":3, "10":6}, "toFixedCount":2},
                 {"filter":"attackAttacked", "buffFilter":"火力專注T", "type":"debuff", "target":"enemyAttackAttacked", "attribute":"dmg", "value":{"0":0}},
                 {"filter":"attack", "buffFilter":"伸冤者印記", "type":"attack", "target":"enemy", "radius":2.5, "allLinkDo":false, "value":{"0":1}}
             ]},
@@ -4451,8 +4451,8 @@
             "detailText":{
                 "val":"開啟突擊專注時會使用主副武器同時攻擊,<br>副武器造成{0}%的傷害,對受伸冤者印記影響的目標造成{1}%的傷害"},
             "effects":[
-                {"filter":"attack", "buffFilter":"突擊專注T", "type":"attack", "target":"enemy", "targetNotWithBuff":"伸冤者印記", "value":{"1":0.05, "10":0.1}},
-                {"filter":"attack", "buffFilter":"突擊專注T", "type":"attack", "target":"enemy", "targetWithBuff":"伸冤者印記", "value":{"1":0.1, "10":0.2}}
+                {"filter":"attack", "buffFilter":"突擊專注T", "type":"attack", "target":"enemy", "targetNotWithBuff":"伸冤者印記", "value":{"1":0.05, "10":0.1}, "toFixedCount":2},
+                {"filter":"attack", "buffFilter":"突擊專注T", "type":"attack", "target":"enemy", "targetWithBuff":"伸冤者印記", "value":{"1":0.1, "10":0.2}, "toFixedCount":2}
             ]},
         "aura":{
             "target":"smg", "effect":{
@@ -4754,7 +4754,7 @@
                 "format":[{"effectIndex":1, "attr":"value", "percent":true}]},
             "effects":[
                 {"filter":"active", "type":"buff", "target":"self","attribute":"dmg", "value":{"0":0}, "initStack":7, "cleanBuff":"same"},
-                {"filter":"attackReplace", "buffFilter":"絕境神射手", "type":"attack", "target":"enemy", "value":{"1":1.2, "10":1.8}},
+                {"filter":"attackReplace", "buffFilter":"絕境神射手", "type":"attack", "target":"enemy", "value":{"1":1.2, "10":1.8}, "toFixedCount":2},
                 {"filter":"attack", "buffFilter":"絕境神射手", "type":"buffStackAdd", "target":"self","buffName":"絕境神射手", "value":{"0":-1}}
             ]},
         "aura":{

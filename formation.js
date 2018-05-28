@@ -985,6 +985,7 @@ function convertSkillEffects(skillLevel, skillName) {
         if ("time" in v) v.time = calculateValue(v.time, skillLevel, 1);
         if ("whenEveryXSeconds" in v) v.whenEveryXSeconds = calculateValue(v.whenEveryXSeconds, skillLevel, 1);
         if ("rate" in v) v.rate = calculateValue(v.rate, skillLevel, 1);
+        if ("stackDownWhenEveryTime" in v) v.stackDownWhenEveryTime = calculateValue(v.stackDownWhenEveryTime, skillLevel, 1);
     };
 }
 
@@ -1734,18 +1735,7 @@ function updateCharObsForBase2(charObj, grid) {
         skill.firstCooldownTime = charObj.skill.firstCooldownTime;
         skill.cooldownTime = calculateValue(charObj.skill.cooldownTime, charObj.c.skillLevel, 1);
         skill.effects = copyList(charObj.skill.effects);
-        skill.effects.forEach((v, i) => {
-            if (!("name" in v)) v.name = skill.name;
-            var toFixedCount = 0;
-            if (v.type == "attack") {
-                toFixedCount = 1;
-            }
-            if ("toFixedCount" in v) toFixedCount = v.toFixedCount;
-            v.value = calculateValue(v.value, charObj.c.skillLevel, toFixedCount);
-            if ("time" in v) v.time = calculateValue(v.time, charObj.c.skillLevel, 1);
-            if ("whenEveryXSeconds" in v) v.whenEveryXSeconds = calculateValue(v.whenEveryXSeconds, charObj.c.skillLevel, 1);
-            if ("rate" in v) v.rate = calculateValue(v.rate, charObj.c.skillLevel, 1);
-        });
+        skill.effects.forEach(convertSkillEffects(charObj.c.skillLevel, skill.name));
         charObj.c.skills.push(skill);
     }
 
@@ -1753,17 +1743,7 @@ function updateCharObsForBase2(charObj, grid) {
         var skill = {};
         skill.name = charObj.mod2Skill.name;
         skill.effects = copyList(charObj.mod2Skill.effects);
-        skill.effects.forEach((v, i) => {
-            if (!("name" in v)) v.name = skill.name;
-            var toFixedCount = 0;
-            if (v.type == "attack") {
-                toFixedCount = 2;
-            }
-            if ("toFixedCount" in v) toFixedCount = v.toFixedCount;
-            v.value = calculateValue(v.value, charObj.c.mod2SkillLevel, toFixedCount);
-            if ("time" in v) v.time = calculateValue(v.time, charObj.c.mod2SkillLevel, 1);
-            if ("stackDownWhenEveryTime" in v) v.stackDownWhenEveryTime = calculateValue(v.stackDownWhenEveryTime, charObj.c.mod2SkillLevel, 1);
-        });
+        skill.effects.forEach(convertSkillEffects(charObj.c.mod2SkillLevel, skill.name));
         charObj.c.skills.push(skill);
     }
 }
