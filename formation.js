@@ -986,6 +986,7 @@ function convertSkillEffects(skillLevel, skillName) {
         if ("whenEveryXSeconds" in v) v.whenEveryXSeconds = calculateValue(v.whenEveryXSeconds, skillLevel, 1);
         if ("rate" in v) v.rate = calculateValue(v.rate, skillLevel, 1);
         if ("stackDownWhenEveryTime" in v) v.stackDownWhenEveryTime = calculateValue(v.stackDownWhenEveryTime, skillLevel, 1);
+        if ("knockingBack" in v) v.knockingBack = calculateValue(v.knockingBack, skillLevel, 1);
     };
 }
 
@@ -2641,6 +2642,7 @@ function calculateActionDmg(charObj, enemy, mode) {
             getFilterEffects(charObj).filter(v => (v.filter == "active" || v.filter == "otherActive") && v.type == "attack")
                     .filter(targetFilter).forEach(v => {
                 charObj.cb.skillAttack = v.value * charObj.cb.attr.dmg * enemy.cb.attr.reducedDamage;
+                if (v.fixedDmg) charObj.cb.skillAttack = v.value;
                 if (v.allLinkDo) charObj.cb.skillAttack *= link;
             });
         }
@@ -3065,7 +3067,10 @@ function battleSimulation(endTime, walkTime, ally, enemy, isSimulation) {
                                 link = charObj.c.link;
                             }
 
-                            harmThisFrame += parseInt(charObj.cb.attr.dmg * attackMultiply * link * enemy.cb.attr.reducedDamage);
+                            if (v.fixedDmg)
+                                harmThisFrame += parseInt(v.value * link);
+                            else
+                                harmThisFrame += parseInt(charObj.cb.attr.dmg * attackMultiply * link * enemy.cb.attr.reducedDamage);
 
                             if ('skillTimes' in v && charObj.cb.skillUsedTimes < v.skillTimes) {
                                 charObj.cb.actionType = PREPARE_TO_USE_SKILL;
