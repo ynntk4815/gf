@@ -176,7 +176,7 @@
             "dmg":{"min": "12", "max":"16"},
             "hit":{"min": "-5", "max":"-1"}
         }},
-    {"id":"61", "name":"Titan火控晶片", "type":"chip", "rarity":"5", "can_char":["75"], "strengthenCoefficient":"0.05",
+    {"id":"61", "name":"Titan火控晶片", "type":"chip", "rarity":"5", "can_char":["75", "20075"], "strengthenCoefficient":"0.05",
         "effect":{
             "ammoCount":{"min": "3", "max":"4"},
             "dmg":{"min": "-4", "max":"-2"},
@@ -306,7 +306,7 @@
             "criRate":{"min": "32", "max":"32", "strengthenCoefficient":"0.05"},
             "criDmg":{"min": "10", "max":"10", "strengthenCoefficient":"0.05"}
         }},
-    {"id":"86", "name":"Hayha記憶晶片", "type":"chip", "rarity":"5", "can_char":["39"],
+    {"id":"86", "name":"Hayha記憶晶片", "type":"chip", "rarity":"5", "can_char":["39", "20039"],
         "effect":{
             "dmg":{"min": "18", "max":"25", "strengthenCoefficient":"0.02"},
             "dodge":{"min": "2", "max":"4", "strengthenCoefficient":"0.03"},
@@ -355,33 +355,33 @@
             "hit":{"min":-5, "max":-3, "strengthenCoefficient":0},
             "ammoCount":{"min":3, "max":4, "strengthenCoefficient":0.05}
         }},
-    {"id":"99", "name":"遺留的武器庫", "type":"special_human_form", "rarity":"5", "can_char":["20055"],
+    {"id":"99", "name":"遺留的武器庫", "type":"special_human_form", "rarity":"5", "can_char":["20055", "55"],
         "effect":{
             "dmg":{"min":2, "max":3, "strengthenCoefficient":0.07},
             "armor":{"min":9, "max":12, "strengthenCoefficient":0.025}
         }},
-    {"id":"100", "name":"輕量化導軌套件", "type":"special_accessory", "rarity":"5", "can_char":["20057"],
+    {"id":"100", "name":"輕量化導軌套件", "type":"special_accessory", "rarity":"5", "can_char":["20057", "57"],
         "effect":{
             "hit":{"min":4, "max":6, "strengthenCoefficient":0.07},
             "criDmg":{"min":11, "max":15, "strengthenCoefficient":0.035}
         }},
-    {"id":"101", "name":"XM261短彈", "type":"status_bullet", "rarity":"5", "can_char":["20002"],
+    {"id":"101", "name":"XM261短彈", "type":"status_bullet", "rarity":"5", "can_char":["20002", "2"],
         "effect":{
             "dmg":{"min":8, "max":11, "strengthenCoefficient":0.055},
             "armorPiercing":{"min":-10, "max":-7, "strengthenCoefficient":0}
         }},
-    {"id":"102", "name":"性能升級卡帶", "type":"chip", "rarity":"5", "can_char":["20093"],
+    {"id":"102", "name":"性能升級卡帶", "type":"chip", "rarity":"5", "can_char":["20093", "93"],
         "effect":{
             "dmg":{"min":-10, "max":-6, "strengthenCoefficient":0},
             "dodge":{"min":21, "max":27, "strengthenCoefficient":0.045},
             "fireOfRate":{"min":1, "max":2, "strengthenCoefficient":0.05}
         }},
-    {"id":"103", "name":"64專用消音器", "type":"silencer", "rarity":"5", "can_char":["20094"],
+    {"id":"103", "name":"64專用消音器", "type":"silencer", "rarity":"5", "can_char":["20094", "94"],
         "effect":{
             "dodge":{"min":8, "max":11, "strengthenCoefficient":0.04},
             "criRate":{"min":12, "max":15, "strengthenCoefficient":0.035}
         }},
-    {"id":"104", "name":"快慢機扳機組", "type":"special_accessory", "rarity":"5", "can_char":["20051"],
+    {"id":"104", "name":"快慢機扳機組", "type":"special_accessory", "rarity":"5", "can_char":["20051", "51"],
         "effect":{
             "fireOfRate":{"min":2, "max":3, "strengthenCoefficient":0.07},
             "criRate":{"min":18, "max":24, "strengthenCoefficient":0.1}
@@ -410,24 +410,24 @@
             "hit":{"max":10, "strengthenCoefficient":0.04},
             "criRate":{"max":15, "strengthenCoefficient":0.07}
         }},
-    {"id":"111", "name":"K6-24X56", "type":"optical_gunsight", "rarity":"5", "can_char":["20039"],
+    {"id":"111", "name":"K6-24X56", "type":"optical_gunsight", "rarity":"5", "can_char":["20039", "39"],
         "effect":{
             "hit":{"max":3, "strengthenCoefficient":0.1},
             "criRate":{"max":25, "strengthenCoefficient":0.1}
         }},
-    {"id":"112", "name":"CT 4X20", "type":"red_dot_sight", "rarity":"5", "can_char":["20075"],
+    {"id":"112", "name":"CT 4X20", "type":"red_dot_sight", "rarity":"5", "can_char":["20075", "75"],
         "effect":{
             "hit":{"max":15, "strengthenCoefficient":0.1},
             "fireOfRate":{"max":-1},
             "criRate":{"max":5, "strengthenCoefficient":0.1}
         }},
-    {"id":"113", "name":"納甘左輪消音器", "type":"silencer", "rarity":"5", "can_char":["20005"],
+    {"id":"113", "name":"納甘左輪消音器", "type":"silencer", "rarity":"5", "can_char":["20005", "5"],
         "effect":{
             "hit":{"max":2, "strengthenCoefficient":0.1},
             "dodge":{"max":10, "strengthenCoefficient":0.04},
             "criRate":{"max":15, "strengthenCoefficient":0.035}
         }},
-    {"id":"114", "name":"MP446C比賽槍管", "type":"special_accessory", "rarity":"5", "can_char":["20091"],
+    {"id":"114", "name":"MP446C比賽槍管", "type":"special_accessory", "rarity":"5", "can_char":["20091", "91"],
         "effect":{
             "hit":{"max":4, "strengthenCoefficient":0.1},
             "dodge":{"max":8, "strengthenCoefficient":0.03},
