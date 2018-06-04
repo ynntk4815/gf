@@ -47,6 +47,7 @@ var mFairyData = "";
 var mStringData = "";
 var mUpdate = [];
 var mCharData = [];
+var mAttackFrameData = [];
 var mGridOrder = [];
 var mFormation = [];
 var mGridToUI = [];
@@ -1007,6 +1008,7 @@ function initData() {
         $.each(data.chars, function(key, val) {
             mCharData.push(val);
         });
+        mAttackFrameData = data.attackFrame;
     }).fail(function() {
         alert("load json data fail");
     });
@@ -1597,10 +1599,17 @@ function copyList(s) {
     return d;
 }
 
+function findById(data, id) {
+    var result = data.filter(v => v.id == id);
+    if (result.length > 0) return result[0];
+    else return null;
+}
+
 function getChar(id){
     var grepList = $.grep(mCharData, function(e){return e.id == id;});
     var obj = JSON.parse(JSON.stringify(grepList[0]));
     obj["criDmg"] = 150;
+    obj["attackFrame"] = -1;
     obj["movementSpeed"] = 150;
     obj["equipment"] = [];
     obj["equipment"][1] = "";
@@ -1614,6 +1623,9 @@ function getChar(id){
         if (obj.type == "rf" || obj.type == "sg") obj[CRI_RATE] = 40;
         if (obj.type == "smg" || obj.type == "mg") obj[CRI_RATE] = 5;
     }
+
+    var attackFrameData = findById(mAttackFrameData, id)
+    if (attackFrameData) obj["attackFrame"] = attackFrameData.frame;
     return obj;
 }
 
@@ -1993,7 +2005,8 @@ function updateCharObsForBattle() {
 }
 
 function getAttackFrame(charObj) {
-    if (charObj.type == "mg") return 11;
+    if (charObj.attackFrame > 0) return charObj.attackFrame;
+    if (charObj.type == "mg") return 10;
     if ('cb' in charObj) {
         return Math.ceil(50.0 * 30.0 / charObj.cb.attr.fireOfRate) - 1;
     } else {
